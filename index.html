@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termux — Codes Essentiels</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --panel: #0f1319;
+    --border: #1e2840;
+    --accent: #00f5a0;
+    --accent2: #00b4d8;
+    --accent3: #f72585;
+    --text: #c9d6e3;
+    --muted: #4a5a70;
+    --yellow: #ffd60a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+    overflow-x: hidden;
+  }
+
+  /* --- AJOUT MENU BURGER CSS --- */
+  .menu-btn { position: absolute; top: 30px; right: 20px; font-size: 30px; color: var(--accent); cursor: pointer; z-index: 1000; }
+  .nav-menu { position: fixed; top: 0; right: -250px; width: 250px; height: 100%; background: var(--panel); border-left: 1px solid var(--border); transition: 0.3s; padding: 80px 20px; z-index: 999; }
+  .nav-menu.active { right: 0; }
+  .nav-menu a { display: block; color: var(--text); text-decoration: none; font-family: 'Share Tech Mono', monospace; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; cursor: pointer;}
+  /* ----------------------------- */
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,245,160,0.012) 2px,
+      rgba(0,245,160,0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  header {
+    position: relative;
+    padding: 48px 24px 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,245,160,0.08) 0%, transparent 70%);
+  }
+
+  .logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(28px, 6vw, 52px);
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(0,245,160,0.5), 0 0 60px rgba(0,245,160,0.2);
+    position: relative;
+    animation: flicker 6s infinite;
+  }
+
+  @keyframes flicker {
+    0%,95%,100% { opacity: 1; }
+    96% { opacity: 0.85; }
+    97% { opacity: 1; }
+    98% { opacity: 0.9; }
+  }
+
+  .logo span { color: var(--accent2); }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .stat strong {
+    color: var(--accent);
+    font-size: 16px;
+    display: block;
+  }
+
+  /* Filter tabs */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex-shrink: 0;
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,245,160,0.06);
+  }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin: 1px;
+  }
+
+  .card {
+    background: var(--panel);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    background: #131820;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card[data-cat="install"]::before { background: var(--accent); }
+  .card[data-cat="réseau"]::before { background: var(--accent2); }
+  .card[data-cat="fichiers"]::before { background: var(--yellow); }
+  .card[data-cat="système"]::before { background: var(--accent3); }
+  .card[data-cat="outils"]::before { background: #b388ff; }
+  .card[data-cat="hacking"]::before { background: #ff6b6b; }
+
+  .card-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8f0fe;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .card-code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 12px;
+    color: var(--accent);
+    line-height: 1.7;
+    word-break: break-all;
+    position: relative;
+    white-space: pre-wrap;
+  }
+
+  .card[data-cat="réseau"] .card-code { color: var(--accent2); }
+  .card[data-cat="fichiers"] .card-code { color: var(--yellow); }
+  .card[data-cat="système"] .card-code { color: #ff8fa3; }
+  .card[data-cat="outils"] .card-code { color: #b388ff; }
+  .card[data-cat="hacking"] .card-code { color: #ff6b6b; }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  .card[data-cat="install"] .card-tag { background: rgba(0,245,160,0.1); color: var(--accent); }
+  .card[data-cat="réseau"] .card-tag { background: rgba(0,180,216,0.1); color: var(--accent2); }
+  .card[data-cat="fichiers"] .card-tag { background: rgba(255,214,10,0.1); color: var(--yellow); }
+  .card[data-cat="système"] .card-tag { background: rgba(247,37,133,0.12); color: var(--accent3); }
+  .card[data-cat="outils"] .card-tag { background: rgba(179,136,255,0.1); color: #b388ff; }
+  .card[data-cat="hacking"] .card-tag { background: rgba(255,107,107,0.1); color: #ff6b6b; }
+
+  .copy-btn {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: rgba(0,245,160,0.08);
+    border: 1px solid rgba(0,245,160,0.2);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    padding: 3px 7px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .copy-btn:hover {
+    background: rgba(0,245,160,0.15);
+  }
+
+  .copy-btn.copied {
+    color: var(--yellow);
+    border-color: var(--yellow);
+    background: rgba(255,214,10,0.08);
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 24px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .hidden { display: none !important; }
+  
+  /* Style section À PROPOS */
+  #about-section { padding: 30px; line-height: 1.6; color: var(--text); max-width: 800px; margin: auto; }
+
+  /* Modale paiement */
+  #payment-modal { position: fixed; inset: 0; background: rgba(10,12,16,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+  .modal-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 8px; max-width: 400px; }
+  .modal-content p { color: var(--text); margin-bottom: 20px; line-height: 1.5; font-size: 14px;}
+  .modal-content input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); margin-bottom: 15px; outline: none; text-align: center; font-family: monospace;}
+  .modal-content button { width: 100%; padding: 12px; background: var(--accent); border: none; cursor: pointer; font-weight: bold; font-family: 'Share Tech Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div id="payment-modal" class="hidden">
+    <div class="modal-content">
+        <h3 style="color:var(--accent); margin-bottom:15px;">ACCÈS PREMIUM</h3>
+        <p>Je suis FASSOU LOLAMOU débutant en programmation et en cyber sécurité, avec mon niveau j'ai jugé nécessaire de créer ce site pour permettre à tous les débutants comme moi de maîtriser les commandes importantes sur Termux. À retenir, ces commandes ne sont pas à utiliser dans des activités illégales, retenez bien tout usage contre autrui sans son autorisation est condamné par la loi. Écoutez bien il n'était pas dans mon intention d'ajouter la version payante, je l'ai fait pour collecter et investir dans d'autres recherches pour pouvoir faire mieux que ça. En semble unissons nous et grandissons.</p>
+        <input type="text" id="vip-code" placeholder="Entrez votre code d'accès">
+        <button onclick="verifierCode()">VALIDER</button>
+        <button onclick="window.location.href='https://wa.me/224621577363'" style="margin-top:10px; background:var(--accent2);">OBTENIR ACCÈS</button>
+    </div>
+</div>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="header-bg"></div>
+  <div class="logo">TERMUX<span>_</span>CODES</div>
+  <div class="subtitle">Android Terminal Emulator — Référence Complète</div>
+  <div class="stats">
+    <div class="stat"><strong>54</strong>commandes</div>
+    <div class="stat"><strong>6</strong>catégories</div>
+    <div class="stat"><strong>100%</strong>testé</div>
+  </div>
+</header>
+
+<div class="nav-menu" id="nav-menu">
+  <a href="#" onclick="toggleMenu()">× FERMER</a>
+  <a href="#" onclick="showAbout()">À PROPOS</a>
+  <a href="https://wa.me/224621577363">CONTACT</a>
+</div>
+
+<div id="about-section" class="hidden">
+    <h2 style="color:var(--accent); margin-bottom:15px;">À PROPOS</h2>
+    <p>Je suis FASSOU LOLAMOU débutant en programmation et en cyber sécurité, avec mon niveau j'ai jugé nécessaire de créer ce site pour permettre à tous les débutants comme moi de maîtriser les commandes importantes sur Termux.</p>
+    <br>
+    <p>À retenir, ces commandes ne sont pas à utiliser dans des activités illégales, retenez bien tout usage contre autrui sans son autorisation est condamné par la loi.</p>
+    <br>
+    <p>Écoutez bien, il n'était pas dans mon intention d'ajouter la version payante, je l'ai fait pour collecter et investir dans d'autres recherches pour pouvoir faire mieux que ça.</p>
+    <br>
+    <p>Ensemble unissons-nous et grandissons.</p>
+    <br>
+    <button onclick="hideAbout()" style="background:var(--accent); border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">RETOUR</button>
+</div>
+
+<div id="main-content">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterCards('all')">Tout</button>
+      <button class="filter-btn" onclick="filterCards('install')"> Install</button>
+      <button class="filter-btn" onclick="filterCards('réseau')"> Réseau</button>
+      <button class="filter-btn" onclick="filterCards('fichiers')"> Fichiers</button>
+      <button class="filter-btn" onclick="filterCards('système')">⚙️ Système</button>
+      <button class="filter-btn" onclick="filterCards('outils')"> Outils</button>
+      <button class="filter-btn" onclick="filterCards('hacking')"> Hacking</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+</div>
+
+<footer>// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //</footer>
+
+<script>
+// Fonction de validation du code
+function verifierCode() {
+    const code = document.getElementById('vip-code').value;
+    if (code === "123#@55") {
+        document.getElementById('payment-modal').classList.add('hidden');
+    } else {
+        alert("Code incorrect !");
+    }
+}
+
+// Afficher la modale après 8 secondes
+setTimeout(() => {
+    document.getElementById('payment-modal').classList.remove('hidden');
+}, 8000);
+
+const codes = [
+  // INSTALL
+  { n:"01", cat:"install", title:"Mise à jour complète", code:"pkg update && pkg upgrade -y", desc:"Met à jour tous les paquets Termux." },
+  { n:"02", cat:"install", title:"Installer Python", code:"pkg install python -y", desc:"Installe Python 3 avec pip." },
+  { n:"03", cat:"install", title:"Installer Node.js", code:"pkg install nodejs -y", desc:"Installe Node.js et npm." },
+  { n:"04", cat:"install", title:"Installer Git", code:"pkg install git -y", desc:"Installe Git pour le versioning." },
+  { n:"05", cat:"install", title:"Installer des outils essentiels", code:"pkg install curl wget nano vim -y", desc:"Pack d'outils de base indispensables." },
+  { n:"06", cat:"install", title:"Installer Ruby", code:"pkg install ruby -y", desc:"Installe Ruby et gem." },
+  { n:"07", cat:"install", title:"Accès stockage Android", code:"termux-setup-storage", desc:"Donne accès aux fichiers Android depuis Termux." },
+  { n:"08", cat:"install", title:"Installer Golang", code:"pkg install golang -y", desc:"Installe le compilateur Go." },
+  { n:"09", cat:"install", title:"Installer ffmpeg", code:"pkg install ffmpeg -y", desc:"Traitement audio/vidéo en ligne de commande." },
+  { n:"10", cat:"install", title:"Installer PHP", code:"pkg install php -y", desc:"Installe PHP pour les scripts web." },
+
+  // RÉSEAU
+  { n:"11", cat:"réseau", title:"Scanner le réseau local", code:"pkg install nmap -y\nnmap -sV 192.168.1.0/24", desc:"Découvre tous les appareils sur le réseau local." },
+  { n:"12", cat:"réseau", title:"Tester la vitesse internet", code:"pkg install python -y\npip install speedtest-cli\nspeedtest-cli", desc:"Mesure le débit upload/download." },
+  { n:"13", cat:"réseau", title:"Tracer une route réseau", code:"pkg install traceroute -y\ntraceroute google.com", desc:"Affiche le chemin des paquets vers une destination." },
+  { n:"14", cat:"réseau", title:"Écouter le trafic réseau", code:"pkg install tcpdump -y\ntcpdump -i wlan0", desc:"Capture les paquets réseau en temps réel." },
+  { n:"15", cat:"réseau", title:"Requête HTTP avancée", code:"curl -I https://example.com\ncurl -X POST -d 'data=test' url", desc:"Inspections et requêtes HTTP/HTTPS." },
+  { n:"16", cat:"réseau", title:"Serveur HTTP local", code:"python -m http.server 8080", desc:"Lance un serveur HTTP sur le port 8080." },
+  { n:"17", cat:"réseau", title:"Connexion SSH", code:"pkg install openssh -y\nssh user@192.168.1.x", desc:"Connexion SSH vers un serveur distant." },
+  { n:"18", cat:"réseau", title:"Tunnel SSH (port forwarding)", code:"ssh -L 8080:localhost:80 user@server", desc:"Crée un tunnel SSH pour rediriger un port." },
+  { n:"19", cat:"réseau", title:"Ping avancé", code:"ping -c 10 -i 0.2 google.com", desc:"Envoie 10 pings rapides et affiche les stats." },
+  { n:"20", cat:"réseau", title:"Whois d'un domaine", code:"pkg install whois -y\nwhois google.com", desc:"Infos d'enregistrement d'un domaine." },
+
+  // FICHIERS
+  { n:"21", cat:"fichiers", title:"Rechercher un fichier", code:"find / -name '*.txt' 2>/dev/null", desc:"Cherche tous les fichiers .txt sur le système." },
+  { n:"22", cat:"fichiers", title:"Archiver un dossier", code:"tar -czvf archive.tar.gz /mon/dossier", desc:"Compresse un dossier en .tar.gz." },
+  { n:"23", cat:"fichiers", title:"Extraire une archive", code:"tar -xzvf archive.tar.gz", desc:"Décompresse un fichier .tar.gz." },
+  { n:"24", cat:"fichiers", title:"Cloner un repo Git", code:"git clone https://github.com/user/repo", desc:"Clone un dépôt GitHub localement." },
+  { n:"25", cat:"fichiers", title:"Télécharger une vidéo YouTube", code:"pip install yt-dlp\nyt-dlp https://youtu.be/ID", desc:"Télécharge une vidéo YouTube en MP4." },
+  { n:"26", cat:"fichiers", title:"Compter lignes d'un fichier", code:"wc -l fichier.txt", desc:"Compte le nombre de lignes dans un fichier." },
+  { n:"27", cat:"fichiers", title:"Comparer deux fichiers", code:"diff fichier1.txt fichier2.txt", desc:"Affiche les différences entre deux fichiers." },
+  { n:"28", cat:"fichiers", title:"Chiffrer un fichier", code:"pkg install gnupg -y\ngpg -c secret.txt", desc:"Chiffre un fichier avec mot de passe GPG." },
+  { n:"29", cat:"fichiers", title:"Surveiller un fichier en live", code:"tail -f /data/data/com.termux/files/home/log.txt", desc:"Affiche les nouvelles lignes en temps réel." },
+  { n:"30", cat:"fichiers", title:"Dupliquer un dossier", code:"cp -r source/ destination/", desc:"Copie récursive d'un dossier entier." },
+
+  // SYSTÈME
+  { n:"31", cat:"système", title:"Infos CPU & RAM", code:"pkg install procps -y\nfree -h && cat /proc/cpuinfo | grep 'model name'", desc:"Affiche la RAM disponible et les infos CPU." },
+  { n:"32", cat:"système", title:"Processus en cours", code:"pkg install procps -y\nps aux | head -20", desc:"Liste les processus actifs avec leur usage RAM/CPU." },
+  { n:"33", cat:"système", title:"Température batterie", code:"termux-battery-status", desc:"Affiche le niveau et la température de la batterie." },
+  { n:"34", cat:"système", title:"Infos réseau de l'appareil", code:"termux-wifi-connectioninfo", desc:"Affiche les infos de connexion Wi-Fi actuelle." },
+  { n:"35", cat:"système", title:"Exécuter tâche planifiée", code:"pkg install cronie -y\ncrontab -e\n# Exemple: */5 * * * * echo 'hello'", desc:"Planifie des tâches récurrentes avec cron." },
+  { n:"36", cat:"système", title:"Afficher espace disque", code:"df -h", desc:"Résumé de l'espace disque utilisé/disponible." },
+  { n:"37", cat:"système", title:"Envoyer une notification", code:"termux-notification -t 'Titre' -c 'Message'", desc:"Affiche une notification Android depuis le terminal." },
+  { n:"38", cat:"système", title:"Vibration de l'appareil", code:"termux-vibrate -d 1000", desc:"Fait vibrer l'appareil pendant 1 seconde." },
+  { n:"39", cat:"système", title:"Lire le presse-papier", code:"termux-clipboard-get", desc:"Affiche le contenu du presse-papier Android." },
+  { n:"40", cat:"système", title:"Éteindre l'écran", code:"termux-torch off", desc:"Éteint la lampe torche. Remplacer par 'on' pour l'allumer." },
+
+  // OUTILS
+  { n:"41", cat:"outils", title:"Créer un environnement Python", code:"pip install virtualenv\nvirtualenv myenv\nsource myenv/bin/activate", desc:"Crée et active un environnement Python isolé." },
+  { n:"42", cat:"outils", title:"Installer Metasploit", code:"curl https://raw.githubusercontent.com/gushmazuko/metasploit_in_termux/master/metasploit.sh | bash", desc:"Installe le framework Metasploit (éducatif)." },
+  { n:"43", cat:"outils", title:"Accès bureau à distance VNC", code:"pkg install x11-repo -y\npkg install tigervnc -y\nvncserver :1", desc:"Lance un serveur VNC pour accès graphique." },
+  { n:"44", cat:"outils", title:"Convertir image en ASCII", code:"pip install ascii-magic\npython3 -c \"from ascii_magic import from_image; from_image('img.jpg')\"", desc:"Affiche une image en art ASCII dans le terminal." },
+  { n:"45", cat:"outils", title:"Générer un QR Code", code:"pip install qrcode\npython3 -c \"import qrcode; qrcode.make('https://example.com').save('qr.png')\"", desc:"Génère un QR code depuis une URL." },
+  { n:"46", cat:"outils", title:"Lancer Jupyter Notebook", code:"pip install jupyter\njupyter notebook --ip=0.0.0.0", desc:"Lance un serveur Jupyter Notebook accessible via navigateur." },
+  { n:"47", cat:"outils", title:"Moniteur ressources en temps réel", code:"pkg install htop -y\nhtop", desc:"Moniteur interactif des processus et ressources." },
+  { n:"48", cat:"outils", title:"Jeu Snake dans le terminal", code:"pip install curtsies\npip install snakemoji\nsnakemoji", desc:"Joue au Snake directement dans le terminal." },
+  { n:"49", cat:"outils", title:"Exposer service (Cloudflare)", code:"pkg install cloudflared -y\ncloudflared tunnel --url http://127.0.0.1:8080", desc:"Expose votre service local sur une URL publique." },
+  { n:"50", cat:"outils", title:"Script d'auto-déploiement", code:"pkill -f python\npython app.py &\ncloudflared tunnel --url http://127.0.0.1:8080", desc:"Tue l'ancien process et relance app + tunnel." },
+
+  // HACKING (éducatif)
+  { n:"51", cat:"hacking", title:"Analyse de vulnérabilités web", code:"pkg install python -y\npip install sqlmap\nsqlmap -u 'http://target.com/?id=1' --dbs", desc:"⚠️ Outil éducatif d'audit SQL. Usage autorisé uniquement." },
+  { n:"52", cat:"hacking", title:"Cracker un hash MD5", code:"pkg install hashcat -y\nhashcat -m 0 hash.txt wordlist.txt", desc:"⚠️ Test de robustesse de mots de passe. Contexte légal uniquement." },
+  { n:"53", cat:"hacking", title:"Black Hydra (Brute Force)", code:"pkg install python git -y\ngit clone https://github.com/Gameye98/Black-Hydra\ncd Black-Hydra\npython2 blackhydra.py", desc:"⚠️ Outil éducatif de brute force. Usage responsable uniquement." },
+  { n:"54", cat:"hacking", title:"Zphisher (Phishing éthique)", code:"pkg install git curl -y\ngit clone https://github.com/htr-tech/zphisher\ncd zphisher\nbash zphisher.sh", desc:"⚠️ Outil éducatif de sensibilisation. Usage éthique requis." },
+];
+
+const grid = document.getElementById('grid');
+
+codes.forEach(c => {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.dataset.cat = c.cat;
+  div.innerHTML = `
+    <div class="card-num">#${c.n}</div>
+    <div class="card-tag">${c.cat}</div>
+    <div class="card-title">${c.title}</div>
+    <div class="card-code" id="code-${c.n}">${c.code}<button class="copy-btn" onclick="copyCode('${c.n}', this)">COPY</button></div>
+    <div class="card-desc">${c.desc}</div>
+  `;
+  grid.appendChild(div);
+});
+
+function toggleMenu() { document.getElementById('nav-menu').classList.toggle('active'); }
+
+function showAbout() {
+    document.getElementById('about-section').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('hidden');
+    toggleMenu();
+}
+
+function hideAbout() {
+    document.getElementById('about-section').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+}
+
+function copyCode(id, btn) {
+  const el = document.getElementById('code-' + id);
+  const text = el.innerText.replace('COPY', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'OK ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function filterCards(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) card.classList.remove('hidden');
+    else card.classList.add('hidden');
+  });
+}
+</script>
+</body>
+</html>
