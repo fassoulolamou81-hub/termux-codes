@@ -298,26 +298,9 @@
   
   /* Style section À PROPOS */
   #about-section { padding: 30px; line-height: 1.6; color: var(--text); max-width: 800px; margin: auto; }
-
-  /* Modale paiement */
-  #payment-modal { position: fixed; inset: 0; background: rgba(10,12,16,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-  .modal-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 8px; max-width: 400px; }
-  .modal-content p { color: var(--text); margin-bottom: 20px; line-height: 1.5; font-size: 14px;}
-  .modal-content input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); margin-bottom: 15px; outline: none; text-align: center; font-family: monospace;}
-  .modal-content button { width: 100%; padding: 12px; background: var(--accent); border: none; cursor: pointer; font-weight: bold; font-family: 'Share Tech Mono', monospace; }
 </style>
 </head>
 <body>
-
-<div id="payment-modal" class="hidden">
-    <div class="modal-content">
-        <h3 style="color:var(--accent); margin-bottom:15px;">ACCÈS PREMIUM</h3>
-        <p>Je suis FASSOU LOLAMOU débutant en programmation et en cyber sécurité, avec mon niveau j'ai jugé nécessaire de créer ce site pour permettre à tous les débutants comme moi de maîtriser les commandes importantes sur Termux. À retenir, ces commandes ne sont pas à utiliser dans des activités illégales, retenez bien tout usage contre autrui sans son autorisation est condamné par la loi. Écoutez bien il n'était pas dans mon intention d'ajouter la version payante, je l'ai fait pour collecter et investir dans d'autres recherches pour pouvoir faire mieux que ça. En semble unissons nous et grandissons.</p>
-        <input type="text" id="vip-code" placeholder="Entrez votre code d'accès">
-        <button onclick="verifierCode()">VALIDER</button>
-        <button onclick="window.location.href='https://wa.me/224621577363'" style="margin-top:10px; background:var(--accent2);">OBTENIR ACCÈS</button>
-    </div>
-</div>
 
 <header>
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -335,9 +318,13 @@
   <a href="#" onclick="toggleMenu()">× FERMER</a>
   <a href="#" onclick="showAbout()">À PROPOS</a>
   <a href="https://wa.me/224621577363">CONTACT</a>
+  <a href="#" onclick="alert('Mon numéro Orange Money (Guinée) : +224 621 57 73 63. Merci pour ton soutien !')">SOUTENIR</a>
 </div>
 
 <div id="about-section" class="hidden">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="https://i.ibb.co/mV8ddTxH/IMG-0344.jpg" alt="Fassou Lolamou" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover;">
+    </div>
     <h2 style="color:var(--accent); margin-bottom:15px;">À PROPOS</h2>
     <p>Je suis FASSOU LOLAMOU débutant en programmation et en cyber sécurité, avec mon niveau j'ai jugé nécessaire de créer ce site pour permettre à tous les débutants comme moi de maîtriser les commandes importantes sur Termux.</p>
     <br>
@@ -364,24 +351,9 @@
     <div class="grid" id="grid"></div>
 </div>
 
-<footer>// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //</footer>
+<footer>// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //<br>@fassoulolamou-2026</footer>
 
 <script>
-// Fonction de validation du code
-function verifierCode() {
-    const code = document.getElementById('vip-code').value;
-    if (code === "123#@55") {
-        document.getElementById('payment-modal').classList.add('hidden');
-    } else {
-        alert("Code incorrect !");
-    }
-}
-
-// Afficher la modale après 8 secondes
-setTimeout(() => {
-    document.getElementById('payment-modal').classList.remove('hidden');
-}, 8000);
-
 const codes = [
   // INSTALL
   { n:"01", cat:"install", title:"Mise à jour complète", code:"pkg update && pkg upgrade -y", desc:"Met à jour tous les paquets Termux." },
@@ -447,7 +419,7 @@ const codes = [
   { n:"51", cat:"hacking", title:"Analyse de vulnérabilités web", code:"pkg install python -y\npip install sqlmap\nsqlmap -u 'http://target.com/?id=1' --dbs", desc:"⚠️ Outil éducatif d'audit SQL. Usage autorisé uniquement." },
   { n:"52", cat:"hacking", title:"Cracker un hash MD5", code:"pkg install hashcat -y\nhashcat -m 0 hash.txt wordlist.txt", desc:"⚠️ Test de robustesse de mots de passe. Contexte légal uniquement." },
   { n:"53", cat:"hacking", title:"Black Hydra (Brute Force)", code:"pkg install python git -y\ngit clone https://github.com/Gameye98/Black-Hydra\ncd Black-Hydra\npython2 blackhydra.py", desc:"⚠️ Outil éducatif de brute force. Usage responsable uniquement." },
-  { n:"54", cat:"hacking", title:"Zphisher (Phishing éthique)", code:"pkg install git curl -y\ngit clone https://github.com/htr-tech/zphisher\ncd zphisher\nbash zphisher.sh", desc:"⚠️ Outil éducatif de sensibilisation. Usage éthique requis." },
+  { n:"54", cat:"hacking", title:"Zphisher (Phishing éthique)", code:"pkg install git curl -y\ngit clone https://github.com/htr-tech/zphisher\ncd Zphisher\nbash zphisher.sh", desc:"⚠️ Outil éducatif de sensibilisation. Usage éthique requis." },
 ];
 
 const grid = document.getElementById('grid');
