@@ -596,6 +596,42 @@
             .sites-page .grid-boutons { grid-template-columns: 1fr 1fr; gap: 6px; }
             .sites-page .btn-site { font-size: 0.65rem; padding: 10px 4px; }
         }
+
+        /* ===== BOUTON DÉBOGAGE ===== */
+        .debug-btn {
+            background: rgba(255, 200, 50, 0.1);
+            border: 1px solid rgba(255, 200, 50, 0.3);
+            color: #ffd60a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            margin-top: 15px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .debug-btn:hover {
+            background: rgba(255, 200, 50, 0.2);
+        }
+        .debug-info {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 10px;
+            color: #8899bb;
+            word-break: break-all;
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .debug-info.show {
+            display: block;
+        }
+        .debug-info .label { color: #ffd60a; }
+        .debug-info .value { color: #00ff41; }
     </style>
 </head>
 <body>
@@ -692,7 +728,7 @@
         </form>
     </div>
 
-    <!-- PAGE CONNEXION -->
+    <!-- PAGE CONNEXION (avec débogage) -->
     <div id="login-page" class="page-container">
         <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')">← Retour</div>
         <h1 style="text-align:center; margin-bottom:20px;">CONNEXION</h1>
@@ -702,6 +738,8 @@
             <div id="login-error" class="error-msg"></div>
             <button type="submit" class="btn-submit">▶ SE CONNECTER</button>
         </form>
+        <button class="debug-btn" onclick="showDebugInfo()">🔍 Afficher les données stockées</button>
+        <div class="debug-info" id="debug-info"></div>
     </div>
 
     <!-- PAGE PROFIL -->
@@ -829,14 +867,12 @@
             }, 3000);
         }
 
-        // === DÉCONNEXION ===
+        // === DÉCONNEXION (CORRIGÉE - NE SUPPRIME PAS LE COMPTE) ===
         function logout() {
-            // Supprimer les données de session
-            localStorage.removeItem('lola_user');
-            localStorage.removeItem('lola_avatar');
-            // Rediriger vers l'accueil
+            // On ne supprime PAS le compte, on garde les données
+            // On redirige simplement vers l'accueil
             navigate('main-content');
-            showToast('✅ Déconnecté avec succès !', 'success');
+            showToast('👋 Déconnecté avec succès !', 'info');
             closeSidebar();
         }
 
@@ -845,21 +881,7 @@
             showToast('🔐 2FA activée avec succès !', 'success');
         }
 
-        // === FONCTIONS DE CODAGE ===
-        function encodePassword(pwd) {
-            return btoa(pwd);
-        }
-        function decodePassword(encoded) {
-            try {
-                return atob(encoded);
-            } catch(e) {
-                return encoded;
-            }
-        }
-
         // === BARRE DE PROGRESSION ===
-        let progressTimeout = null;
-
         function startProgress() {
             const bar = document.getElementById('progress-bar');
             bar.style.display = 'block';
@@ -979,38 +1001,106 @@
                 showToast('❌ Le mot de passe doit contenir au moins 8 caractères.', 'error');
                 return;
             }
-            const user = { prenom, nom, username, email, telephone, pays, password: encodePassword(password) };
+            const user = { 
+                prenom, 
+                nom, 
+                username, 
+                email, 
+                telephone, 
+                pays, 
+                password: password 
+            };
             localStorage.setItem('lola_user', JSON.stringify(user));
+            console.log('✅ Compte créé :', user);
             showToast('✅ Compte créé avec succès ! Bienvenue ' + username + ' !', 'success');
             navigate('profile-page');
         }
 
-        // === CONNEXION ===
+        // === CONNEXION AVEC DÉBOGAGE ===
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
-            const stored = localStorage.getItem('lola_user');
             const errorDiv = document.getElementById('login-error');
             errorDiv.style.display = 'none';
-            if (!stored) { 
+            
+            console.log('🔍 Tentative de connexion avec :', { email, password });
+            
+            // 1. Récupérer le compte stocké
+            const storedData = localStorage.getItem('lola_user');
+            console.log('📦 Données stockées (brutes) :', storedData);
+            
+            // 2. Si aucun compte n'existe
+            if (!storedData) {
                 errorDiv.textContent = 'Aucun compte trouvé. Veuillez vous inscrire.';
                 errorDiv.style.display = 'block';
                 showToast('❌ Aucun compte trouvé.', 'error');
+                console.log('❌ Aucun compte trouvé dans localStorage');
                 return;
             }
-            const user = JSON.parse(stored);
-            if (user.email === email && decodePassword(user.password) === password) {
-                showToast('✅ Bienvenue ' + user.username + ' !', 'success');
+            
+            // 3. Parser les données
+            let user;
+            try {
+                user = JSON.parse(storedData);
+                console.log('✅ Compte parsé :', user);
+            } catch(e) {
+                localStorage.removeItem('lola_user');
+                errorDiv.textContent = 'Erreur de données. Veuillez vous réinscrire.';
+                errorDiv.style.display = 'block';
+                showToast('❌ Erreur de données.', 'error');
+                console.log('❌ Erreur de parsing :', e);
+                return;
+            }
+            
+            // 4. Vérifier les identifiants
+            console.log('🔍 Comparaison :');
+            console.log('   Email saisi  :', email);
+            console.log('   Email stocké :', user.email);
+            console.log('   Email match  :', user.email === email);
+            console.log('   Mot de passe saisi  :', password);
+            console.log('   Mot de passe stocké :', user.password);
+            console.log('   Mot de passe match  :', user.password === password);
+            
+            if (user.email === email && user.password === password) {
+                showToast('✅ Bienvenue ' + (user.username || 'utilisateur') + ' !', 'success');
+                console.log('✅ Connexion réussie !');
                 navigate('profile-page');
             } else {
                 errorDiv.textContent = 'Email ou mot de passe incorrect.';
                 errorDiv.style.display = 'block';
                 showToast('❌ Email ou mot de passe incorrect.', 'error');
+                console.log('❌ Identifiants incorrects');
             }
         }
 
-        // === CHANGEMENT DE MOT DE PASSE (RÉEL) ===
+        // === DÉBOGAGE : Afficher les données stockées ===
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            const storedData = localStorage.getItem('lola_user');
+            
+            if (!storedData) {
+                debugDiv.innerHTML = '<span class="label">❌ Aucun compte trouvé dans localStorage.</span>';
+                debugDiv.classList.add('show');
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(storedData);
+                debugDiv.innerHTML = `
+                    <div><span class="label">📧 Email :</span> <span class="value">${user.email}</span></div>
+                    <div><span class="label">🔑 Mot de passe :</span> <span class="value">${user.password}</span></div>
+                    <div><span class="label">👤 Nom d\'utilisateur :</span> <span class="value">${user.username}</span></div>
+                    <div><span class="label">📝 Données brutes :</span> <span class="value">${storedData}</span></div>
+                    <div style="margin-top:8px; color:#ffd60a; font-size:9px;">💡 Utilise ces données pour te connecter.</div>
+                `;
+            } catch(e) {
+                debugDiv.innerHTML = `<span class="label">❌ Données corrompues :</span> ${storedData}`;
+            }
+            debugDiv.classList.toggle('show');
+        }
+
+        // === CHANGEMENT DE MOT DE PASSE ===
         function changePassword() {
             const current = document.querySelector('.security-field input[placeholder="Mot de passe actuel"]').value.trim();
             const newPwd = document.querySelector('.security-field input[placeholder="Nouveau mot de passe"]').value.trim();
@@ -1024,7 +1114,7 @@
 
             const user = JSON.parse(stored);
 
-            if (decodePassword(user.password) !== current) {
+            if (user.password !== current) {
                 showToast('❌ Mot de passe actuel incorrect.', 'error');
                 return;
             }
@@ -1039,7 +1129,7 @@
                 return;
             }
 
-            user.password = encodePassword(newPwd);
+            user.password = newPwd;
             localStorage.setItem('lola_user', JSON.stringify(user));
             showToast('✅ Mot de passe changé avec succès !', 'success');
             document.querySelectorAll('.security-field input').forEach(input => input.value = '');
@@ -1219,4 +1309,4 @@
         navigate('main-content');
     </script>
 </body>
-              </html>
+    </html>
