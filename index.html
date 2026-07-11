@@ -144,9 +144,11 @@
         /* Paramètres */
         .settings-section { margin-bottom: 30px; }
         .settings-section h2 { color: var(--accent); font-size: 14px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .lang-option { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .lang-option { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .lang-option:hover { background: rgba(0,255,65,0.05); }
         .lang-option span { font-size: 12px; }
         .lang-option .check { color: var(--accent); font-size: 16px; }
+        .lang-option .check.inactive { color: #555; }
         .security-field { margin-bottom: 15px; }
         .security-field label { display: block; font-size: 10px; color: var(--accent); margin-bottom: 5px; }
         .security-field input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: inherit; }
@@ -597,6 +599,407 @@
             .sites-page .btn-site { font-size: 0.65rem; padding: 10px 4px; }
         }
 
+        /* ========== STYLE POUR LA PAGE BIBLIOTHÈQUE PDF ========== */
+        .pdf-page {
+            display: none;
+            background: #0b1120;
+            min-height: 100vh;
+            padding: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .pdf-page .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            padding: 30px 25px 35px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.7);
+        }
+        .pdf-page .credit {
+            text-align: center;
+            color: #6688aa;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+        .pdf-page h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f0f4ff;
+            text-shadow: 0 2px 12px rgba(100, 200, 255, 0.2);
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 6px;
+        }
+        .pdf-page h1 span {
+            background: linear-gradient(135deg, #60b0ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pdf-page .sous-titre {
+            text-align: center;
+            color: #8899bb;
+            font-size: 0.8rem;
+            margin-bottom: 22px;
+        }
+        .pdf-page .pdf-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .pdf-page .pdf-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: 0.2s;
+            animation: fadeIn 0.3s ease;
+        }
+        .pdf-page .pdf-item .info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+        .pdf-page .pdf-item .info .pdf-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .pdf-page .pdf-item .info .details {
+            flex: 1;
+            min-width: 0;
+        }
+        .pdf-page .pdf-item .info .nom {
+            color: #e8edff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .pdf-page .pdf-item .info .description {
+            color: #7788aa;
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        .pdf-page .pdf-item .actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .pdf-page .pdf-item .actions button {
+            border: none;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .pdf-page .pdf-item .actions button:active {
+            transform: scale(0.92);
+        }
+        .pdf-page .pdf-item .actions .btn-ouvrir {
+            background: rgba(96, 176, 255, 0.2);
+            color: #7aaaff;
+            border: 1px solid rgba(96, 176, 255, 0.15);
+        }
+        .pdf-page .pdf-item .actions .btn-ouvrir:active {
+            background: rgba(96, 176, 255, 0.35);
+        }
+        .pdf-page .pdf-item .actions .btn-telecharger {
+            background: rgba(100, 255, 150, 0.1);
+            color: #66ddaa;
+            border: 1px solid rgba(100, 255, 150, 0.1);
+        }
+        .pdf-page .pdf-item .actions .btn-telecharger:active {
+            background: rgba(100, 255, 150, 0.25);
+        }
+        .pdf-page .drop-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            color: #556688;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            margin-top: 18px;
+            position: relative;
+        }
+        .pdf-page .drop-zone.dragover {
+            border-color: #60b0ff;
+            background: rgba(96, 176, 255, 0.06);
+        }
+        .pdf-page .drop-zone .icon {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .pdf-page .drop-zone .texte {
+            font-size: 0.8rem;
+        }
+        .pdf-page .drop-zone .sous-texte {
+            font-size: 0.65rem;
+            color: #445566;
+            margin-top: 4px;
+        }
+        .pdf-page .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .pdf-page .compteur {
+            text-align: center;
+            color: #556688;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+        .pdf-page .compteur span {
+            color: #8899bb;
+            font-weight: 600;
+        }
+        .pdf-page .footer-message {
+            margin-top: 20px;
+            padding: 14px 16px;
+            background: rgba(100, 200, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(100, 200, 255, 0.06);
+            color: #88bbdd;
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.6;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+        .pdf-page .footer-message span {
+            color: #66ccff;
+            font-weight: 500;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 480px) {
+            .pdf-page .card { padding: 20px 14px 25px; border-radius: 28px; }
+            .pdf-page h1 { font-size: 1.3rem; }
+            .pdf-page .pdf-item { padding: 14px 14px; flex-wrap: wrap; }
+            .pdf-page .pdf-item .info .nom { font-size: 0.85rem; }
+            .pdf-page .pdf-item .actions button { font-size: 0.7rem; padding: 6px 12px; }
+            .pdf-page .pdf-item .info .pdf-icon { font-size: 1.5rem; }
+        }
+        @media (max-width: 380px) {
+            .pdf-page .pdf-item .actions { flex-wrap: wrap; width: 100%; }
+            .pdf-page .pdf-item .actions button { flex: 1; text-align: center; }
+        }
+
+        /* ========== STYLE POUR LA PAGE ASSISTANCE (IA Hack & Code) ========== */
+        .assistance-page {
+            display: none;
+            background: #0b1120;
+            min-height: 100vh;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .assistance-page .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            padding: 30px 25px 35px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.7);
+        }
+        .assistance-page .credit {
+            text-align: center;
+            color: #6688aa;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+        .assistance-page h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f0f4ff;
+            text-shadow: 0 2px 12px rgba(0, 255, 200, 0.15);
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0, 255, 200, 0.08);
+            margin-bottom: 6px;
+        }
+        .assistance-page h1 span {
+            background: linear-gradient(135deg, #00d4aa, #00b4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .assistance-page .sous-titre {
+            text-align: center;
+            color: #8899bb;
+            font-size: 0.8rem;
+            margin-bottom: 22px;
+        }
+        .assistance-page .ia-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .assistance-page .ia-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 24px 16px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeIn 0.4s ease;
+        }
+        .assistance-page .ia-card:active {
+            transform: scale(0.95);
+        }
+        .assistance-page .ia-card .ia-icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .assistance-page .ia-card .ia-nom {
+            color: #e8edff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .assistance-page .ia-card .ia-desc {
+            color: #7788aa;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        .assistance-page .ia-card .ia-badge {
+            display: inline-block;
+            background: rgba(0, 200, 150, 0.12);
+            color: #66ddaa;
+            font-size: 0.6rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 200, 150, 0.1);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .assistance-page .ia-card .ia-badge.code {
+            background: rgba(100, 100, 255, 0.12);
+            color: #88aaff;
+            border-color: rgba(100, 100, 255, 0.1);
+        }
+        .assistance-page .ia-card .ia-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 24px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #aabbdd;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .assistance-page .ia-card .ia-btn:active {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(0.95);
+        }
+        .assistance-page .ia-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .assistance-page .ia-card.ia-hack {
+            border-left: 3px solid #00d4aa;
+        }
+        .assistance-page .ia-card.ia-hack .ia-btn {
+            border-color: rgba(0, 212, 170, 0.2);
+            color: #66ddaa;
+        }
+        .assistance-page .ia-card.ia-code {
+            border-left: 3px solid #00b4ff;
+        }
+        .assistance-page .ia-card.ia-code .ia-btn {
+            border-color: rgba(0, 180, 255, 0.2);
+            color: #7aaaff;
+        }
+        .assistance-page .info-box {
+            margin-top: 10px;
+            padding: 16px 18px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border-left: 4px solid #00d4aa;
+            color: #c8d6ff;
+            font-size: 0.85rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            word-break: break-word;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .assistance-page .info-box .emoji {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        .assistance-page .info-box .message {
+            flex: 1;
+            line-height: 1.5;
+        }
+        .assistance-page .footer-message {
+            margin-top: 18px;
+            padding: 14px 16px;
+            background: rgba(100, 200, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(100, 200, 255, 0.06);
+            color: #88bbdd;
+            font-size: 0.75rem;
+            text-align: center;
+            line-height: 1.6;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+        .assistance-page .footer-message span {
+            color: #66ccff;
+            font-weight: 500;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 480px) {
+            .assistance-page .card { padding: 20px 14px 25px; border-radius: 28px; }
+            .assistance-page h1 { font-size: 1.3rem; }
+            .assistance-page .ia-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .assistance-page .ia-card { padding: 18px 12px 16px; }
+            .assistance-page .ia-card .ia-icon { font-size: 2rem; }
+            .assistance-page .ia-card .ia-nom { font-size: 0.9rem; }
+            .assistance-page .ia-card .ia-desc { font-size: 0.65rem; }
+            .assistance-page .ia-card .ia-btn { font-size: 0.7rem; padding: 6px 16px; }
+            .assistance-page .info-box { font-size: 0.75rem; padding: 12px 14px; min-height: 50px; }
+        }
+        @media (max-width: 360px) {
+            .assistance-page .ia-grid { grid-template-columns: 1fr; gap: 10px; }
+        }
+
         /* ===== BOUTON DÉBOGAGE ===== */
         .debug-btn {
             background: rgba(255, 200, 50, 0.1);
@@ -648,25 +1051,25 @@
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <span class="close-btn" onclick="closeSidebar()">✕</span>
-        <a onclick="navigateWithProgress('profile-page')">👤 Profil</a>
-        <a onclick="navigateWithProgress('settings-page')">⚙️ Paramètres</a>
-        <a onclick="alert('Contact : contact@lolaplus.com')">📬 Contact</a>
-        <a onclick="toggleLuminosity()">☀️ Luminosité</a>
-        <a class="logout" onclick="logout()">🚪 SE DÉCONNECTER</a>
+        <a onclick="navigateWithProgress('profile-page')" data-i18n="sidebar.profil">👤 Profil</a>
+        <a onclick="navigateWithProgress('settings-page')" data-i18n="sidebar.settings">⚙️ Paramètres</a>
+        <a onclick="alert('Contact : contact@lolaplus.com')" data-i18n="sidebar.contact">📬 Contact</a>
+        <a onclick="toggleLuminosity()" data-i18n="sidebar.luminosity">☀️ Luminosité</a>
+        <a class="logout" onclick="logout()" data-i18n="sidebar.logout">🚪 SE DÉCONNECTER</a>
     </div>
 
     <!-- PAGE ACCUEIL -->
     <div id="main-content">
         <div class="nav-top">
             <span>+ LOLA-PLUS // OSINT</span>
-            <button class="btn-signup" onclick="navigateWithProgress('signup-page')">CRÉER UN COMPTE</button>
+            <button class="btn-signup" onclick="navigateWithProgress('signup-page')" data-i18n="global.create_account">CRÉER UN COMPTE</button>
         </div>
         <div class="hero">
-            <div class="badge">PLATEFORME OSINT PROFESSIONNELLE</div>
+            <div class="badge" data-i18n="home.badge">PLATEFORME OSINT PROFESSIONNELLE</div>
             <h1>LOLA-PLUS</h1>
-            <p>Accumulateur des commandes Termux à usage éthique.<br>Ici on retrouve des outils très intéressants, des documents en programmation et hacking éthique.</p>
-            <button class="btn-main" onclick="navigateWithProgress('signup-page')">▶ CRÉER UN COMPTE</button>
-            <button class="btn-sec" onclick="navigateWithProgress('login-page')">CONNEXION</button>
+            <p data-i18n="home.subtitle">Accumulateur des commandes Termux à usage éthique.<br>Ici on retrouve des outils très intéressants, des documents en programmation et hacking éthique.</p>
+            <button class="btn-main" onclick="navigateWithProgress('signup-page')" data-i18n="global.create_account">▶ CRÉER UN COMPTE</button>
+            <button class="btn-sec" onclick="navigateWithProgress('login-page')" data-i18n="global.login">CONNEXION</button>
         </div>
         <div class="terminal-mock">
             <code>$ nmap -sV --script lola_plus 0.0.0.0/0<br>
@@ -678,43 +1081,43 @@
             [*] Secret source ......... CLASSIFIED<br>
             $ lola_plus --status --verbose</code>
         </div>
-        <div class="feature-box"><div>▣</div><h3>Recherche Multi-Sources</h3><p>Interrogez des dizaines de sources publiques en un seul clic.</p></div>
-        <div class="feature-box"><div>▣</div><h3>100% Légal & Éthique</h3><p>Seules les données publiques et légales sont exploitées.</p></div>
-        <div class="feature-box"><div>▣</div><h3>Rapports Détaillés</h3><p>Exportez vos résultats en PDF ou CSV avec scoring de confiance.</p></div>
+        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature1_title">Recherche Multi-Sources</h3><p data-i18n="home.feature1_desc">Interrogez des dizaines de sources publiques en un seul clic.</p></div>
+        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature2_title">100% Légal & Éthique</h3><p data-i18n="home.feature2_desc">Seules les données publiques et légales sont exploitées.</p></div>
+        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature3_title">Rapports Détaillés</h3><p data-i18n="home.feature3_desc">Exportez vos résultats en PDF ou CSV avec scoring de confiance.</p></div>
         <section class="stats-grid">
-            <div class="stat-box"><strong>12,847</strong><span>RECHERCHES EFFECTUÉES</span></div>
-            <div class="stat-box"><strong>3,291</strong><span>UTILISATEURS ACTIFS</span></div>
-            <div class="stat-box"><strong>43+</strong><span>SOURCES OSINT</span></div>
-            <div class="stat-box"><strong>99.9%</strong><span>DISPONIBILITÉ</span></div>
+            <div class="stat-box"><strong>12,847</strong><span data-i18n="home.stat1">RECHERCHES EFFECTUÉES</span></div>
+            <div class="stat-box"><strong>3,291</strong><span data-i18n="home.stat2">UTILISATEURS ACTIFS</span></div>
+            <div class="stat-box"><strong>43+</strong><span data-i18n="home.stat3">SOURCES OSINT</span></div>
+            <div class="stat-box"><strong>99.9%</strong><span data-i18n="home.stat4">DISPONIBILITÉ</span></div>
         </section>
         <section class="about-section">
-            <h2 style="color:var(--accent); margin-bottom:10px; font-size: 14px;">À propos de LOLA-PLUS</h2>
-            <p>LOLA_PLUS est une plateforme OSINT professionnelle conçue pour les chercheurs, analystes et professionnels de la cybersécurité. Notre moteur agrège des données provenant de sources publiques et légales, tout en centralisant des ressources éducatives en programmation et en sécurité offensive pour une montée en compétence éthique.</p>
+            <h2 style="color:var(--accent); margin-bottom:10px; font-size: 14px;" data-i18n="home.about_title">À propos de LOLA-PLUS</h2>
+            <p data-i18n="home.about_text">LOLA_PLUS est une plateforme OSINT professionnelle conçue pour les chercheurs, analystes et professionnels de la cybersécurité. Notre moteur agrège des données provenant de sources publiques et légales, tout en centralisant des ressources éducatives en programmation et en sécurité offensive pour une montée en compétence éthique.</p>
         </section>
         <footer class="footer">
             <div style="color: var(--accent); margin-bottom: 10px;">▣ LOLA-PLUS</div>
-            <div class="footer-links"><a href="#">Conditions d'utilisation</a> | <a href="#">Politique de confidentialité</a></div>
-            <div style="margin-bottom: 5px;"><a href="#" style="color: #333;">Contact</a></div>
-            <div>© 2024 LOLA-PLUS — Tous droits réservés.</div>
-            <div>Créateur : Fassou lolamou</div>
+            <div class="footer-links"><a href="#" data-i18n="footer.terms">Conditions d'utilisation</a> | <a href="#" data-i18n="footer.privacy">Politique de confidentialité</a></div>
+            <div style="margin-bottom: 5px;"><a href="#" style="color: #333;" data-i18n="footer.contact">Contact</a></div>
+            <div data-i18n="footer.copyright">© 2024 LOLA-PLUS — Tous droits réservés.</div>
+            <div data-i18n="footer.creator">Créateur : Fassou lolamou</div>
         </footer>
     </div>
 
     <!-- PAGE INSCRIPTION -->
     <div id="signup-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px;">LOLA PLUS</h1>
-        <p style="text-align:center; font-size:10px; margin-bottom:20px;">Rejoignez la communauté lola plus</p>
+        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')" data-i18n="global.back">← Retour</div>
+        <h1 style="text-align:center; margin-bottom:20px;" data-i18n="signup.title">LOLA PLUS</h1>
+        <p style="text-align:center; font-size:10px; margin-bottom:20px;" data-i18n="signup.subtitle">Rejoignez la communauté lola plus</p>
         <form id="signup-form" onsubmit="handleSignup(event)">
-            <div class="form-group"><label>Prénom</label><input type="text" id="prenom" placeholder="Fassou" required></div>
-            <div class="form-group"><label>Nom</label><input type="text" id="nom" placeholder="Lolamou" required></div>
-            <div class="form-group"><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="Entrez votre pseudo" required></div>
-            <div class="form-group"><label>Adresse email</label><input type="email" id="email" placeholder="user@target.com" required></div>
-            <div class="form-group"><label>Mot de passe</label><input type="password" id="password" placeholder="********" required minlength="8"></div>
-            <div class="form-group"><label>Confirmer le mot de passe</label><input type="password" id="confirm-password" placeholder="********" required minlength="8"></div>
-            <div class="form-group"><label>Téléphone (optionnel)</label><input type="text" id="telephone" placeholder="+224 621 57 73 63"></div>
+            <div class="form-group"><label data-i18n="signup.firstname">Prénom</label><input type="text" id="prenom" placeholder="Fassou" required></div>
+            <div class="form-group"><label data-i18n="signup.lastname">Nom</label><input type="text" id="nom" placeholder="Lolamou" required></div>
+            <div class="form-group"><label data-i18n="signup.username">Nom d'utilisateur</label><input type="text" id="username" placeholder="Entrez votre pseudo" required></div>
+            <div class="form-group"><label data-i18n="signup.email">Adresse email</label><input type="email" id="email" placeholder="user@target.com" required></div>
+            <div class="form-group"><label data-i18n="signup.password">Mot de passe</label><input type="password" id="password" placeholder="********" required minlength="8"></div>
+            <div class="form-group"><label data-i18n="signup.confirm_password">Confirmer le mot de passe</label><input type="password" id="confirm-password" placeholder="********" required minlength="8"></div>
+            <div class="form-group"><label data-i18n="signup.phone">Téléphone (optionnel)</label><input type="text" id="telephone" placeholder="+224 621 57 73 63"></div>
             <div class="form-group">
-                <label>Pays</label>
+                <label data-i18n="signup.country">Pays</label>
                 <select id="pays">
                     <option value="">-</option>
                     <option>Guinée</option><option>Belgique</option><option>Suisse</option>
@@ -724,19 +1127,19 @@
                 </select>
             </div>
             <div id="signup-error" class="error-msg"></div>
-            <button type="submit" class="btn-submit">▶ CRÉER MON COMPTE</button>
+            <button type="submit" class="btn-submit" data-i18n="signup.submit">▶ CRÉER MON COMPTE</button>
         </form>
     </div>
 
-    <!-- PAGE CONNEXION (avec débogage) -->
+    <!-- PAGE CONNEXION -->
     <div id="login-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px;">CONNEXION</h1>
+        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')" data-i18n="global.back">← Retour</div>
+        <h1 style="text-align:center; margin-bottom:20px;" data-i18n="login.title">CONNEXION</h1>
         <form id="login-form" onsubmit="handleLogin(event)">
-            <div class="form-group"><label>ADRESSE EMAIL</label><input type="email" id="login-email" placeholder="user@target.com" required></div>
-            <div class="form-group"><label>MOT DE PASSE</label><input type="password" id="login-password" placeholder="********" required></div>
+            <div class="form-group"><label data-i18n="login.email">ADRESSE EMAIL</label><input type="email" id="login-email" placeholder="user@target.com" required></div>
+            <div class="form-group"><label data-i18n="login.password">MOT DE PASSE</label><input type="password" id="login-password" placeholder="********" required></div>
             <div id="login-error" class="error-msg"></div>
-            <button type="submit" class="btn-submit">▶ SE CONNECTER</button>
+            <button type="submit" class="btn-submit" data-i18n="global.login">▶ SE CONNECTER</button>
         </form>
         <button class="debug-btn" onclick="showDebugInfo()">🔍 Afficher les données stockées</button>
         <div class="debug-info" id="debug-info"></div>
@@ -750,111 +1153,532 @@
             <div class="burger-bar"></div>
         </div>
         <div class="profile-pic-box" id="profile-pic-box" onclick="document.getElementById('avatar-input').click();">
-            <span id="avatar-placeholder">Photo</span>
+            <span id="avatar-placeholder" data-i18n="profile.photo">Photo</span>
             <img id="avatar-image" style="display:none;" alt="Avatar">
         </div>
         <input type="file" id="avatar-input" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
         <div class="name-rect" id="profile-name">Nom de l'utilisateur</div>
         <section class="stats-grid">
-            <div class="stat-box" onclick="navigateWithProgress('termux-page')"><strong>1</strong><span>COMMANDES TERMUX</span></div>
-            <div class="stat-box" onclick="navigateWithProgress('sites-page')"><strong>2</strong><span>SITES À CONNAITRE</span></div>
-            <div class="stat-box"><strong>3+</strong><span>PDF-BOOK</span></div>
-            <div class="stat-box"><strong>4</strong><span>ASSISTANCE</span></div>
+            <div class="stat-box" onclick="navigateWithProgress('termux-page')"><strong>1</strong><span data-i18n="profile.stat1">COMMANDES TERMUX</span></div>
+            <div class="stat-box" onclick="navigateWithProgress('sites-page')"><strong>2</strong><span data-i18n="profile.stat2">SITES À CONNAITRE</span></div>
+            <div class="stat-box" onclick="navigateWithProgress('pdf-page')"><strong>3+</strong><span data-i18n="profile.stat3">PDF-BOOK</span></div>
+            <div class="stat-box" onclick="navigateWithProgress('assistance-page')"><strong>4</strong><span data-i18n="profile.stat4">ASSISTANCE</span></div>
         </section>
         <div class="feature-box" onclick="window.open('https://youtube.com/@tbhack224?si=1lcuEKKYJVLDVFiQ', '_blank');">
             <div>▣</div>
-            <h3>NOTRE-YOUTUBE</h3>
+            <h3 data-i18n="profile.youtube">NOTRE-YOUTUBE</h3>
         </div>
         <div class="feature-box" onclick="window.open('https://www.tiktok.com/@visibilite10?_r=1&_t=ZN-97wejHDEE9m', '_blank');">
             <div>▣</div>
-            <h3>NOTRE-TIKTOK</h3>
+            <h3 data-i18n="profile.tiktok">NOTRE-TIKTOK</h3>
         </div>
         <div class="feature-box" onclick="window.open('https://whatsapp.com/channel/0029VaYQeQiF1YlOKm5Aag3j', '_blank');">
             <div>▣</div>
-            <h3>CHAINE WHATSAPP</h3>
+            <h3 data-i18n="profile.whatsapp">CHAINE WHATSAPP</h3>
         </div>
-        <div class="feature-box"><div>▣</div><h3>NOTRE-FACEBOOK</h3></div>
+        <div class="feature-box"><div>▣</div><h3 data-i18n="profile.facebook">NOTRE-FACEBOOK</h3></div>
     </div>
 
     <!-- PAGE PARAMÈTRES -->
     <div id="settings-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('profile-page')">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px; color:var(--accent);">Paramètres</h1>
+        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
+        <h1 style="text-align:center; margin-bottom:20px; color:var(--accent);" data-i18n="settings.title">Paramètres</h1>
         <div class="settings-section">
-            <h2>Langue</h2>
-            <div class="lang-option"><span>Français</span><span class="check">✔</span></div>
-            <div class="lang-option"><span>English</span><span class="check" style="color:#555;">[ ]</span></div>
-            <div class="lang-option"><span>Kreyòl Ayisyen</span><span class="check" style="color:#555;">[ ]</span></div>
+            <h2 data-i18n="settings.language">Langue</h2>
+            <div class="lang-option" onclick="setLanguage('fr')">
+                <span>Français</span>
+                <span class="check" id="lang-fr">✔</span>
+            </div>
+            <div class="lang-option" onclick="setLanguage('en')">
+                <span>English</span>
+                <span class="check inactive" id="lang-en">[ ]</span>
+            </div>
+            <div class="lang-option" onclick="setLanguage('ht')">
+                <span>Kreyòl Ayisyen</span>
+                <span class="check inactive" id="lang-ht">[ ]</span>
+            </div>
         </div>
         <div class="settings-section">
-            <h2>Sécurité</h2>
-            <div class="security-field"><label>Changer le mot de passe</label><input type="password" placeholder="Mot de passe actuel"></div>
-            <div class="security-field"><label>Nouveau mot de passe</label><input type="password" placeholder="Nouveau mot de passe"></div>
-            <div class="security-field"><label>Confirmer le nouveau mot de passe</label><input type="password" placeholder="Confirmer le nouveau mot de passe"></div>
-            <button class="btn-change-pwd" onclick="changePassword()">CHANGER LE MOT DE PASSE</button>
+            <h2 data-i18n="settings.security">Sécurité</h2>
+            <div class="security-field"><label data-i18n="settings.current_password">Changer le mot de passe</label><input type="password" placeholder="Mot de passe actuel"></div>
+            <div class="security-field"><label data-i18n="settings.new_password">Nouveau mot de passe</label><input type="password" placeholder="Nouveau mot de passe"></div>
+            <div class="security-field"><label data-i18n="settings.confirm_new_password">Confirmer le nouveau mot de passe</label><input type="password" placeholder="Confirmer le nouveau mot de passe"></div>
+            <button class="btn-change-pwd" onclick="changePassword()" data-i18n="settings.change_password">CHANGER LE MOT DE PASSE</button>
         </div>
         <div class="settings-section">
-            <h2>Double authentification</h2>
-            <div class="status-2fa"><span class="toggle-indicator off"></span> 2FA désactivée</div>
-            <button class="btn-2fa" onclick="handle2FA()">ACTIVER LA 2FA</button>
+            <h2 data-i18n="settings.twofa">Double authentification</h2>
+            <div class="status-2fa"><span class="toggle-indicator off"></span> <span data-i18n="settings.twofa_status">2FA désactivée</span></div>
+            <button class="btn-2fa" onclick="handle2FA()" data-i18n="settings.twofa_activate">ACTIVER LA 2FA</button>
         </div>
     </div>
 
-    <!-- PAGE TERMUX (intégrée) -->
+    <!-- PAGE TERMUX -->
     <div id="termux-page" class="page-container termux-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px;" onclick="navigateWithProgress('profile-page')">← Retour</div>
+        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
         <div class="termux-header">
             <div class="termux-logo">TERMUX<span>_</span>CODES</div>
-            <div class="termux-subtitle">Android Terminal Emulator — Référence Complète</div>
+            <div class="termux-subtitle" data-i18n="termux.subtitle">Android Terminal Emulator — Référence Complète</div>
             <div class="termux-stats">
-                <div class="termux-stat"><strong>52</strong>commandes</div>
-                <div class="termux-stat"><strong>6</strong>catégories</div>
-                <div class="termux-stat"><strong>100%</strong>testé</div>
+                <div class="termux-stat"><strong>52</strong><span data-i18n="termux.stat1">commandes</span></div>
+                <div class="termux-stat"><strong>6</strong><span data-i18n="termux.stat2">catégories</span></div>
+                <div class="termux-stat"><strong>100%</strong><span data-i18n="termux.stat3">testé</span></div>
             </div>
         </div>
-
         <div class="filters">
-            <button class="filter-btn active" onclick="filterCards('all')">Tout</button>
-            <button class="filter-btn" onclick="filterCards('install')"> Install</button>
-            <button class="filter-btn" onclick="filterCards('réseau')"> Réseau</button>
-            <button class="filter-btn" onclick="filterCards('fichiers')"> Fichiers</button>
-            <button class="filter-btn" onclick="filterCards('système')">⚙️ Système</button>
-            <button class="filter-btn" onclick="filterCards('outils')"> Outils</button>
-            <button class="filter-btn" onclick="filterCards('hacking')"> Hacking</button>
+            <button class="filter-btn active" onclick="filterCards('all')" data-i18n="termux.filter_all">Tout</button>
+            <button class="filter-btn" onclick="filterCards('install')" data-i18n="termux.filter_install"> Install</button>
+            <button class="filter-btn" onclick="filterCards('réseau')" data-i18n="termux.filter_reseau"> Réseau</button>
+            <button class="filter-btn" onclick="filterCards('fichiers')" data-i18n="termux.filter_fichiers"> Fichiers</button>
+            <button class="filter-btn" onclick="filterCards('système')" data-i18n="termux.filter_systeme">⚙️ Système</button>
+            <button class="filter-btn" onclick="filterCards('outils')" data-i18n="termux.filter_outils"> Outils</button>
+            <button class="filter-btn" onclick="filterCards('hacking')" data-i18n="termux.filter_hacking"> Hacking</button>
         </div>
-
         <div class="grid" id="termux-grid"></div>
-
-        <div class="termux-footer">// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //</div>
+        <div class="termux-footer" data-i18n="termux.footer">// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //</div>
     </div>
 
     <!-- PAGE SITES À CONNAITRE -->
     <div id="sites-page" class="sites-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')">← Retour</div>
+        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
         <div class="card">
-            <div class="credit">📌 collectés par FASSOU LOLAMOU</div>
-            <h1>🛡️ <span>SITES À CONNAITRE</span></h1>
-            <p class="sous-titre">🔍 Reconnaître les pièges pour ne pas se faire avoir</p>
-            <div class="alerte">
+            <div class="credit" data-i18n="sites.credit">📌 collectés par FASSOU LOLAMOU</div>
+            <h1>🛡️ <span data-i18n="sites.title">SITES À CONNAITRE</span></h1>
+            <p class="sous-titre" data-i18n="sites.subtitle">🔍 Reconnaître les pièges pour ne pas se faire avoir</p>
+            <div class="alerte" data-i18n="sites.alert">
                 ⚠️ <strong>Ne clique jamais</strong> sur ces sites sans les avoir analysés.<br />
                 Ils servent à <strong>voler tes données, tracker ton IP ou infecter ton appareil</strong>.
             </div>
             <div class="grid-boutons" id="conteneurBoutons"></div>
             <div class="info-box" id="infoBox">
                 <span class="emoji">🛡️</span>
-                <span class="message">Clique sur un site pour voir son danger et son lien</span>
+                <span class="message" data-i18n="sites.info_default">Clique sur un site pour voir son danger et son lien</span>
             </div>
-            <div class="avertissement">
+            <div class="avertissement" data-i18n="sites.warning">
                 <strong>🔐 Règle d'or :</strong> Avant de cliquer sur un lien inconnu, <strong>colle-le dans VirusTotal</strong>.<br />
                 Ne jamais entrer ses identifiants sur un site reçu par SMS ou email.
             </div>
             <div class="footer-message">
-                ✊ <span> collecté par fassou lolamou . ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
+                ✊ <span data-i18n="sites.footer"> collecté par fassou lolamou . ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE BIBLIOTHÈQUE PDF -->
+    <div id="pdf-page" class="pdf-page" style="max-width:100%;">
+        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
+        <div class="card">
+            <div class="credit" data-i18n="pdf.credit">📌 collectés par FASSOU LOLAMOU</div>
+            <h1>📚 <span data-i18n="pdf.title">Bibliothèque PDF</span></h1>
+            <p class="sous-titre" data-i18n="pdf.subtitle">📖 Ressources à connaître pour se protéger</p>
+
+            <div class="pdf-list" id="pdfList"></div>
+
+            <div class="drop-zone" id="dropZone">
+                <span class="icon">📤</span>
+                <div class="texte" data-i18n="pdf.drop_text">Ajoute tes propres PDF</div>
+                <div class="sous-texte" data-i18n="pdf.drop_subtext">Dépose ou clique</div>
+                <input type="file" id="fileInput" accept=".pdf" multiple />
+            </div>
+
+            <div class="compteur">
+                <span id="compteActuel">0</span> <span data-i18n="pdf.counter">PDF ajoutés (hors ressources)</span>
+            </div>
+
+            <div class="footer-message">
+                ✊ <span data-i18n="pdf.footer">ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE ASSISTANCE (IA Hack & Code) -->
+    <div id="assistance-page" class="assistance-page" style="max-width:100%;">
+        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
+        <div class="card">
+            <div class="credit" data-i18n="assistance.credit">📌 collectés par FASSOU LOLAMOU</div>
+            <h1>🤖 <span data-i18n="assistance.title">IA Hack & Code</span></h1>
+            <p class="sous-titre" data-i18n="assistance.subtitle">⚡ 2 IA gratuites pour apprendre et progresser</p>
+
+            <div class="ia-grid">
+                <div class="ia-card ia-hack" id="iaHack">
+                    <span class="ia-icon">🛡️</span>
+                    <div class="ia-nom" data-i18n="assistance.hack_name">HackBot</div>
+                    <div class="ia-desc" data-i18n="assistance.hack_desc">IA spécialisée en sécurité offensive, pentesting et hack éthique.</div>
+                    <span class="ia-badge" data-i18n="assistance.hack_badge">🛡️ HACK ÉTHIQUE</span>
+                    <a href="https://hackbot.ai" target="_blank" class="ia-btn" id="btnHack" data-i18n="assistance.chat">💬 Discuter</a>
+                </div>
+
+                <div class="ia-card ia-code" id="iaCode">
+                    <span class="ia-icon">💻</span>
+                    <div class="ia-nom" data-i18n="assistance.code_name">CodeMate</div>
+                    <div class="ia-desc" data-i18n="assistance.code_desc">IA d'assistance au codage, débogage et optimisation de scripts.</div>
+                    <span class="ia-badge code" data-i18n="assistance.code_badge">💻 CODAGE</span>
+                    <a href="https://codemate.ai" target="_blank" class="ia-btn" id="btnCode" data-i18n="assistance.chat">💬 Discuter</a>
+                </div>
+            </div>
+
+            <div class="info-box" id="infoBoxAssistance">
+                <span class="emoji">🤖</span>
+                <span class="message" data-i18n="assistance.info_default">Clique sur "Discuter" pour échanger avec une IA</span>
+            </div>
+
+            <div class="footer-message">
+                ✊ <span data-i18n="assistance.footer">ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
             </div>
         </div>
     </div>
 
     <script>
+        // ========== SYSTÈME DE TRADUCTION ==========
+        const translations = {
+            fr: {
+                // Global
+                "global.create_account": "CRÉER UN COMPTE",
+                "global.login": "CONNEXION",
+                "global.back": "← Retour",
+                // Sidebar
+                "sidebar.profil": "👤 Profil",
+                "sidebar.settings": "⚙️ Paramètres",
+                "sidebar.contact": "📬 Contact",
+                "sidebar.luminosity": "☀️ Luminosité",
+                "sidebar.logout": "🚪 SE DÉCONNECTER",
+                // Home
+                "home.badge": "PLATEFORME OSINT PROFESSIONNELLE",
+                "home.subtitle": "Accumulateur des commandes Termux à usage éthique.<br>Ici on retrouve des outils très intéressants, des documents en programmation et hacking éthique.",
+                "home.feature1_title": "Recherche Multi-Sources",
+                "home.feature1_desc": "Interrogez des dizaines de sources publiques en un seul clic.",
+                "home.feature2_title": "100% Légal & Éthique",
+                "home.feature2_desc": "Seules les données publiques et légales sont exploitées.",
+                "home.feature3_title": "Rapports Détaillés",
+                "home.feature3_desc": "Exportez vos résultats en PDF ou CSV avec scoring de confiance.",
+                "home.stat1": "RECHERCHES EFFECTUÉES",
+                "home.stat2": "UTILISATEURS ACTIFS",
+                "home.stat3": "SOURCES OSINT",
+                "home.stat4": "DISPONIBILITÉ",
+                "home.about_title": "À propos de LOLA-PLUS",
+                "home.about_text": "LOLA_PLUS est une plateforme OSINT professionnelle conçue pour les chercheurs, analystes et professionnels de la cybersécurité. Notre moteur agrège des données provenant de sources publiques et légales, tout en centralisant des ressources éducatives en programmation et en sécurité offensive pour une montée en compétence éthique.",
+                // Footer
+                "footer.terms": "Conditions d'utilisation",
+                "footer.privacy": "Politique de confidentialité",
+                "footer.contact": "Contact",
+                "footer.copyright": "© 2024 LOLA-PLUS — Tous droits réservés.",
+                "footer.creator": "Créateur : Fassou lolamou",
+                // Signup
+                "signup.title": "LOLA PLUS",
+                "signup.subtitle": "Rejoignez la communauté lola plus",
+                "signup.firstname": "Prénom",
+                "signup.lastname": "Nom",
+                "signup.username": "Nom d'utilisateur",
+                "signup.email": "Adresse email",
+                "signup.password": "Mot de passe",
+                "signup.confirm_password": "Confirmer le mot de passe",
+                "signup.phone": "Téléphone (optionnel)",
+                "signup.country": "Pays",
+                "signup.submit": "▶ CRÉER MON COMPTE",
+                // Login
+                "login.title": "CONNEXION",
+                "login.email": "ADRESSE EMAIL",
+                "login.password": "MOT DE PASSE",
+                // Profile
+                "profile.photo": "Photo",
+                "profile.stat1": "COMMANDES TERMUX",
+                "profile.stat2": "SITES À CONNAITRE",
+                "profile.stat3": "PDF-BOOK",
+                "profile.stat4": "ASSISTANCE",
+                "profile.youtube": "NOTRE-YOUTUBE",
+                "profile.tiktok": "NOTRE-TIKTOK",
+                "profile.whatsapp": "CHAINE WHATSAPP",
+                "profile.facebook": "NOTRE-FACEBOOK",
+                // Settings
+                "settings.title": "Paramètres",
+                "settings.language": "Langue",
+                "settings.security": "Sécurité",
+                "settings.current_password": "Changer le mot de passe",
+                "settings.new_password": "Nouveau mot de passe",
+                "settings.confirm_new_password": "Confirmer le nouveau mot de passe",
+                "settings.change_password": "CHANGER LE MOT DE PASSE",
+                "settings.twofa": "Double authentification",
+                "settings.twofa_status": "2FA désactivée",
+                "settings.twofa_activate": "ACTIVER LA 2FA",
+                // Termux
+                "termux.subtitle": "Android Terminal Emulator — Référence Complète",
+                "termux.stat1": "commandes",
+                "termux.stat2": "catégories",
+                "termux.stat3": "testé",
+                "termux.filter_all": "Tout",
+                "termux.filter_install": " Install",
+                "termux.filter_reseau": " Réseau",
+                "termux.filter_fichiers": " Fichiers",
+                "termux.filter_systeme": "⚙️ Système",
+                "termux.filter_outils": " Outils",
+                "termux.filter_hacking": " Hacking",
+                "termux.footer": "// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //",
+                // Sites
+                "sites.credit": "📌 collectés par FASSOU LOLAMOU",
+                "sites.title": "SITES À CONNAITRE",
+                "sites.subtitle": "🔍 Reconnaître les pièges pour ne pas se faire avoir",
+                "sites.alert": "⚠️ <strong>Ne clique jamais</strong> sur ces sites sans les avoir analysés.<br />Ils servent à <strong>voler tes données, tracker ton IP ou infecter ton appareil</strong>.",
+                "sites.info_default": "Clique sur un site pour voir son danger et son lien",
+                "sites.warning": "<strong>🔐 Règle d'or :</strong> Avant de cliquer sur un lien inconnu, <strong>colle-le dans VirusTotal</strong>.<br />Ne jamais entrer ses identifiants sur un site reçu par SMS ou email.",
+                "sites.footer": " collecté par fassou lolamou . ton objectif ici est de connaitre pour te proteger et non pour t'enservir",
+                // PDF
+                "pdf.credit": "📌 collectés par FASSOU LOLAMOU",
+                "pdf.title": "Bibliothèque PDF",
+                "pdf.subtitle": "📖 Ressources à connaître pour se protéger",
+                "pdf.drop_text": "Ajoute tes propres PDF",
+                "pdf.drop_subtext": "Dépose ou clique",
+                "pdf.counter": "PDF ajoutés (hors ressources)",
+                "pdf.footer": "ton objectif ici est de connaitre pour te proteger et non pour t'enservir",
+                // Assistance
+                "assistance.credit": "📌 collectés par FASSOU LOLAMOU",
+                "assistance.title": "IA Hack & Code",
+                "assistance.subtitle": "⚡ 2 IA gratuites pour apprendre et progresser",
+                "assistance.hack_name": "HackBot",
+                "assistance.hack_desc": "IA spécialisée en sécurité offensive, pentesting et hack éthique.",
+                "assistance.hack_badge": "🛡️ HACK ÉTHIQUE",
+                "assistance.code_name": "CodeMate",
+                "assistance.code_desc": "IA d'assistance au codage, débogage et optimisation de scripts.",
+                "assistance.code_badge": "💻 CODAGE",
+                "assistance.chat": "💬 Discuter",
+                "assistance.info_default": "Clique sur \"Discuter\" pour échanger avec une IA",
+                "assistance.footer": "ton objectif ici est de connaitre pour te proteger et non pour t'enservir"
+            },
+            en: {
+                "global.create_account": "CREATE ACCOUNT",
+                "global.login": "LOGIN",
+                "global.back": "← Back",
+                "sidebar.profil": "👤 Profile",
+                "sidebar.settings": "⚙️ Settings",
+                "sidebar.contact": "📬 Contact",
+                "sidebar.luminosity": "☀️ Luminosity",
+                "sidebar.logout": "🚪 LOGOUT",
+                "home.badge": "PROFESSIONAL OSINT PLATFORM",
+                "home.subtitle": "Accumulator of Termux commands for ethical use.<br>Here you find interesting tools, programming documents and ethical hacking.",
+                "home.feature1_title": "Multi-Source Search",
+                "home.feature1_desc": "Query dozens of public sources with one click.",
+                "home.feature2_title": "100% Legal & Ethical",
+                "home.feature2_desc": "Only public and legal data is exploited.",
+                "home.feature3_title": "Detailed Reports",
+                "home.feature3_desc": "Export your results as PDF or CSV with confidence scoring.",
+                "home.stat1": "SEARCHES PERFORMED",
+                "home.stat2": "ACTIVE USERS",
+                "home.stat3": "OSINT SOURCES",
+                "home.stat4": "AVAILABILITY",
+                "home.about_title": "About LOLA-PLUS",
+                "home.about_text": "LOLA_PLUS is a professional OSINT platform designed for researchers, analysts and cybersecurity professionals. Our engine aggregates data from public and legal sources, while centralizing educational resources in programming and offensive security for ethical skill building.",
+                "footer.terms": "Terms of use",
+                "footer.privacy": "Privacy policy",
+                "footer.contact": "Contact",
+                "footer.copyright": "© 2024 LOLA-PLUS — All rights reserved.",
+                "footer.creator": "Creator: Fassou lolamou",
+                "signup.title": "LOLA PLUS",
+                "signup.subtitle": "Join the lola plus community",
+                "signup.firstname": "First name",
+                "signup.lastname": "Last name",
+                "signup.username": "Username",
+                "signup.email": "Email address",
+                "signup.password": "Password",
+                "signup.confirm_password": "Confirm password",
+                "signup.phone": "Phone (optional)",
+                "signup.country": "Country",
+                "signup.submit": "▶ CREATE MY ACCOUNT",
+                "login.title": "LOGIN",
+                "login.email": "EMAIL ADDRESS",
+                "login.password": "PASSWORD",
+                "profile.photo": "Photo",
+                "profile.stat1": "TERMUX COMMANDS",
+                "profile.stat2": "SITES TO KNOW",
+                "profile.stat3": "PDF-BOOK",
+                "profile.stat4": "ASSISTANCE",
+                "profile.youtube": "OUR-YOUTUBE",
+                "profile.tiktok": "OUR-TIKTOK",
+                "profile.whatsapp": "WHATSAPP CHANNEL",
+                "profile.facebook": "OUR-FACEBOOK",
+                "settings.title": "Settings",
+                "settings.language": "Language",
+                "settings.security": "Security",
+                "settings.current_password": "Change password",
+                "settings.new_password": "New password",
+                "settings.confirm_new_password": "Confirm new password",
+                "settings.change_password": "CHANGE PASSWORD",
+                "settings.twofa": "Two-factor authentication",
+                "settings.twofa_status": "2FA disabled",
+                "settings.twofa_activate": "ACTIVATE 2FA",
+                "termux.subtitle": "Android Terminal Emulator — Complete Reference",
+                "termux.stat1": "commands",
+                "termux.stat2": "categories",
+                "termux.stat3": "tested",
+                "termux.filter_all": "All",
+                "termux.filter_install": " Install",
+                "termux.filter_reseau": " Network",
+                "termux.filter_fichiers": " Files",
+                "termux.filter_systeme": "⚙️ System",
+                "termux.filter_outils": " Tools",
+                "termux.filter_hacking": " Hacking",
+                "termux.footer": "// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //",
+                "sites.credit": "📌 collected by FASSOU LOLAMOU",
+                "sites.title": "SITES TO KNOW",
+                "sites.subtitle": "🔍 Recognize traps to avoid being fooled",
+                "sites.alert": "⚠️ <strong>Never click</strong> on these sites without analyzing them.<br />They are used to <strong>steal your data, track your IP or infect your device</strong>.",
+                "sites.info_default": "Click on a site to see its danger and link",
+                "sites.warning": "<strong>🔐 Golden rule:</strong> Before clicking on an unknown link, <strong>paste it into VirusTotal</strong>.<br />Never enter your credentials on a site received by SMS or email.",
+                "sites.footer": " collected by fassou lolamou . your goal here is to know to protect yourself and not to enslave yourself",
+                "pdf.credit": "📌 collected by FASSOU LOLAMOU",
+                "pdf.title": "PDF Library",
+                "pdf.subtitle": "📖 Resources to know to protect yourself",
+                "pdf.drop_text": "Add your own PDFs",
+                "pdf.drop_subtext": "Drop or click",
+                "pdf.counter": "PDFs added (excluding resources)",
+                "pdf.footer": "your goal here is to know to protect yourself and not to enslave yourself",
+                "assistance.credit": "📌 collected by FASSOU LOLAMOU",
+                "assistance.title": "AI Hack & Code",
+                "assistance.subtitle": "⚡ 2 free AIs to learn and progress",
+                "assistance.hack_name": "HackBot",
+                "assistance.hack_desc": "AI specialized in offensive security, pentesting and ethical hacking.",
+                "assistance.hack_badge": "🛡️ ETHICAL HACKING",
+                "assistance.code_name": "CodeMate",
+                "assistance.code_desc": "AI assistant for coding, debugging and script optimization.",
+                "assistance.code_badge": "💻 CODING",
+                "assistance.chat": "💬 Chat",
+                "assistance.info_default": "Click on \"Chat\" to interact with an AI",
+                "assistance.footer": "your goal here is to know to protect yourself and not to enslave yourself"
+            },
+            ht: {
+                "global.create_account": "KREYE YON KONT",
+                "global.login": "KONEKSYON",
+                "global.back": "← Retounen",
+                "sidebar.profil": "👤 Pwofil",
+                "sidebar.settings": "⚙️ Paramèt",
+                "sidebar.contact": "📬 Kontak",
+                "sidebar.luminosity": "☀️ Limyè",
+                "sidebar.logout": "🚪 DEKONEKTE",
+                "home.badge": "PLATFÒM OSINT PWOFESYONÈL",
+                "home.subtitle": "Akimilatè kòmand Termux pou itilizasyon etik.<br>Isit la w ap jwenn zouti enteresan, dokiman sou pwogramasyon ak hacking etik.",
+                "home.feature1_title": "Rechèch Multi-Sous",
+                "home.feature1_desc": "Interroge plizyè sous piblik nan yon sèl klike.",
+                "home.feature2_title": "100% Legal & Etik",
+                "home.feature2_desc": "Se sèlman done piblik ak legal yo itilize.",
+                "home.feature3_title": "Rapò Detaye",
+                "home.feature3_desc": "Ekspòte rezilta ou an PDF oswa CSV ak nòt konfyans.",
+                "home.stat1": "RECHÈCH FÈ",
+                "home.stat2": "ITILIZATÈ AKTIF",
+                "home.stat3": "SOUS OSINT",
+                "home.stat4": "DISPONIBILITE",
+                "home.about_title": "Sou LOLA-PLUS",
+                "home.about_text": "LOLA_PLUS se yon platfòm OSINT pwofesyonèl ki fèt pou chèchè, analis ak pwofesyonèl nan sekirite sybernetik. Motè nou an rasanble done ki soti nan sous piblik ak legal, pandan l ap santralize resous edikatif nan pwogramasyon ak sekirite ofansif pou amelyore konpetans etik.",
+                "footer.terms": "Kondisyon itilizasyon",
+                "footer.privacy": "Politik konfidansyèl",
+                "footer.contact": "Kontak",
+                "footer.copyright": "© 2024 LOLA-PLUS — Tout dwa rezève.",
+                "footer.creator": "Kreatè : Fassou lolamou",
+                "signup.title": "LOLA PLUS",
+                "signup.subtitle": "Antre nan kominote lola plus la",
+                "signup.firstname": "Premye non",
+                "signup.lastname": "Siyati",
+                "signup.username": "Non itilizatè",
+                "signup.email": "Adrès imèl",
+                "signup.password": "Modpas",
+                "signup.confirm_password": "Konfime modpas",
+                "signup.phone": "Telefòn (opsyonèl)",
+                "signup.country": "Peyi",
+                "signup.submit": "▶ KREYE KONT MWEN",
+                "login.title": "KONEKSYON",
+                "login.email": "ADRÈS IMÈL",
+                "login.password": "MODPAS",
+                "profile.photo": "Foto",
+                "profile.stat1": "KOMAND TERMUX",
+                "profile.stat2": "SIT YO KONNEN",
+                "profile.stat3": "PDF-BOOK",
+                "profile.stat4": "ASISTANS",
+                "profile.youtube": "NOU-YOUTUBE",
+                "profile.tiktok": "NOU-TIKTOK",
+                "profile.whatsapp": "CHANÈL WHATSAPP",
+                "profile.facebook": "NOU-FACEBOOK",
+                "settings.title": "Paramèt",
+                "settings.language": "Lang",
+                "settings.security": "Sekirite",
+                "settings.current_password": "Chanje modpas",
+                "settings.new_password": "Nouvo modpas",
+                "settings.confirm_new_password": "Konfime nouvo modpas",
+                "settings.change_password": "CHANJE MODPAS",
+                "settings.twofa": "Otantifikasyon doub",
+                "settings.twofa_status": "2FA deaktive",
+                "settings.twofa_activate": "AKTIVE 2FA",
+                "termux.subtitle": "Emulatè tèminal Android — Referans Konplè",
+                "termux.stat1": "kòmand",
+                "termux.stat2": "kategori",
+                "termux.stat3": "teste",
+                "termux.filter_all": "Tout",
+                "termux.filter_install": " Enstalasyon",
+                "termux.filter_reseau": " Rezo",
+                "termux.filter_fichiers": " Dosye",
+                "termux.filter_systeme": "⚙️ Sistèm",
+                "termux.filter_outils": " Zouti",
+                "termux.filter_hacking": " Hacking",
+                "termux.footer": "// ITILIZE AVÈK RESPONSABILITE — SÈLMAN POU REZON EDUKATIF //",
+                "sites.credit": "📌 kolekte pa FASSOU LOLAMOU",
+                "sites.title": "SIT YO KONNEN",
+                "sites.subtitle": "🔍 Rekonèt pyèj yo pou pa tonbe",
+                "sites.alert": "⚠️ <strong>Pa janm klike</strong> sou sit sa yo san ou pa analize yo.<br />Yo sèvi pou <strong>vòlè done w, swiv IP w oswa enfekte aparèy w</strong>.",
+                "sites.info_default": "Klike sou yon sit pou wè danje li ak lyen li",
+                "sites.warning": "<strong>🔐 Règ lò :</strong> Anvan w klike sou yon lyen ou pa konnen, <strong>kole li nan VirusTotal</strong>.<br />Pa janm mete idantifyan ou sou yon sit ou resevwa pa SMS oswa imèl.",
+                "sites.footer": " kolekte pa fassou lolamou . objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj",
+                "pdf.credit": "📌 kolekte pa FASSOU LOLAMOU",
+                "pdf.title": "Bibliyotèk PDF",
+                "pdf.subtitle": "📖 Resous yo konnen pou pwoteje tèt ou",
+                "pdf.drop_text": "Ajoute pwòp PDF ou",
+                "pdf.drop_subtext": "Depoze oswa klike",
+                "pdf.counter": "PDF ajoute (eksepte resous)",
+                "pdf.footer": "objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj",
+                "assistance.credit": "📌 kolekte pa FASSOU LOLAMOU",
+                "assistance.title": "IA Hack & Code",
+                "assistance.subtitle": "⚡ 2 IA gratis pou aprann ak pwogrese",
+                "assistance.hack_name": "HackBot",
+                "assistance.hack_desc": "IA espesyalize nan sekirite ofansif, pentesting ak hacking etik.",
+                "assistance.hack_badge": "🛡️ HACK ETIK",
+                "assistance.code_name": "CodeMate",
+                "assistance.code_desc": "IA asistans pou kodaj, debogaj ak optimize scripts.",
+                "assistance.code_badge": "💻 KODAJ",
+                "assistance.chat": "💬 Pale",
+                "assistance.info_default": "Klike sou \"Pale\" pou pale ak yon IA",
+                "assistance.footer": "objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj"
+            }
+        };
+
+        let currentLang = localStorage.getItem('lola_lang') || 'fr';
+
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+            // Mettre à jour les indicateurs de langue
+            document.querySelectorAll('.lang-option .check').forEach(c => c.classList.add('inactive'));
+            const activeCheck = document.getElementById('lang-' + lang);
+            if (activeCheck) {
+                activeCheck.classList.remove('inactive');
+                activeCheck.textContent = '✔';
+            }
+            localStorage.setItem('lola_lang', lang);
+            currentLang = lang;
+        }
+
+        function setLanguage(lang) {
+            applyTranslations(lang);
+            showToast('✅ Langue changée / Language changed / Lang chanje', 'success');
+        }
+
+        // Appliquer la langue au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations(currentLang);
+        });
+
         // === TOAST NOTIFICATIONS ===
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -869,8 +1693,6 @@
 
         // === DÉCONNEXION (CORRIGÉE - NE SUPPRIME PAS LE COMPTE) ===
         function logout() {
-            // On ne supprime PAS le compte, on garde les données
-            // On redirige simplement vers l'accueil
             navigate('main-content');
             showToast('👋 Déconnecté avec succès !', 'info');
             closeSidebar();
@@ -918,7 +1740,11 @@
             document.getElementById('settings-page').style.display = (pageId === 'settings-page') ? 'block' : 'none';
             document.getElementById('termux-page').style.display = (pageId === 'termux-page') ? 'block' : 'none';
             document.getElementById('sites-page').style.display = (pageId === 'sites-page') ? 'block' : 'none';
+            document.getElementById('pdf-page').style.display = (pageId === 'pdf-page') ? 'block' : 'none';
+            document.getElementById('assistance-page').style.display = (pageId === 'assistance-page') ? 'block' : 'none';
             closeSidebar();
+            // Appliquer les traductions sur la page chargée
+            applyTranslations(currentLang);
 
             if (pageId === 'profile-page') {
                 const user = JSON.parse(localStorage.getItem('lola_user'));
@@ -942,6 +1768,14 @@
                 if (!document.getElementById('conteneurBoutons').hasChildNodes()) {
                     loadSites();
                 }
+            }
+            if (pageId === 'pdf-page') {
+                if (!document.getElementById('pdfList').hasChildNodes()) {
+                    afficherPDFs();
+                }
+            }
+            if (pageId === 'assistance-page') {
+                initAssistance();
             }
         }
 
@@ -1026,11 +1860,9 @@
             
             console.log('🔍 Tentative de connexion avec :', { email, password });
             
-            // 1. Récupérer le compte stocké
             const storedData = localStorage.getItem('lola_user');
             console.log('📦 Données stockées (brutes) :', storedData);
             
-            // 2. Si aucun compte n'existe
             if (!storedData) {
                 errorDiv.textContent = 'Aucun compte trouvé. Veuillez vous inscrire.';
                 errorDiv.style.display = 'block';
@@ -1039,7 +1871,6 @@
                 return;
             }
             
-            // 3. Parser les données
             let user;
             try {
                 user = JSON.parse(storedData);
@@ -1053,7 +1884,6 @@
                 return;
             }
             
-            // 4. Vérifier les identifiants
             console.log('🔍 Comparaison :');
             console.log('   Email saisi  :', email);
             console.log('   Email stocké :', user.email);
@@ -1295,6 +2125,226 @@
             });
         }
 
+        // === BIBLIOTHÈQUE PDF ===
+        const pdfs = [
+            {
+                nom: "Hack-Éthique",
+                description: "Guide sur les bases de la sécurité offensive et défensive.",
+                lien: "https://www.transfernow.net/dl/20260711cIV5b5tk"
+            },
+            {
+                nom: "Apprendre Python",
+                description: "Initiation au langage Python pour l'analyse et la sécurité.",
+                lien: "https://www.transfernow.net/dl/20260711cnpPz7Yp"
+            },
+            {
+                nom: "Termux-Guide",
+                description: "Utiliser Termux sur Android pour l'audit et la programmation.",
+                lien: "https://www.transfernow.net/dl/20260711aFlMF3sA"
+            },
+            {
+                nom: "Metasploit",
+                description: "Introduction à Metasploit pour les tests d'intrusion.",
+                lien: "https://www.transfernow.net/dl/20260711BR4UagwQ"
+            }
+        ];
+
+        const pdfsPerso = [];
+        const MAX = 4;
+
+        function afficherPDFs() {
+            const pdfList = document.getElementById('pdfList');
+            let html = '';
+            pdfs.forEach((pdf, index) => {
+                html += `
+                    <div class="pdf-item" data-index="${index}">
+                        <div class="info">
+                            <span class="pdf-icon">📄</span>
+                            <div class="details">
+                                <div class="nom">${pdf.nom}</div>
+                                <div class="description">${pdf.description}</div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-ouvrir" data-index="${index}">📖 Ouvrir</button>
+                            <button class="btn-telecharger" data-index="${index}">⬇️ Télécharger</button>
+                        </div>
+                    </div>
+                `;
+            });
+            pdfList.innerHTML = html;
+
+            document.querySelectorAll('.btn-ouvrir').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const idx = parseInt(this.dataset.index);
+                    const pdf = pdfs[idx];
+                    if (pdf) {
+                        window.open(pdf.lien, '_blank');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-telecharger').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const idx = parseInt(this.dataset.index);
+                    const pdf = pdfs[idx];
+                    if (pdf) {
+                        const a = document.createElement('a');
+                        a.href = pdf.lien;
+                        a.download = pdf.nom + '.pdf';
+                        a.target = '_blank';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                });
+            });
+        }
+
+        function afficherCompteur() {
+            document.getElementById('compteActuel').textContent = pdfsPerso.length;
+        }
+
+        function ajouterFichiersPerso(fichiers) {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            let ajoutes = 0;
+            for (const fichier of fichiers) {
+                if (pdfsPerso.length >= MAX) {
+                    alert('⚠️ Limite de 4 PDF personnels atteinte.');
+                    break;
+                }
+                if (fichier.type !== 'application/pdf') {
+                    alert(`❌ "${fichier.name}" n'est pas un PDF.`);
+                    continue;
+                }
+                const existe = pdfsPerso.some(p => p.name === fichier.name && p.size === fichier.size);
+                if (existe) {
+                    alert(`⚠️ "${fichier.name}" est déjà ajouté.`);
+                    continue;
+                }
+                pdfsPerso.push(fichier);
+                ajoutes++;
+            }
+            if (ajoutes > 0) {
+                afficherCompteur();
+                fileInput.value = '';
+                dropZone.querySelector('.sous-texte').textContent = 
+                    pdfsPerso.length + ' PDF personnel(s) ajouté(s)';
+            }
+        }
+
+        // === ASSISTANCE (IA Hack & Code) ===
+        function initAssistance() {
+            const ias = [
+                {
+                    id: "iaHack",
+                    nom: "HackBot",
+                    description: "Pose-lui tes questions sur le pentesting, les vulnérabilités et la sécurité éthique.",
+                    lien: "https://hackbot.ai",
+                    emoji: "🛡️",
+                    type: "Hack Éthique"
+                },
+                {
+                    id: "iaCode",
+                    nom: "CodeMate",
+                    description: "Aide à la programmation, débogage, optimisation et apprentissage des langages.",
+                    lien: "https://codemate.ai",
+                    emoji: "💻",
+                    type: "Codage"
+                }
+            ];
+
+            const infoBox = document.getElementById('infoBoxAssistance');
+
+            document.querySelectorAll('.ia-card').forEach(card => {
+                card.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        return;
+                    }
+                    const id = this.id;
+                    const ia = ias.find(i => i.id === id);
+                    if (ia) {
+                        infoBox.innerHTML = `
+                            <span class="emoji">${ia.emoji}</span>
+                            <span class="message">
+                                <strong>${ia.nom}</strong> — ${ia.description}<br />
+                                <span style="font-size:0.7rem;color:#667799;">
+                                    🔗 ${ia.lien}
+                                </span>
+                            </span>
+                        `;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.ia-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    const card = this.closest('.ia-card');
+                    if (card) {
+                        const id = card.id;
+                        const ia = ias.find(i => i.id === id);
+                        if (ia) {
+                            infoBox.innerHTML = `
+                                <span class="emoji">${ia.emoji}</span>
+                                <span class="message">
+                                    <strong>${ia.nom}</strong> — Ouverture en cours...<br />
+                                    <span style="font-size:0.7rem;color:#667799;">
+                                        🔗 ${ia.lien}
+                                    </span>
+                                </span>
+                            `;
+                        }
+                    }
+                });
+            });
+
+            console.log('✅ 2 IA prêtes : HackBot & CodeMate');
+        }
+
+        // === INITIALISATION DES PAGES ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // PDF
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+
+            if (dropZone) {
+                dropZone.addEventListener('click', function (e) {
+                    if (e.target.tagName !== 'INPUT') {
+                        fileInput.click();
+                    }
+                });
+
+                fileInput.addEventListener('change', function () {
+                    if (this.files.length > 0) {
+                        ajouterFichiersPerso(this.files);
+                    }
+                });
+
+                dropZone.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                dropZone.addEventListener('dragleave', function (e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+
+                dropZone.addEventListener('drop', function (e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    if (e.dataTransfer.files.length > 0) {
+                        ajouterFichiersPerso(e.dataTransfer.files);
+                    }
+                });
+            }
+
+            afficherPDFs();
+            afficherCompteur();
+            console.log('✅ 4 PDF chargés + zone de dépôt prête');
+        });
+
         // Rediriger tous les appels de navigation vers navigateWithProgress
         document.querySelectorAll('[onclick*="navigate("]').forEach(el => {
             const oldOnclick = el.getAttribute('onclick');
@@ -1309,4 +2359,4 @@
         navigate('main-content');
     </script>
 </body>
-    </html>
+            </html>
